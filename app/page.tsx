@@ -2,11 +2,18 @@
 
 import { Button } from "@/components/ui/button"
 import { Footer } from "@/components/footer"
-import { ContactForm } from "@/components/contact-form"
+import { RequestForm } from "@/components/request-form"
 import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
+
+interface ServiceCardProps {
+  title: string;
+  icon: string;
+  description: string;
+  link: string;
+}
 
 export default function Home() {
   const [isBlinking, setIsBlinking] = useState(false)
@@ -122,7 +129,7 @@ export default function Home() {
             Заполните форму, и мы свяжемся с вами для обсуждения деталей
           </p>
           <div className="max-w-md mx-auto">
-            <ContactForm />
+            <RequestForm />
           </div>
         </div>
       </section>
@@ -132,7 +139,7 @@ export default function Home() {
   )
 }
 
-function ServiceCard({ title, icon, description, link }) {
+function ServiceCard({ title, icon, description, link }: ServiceCardProps) {
   return (
     <Card className="border-none shadow-md hover:shadow-lg transition-shadow overflow-hidden">
       <CardContent className="p-6">
