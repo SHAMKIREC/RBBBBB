@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronDown } from "lucide-react"
+import Link from "next/link"
 
 interface ServiceOption {
   id: string
@@ -17,12 +18,27 @@ interface ServiceCategory {
   options: ServiceOption[]
 }
 
-interface ServiceCardProps {
+// Базовый интерфейс для всех вариантов карточки
+interface BaseServiceCardProps {
   icon: React.ReactNode
   title: string
   description: string
-  categories: ServiceCategory[]
 }
+
+// Интерфейс для детального режима с категориями
+interface DetailedServiceCardProps extends BaseServiceCardProps {
+  categories: ServiceCategory[]
+  variant?: "detailed"
+}
+
+// Интерфейс для простого режима (главная страница)
+interface SimpleServiceCardProps extends BaseServiceCardProps {
+  href: string
+  variant: "simple"
+}
+
+// Объединенный тип для всех вариантов
+type ServiceCardProps = DetailedServiceCardProps | SimpleServiceCardProps
 
 // Простой компонент чекбокса
 function SimpleCheckbox({ id, label }: { id: string; label: string }) {
@@ -98,20 +114,45 @@ function SimpleAccordionItem({ title, children }: { title: string; children: Rea
   )
 }
 
-export function ServiceCard({ icon, title, description, categories }: ServiceCardProps) {
+export function ServiceCard(props: ServiceCardProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const { icon, title, description } = props
 
+  // Если это простой вариант (для главной страницы)
+  if (props.variant === "simple") {
+    return (
+      <Card className="relative bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden">
+        <CardContent className="p-6">
+          <div className="flex flex-col h-full">
+            <div className="text-4xl mb-4">{icon}</div>
+            <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">{title}</h3>
+            <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">{description}</p>
+            <Link 
+              href={props.href} 
+              className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium inline-flex items-center mt-auto"
+            >
+              Подробнее →
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  // Детальный вариант с категориями
+  const detailedProps = props as DetailedServiceCardProps
+  
   return (
-    <Card className="border-none shadow-md hover:shadow-lg transition-shadow overflow-hidden">
+    <Card className="relative bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden">
       <CardContent className="p-6">
         <div className="flex flex-col h-full">
-          <div className="mb-4 text-3xl">{icon}</div>
-          <h3 className="text-xl font-bold mb-2">{title}</h3>
-          <p className="text-gray-600 mb-4">{description}</p>
+          <div className="text-4xl mb-4">{icon}</div>
+          <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">{title}</h3>
+          <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">{description}</p>
 
           <Button
             variant="link"
-            className="text-blue-600 hover:text-blue-800 p-0 justify-start mb-2"
+            className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 p-0 justify-start mb-2"
             onClick={() => setIsOpen(!isOpen)}
           >
             Подробнее →
@@ -127,10 +168,10 @@ export function ServiceCard({ icon, title, description, categories }: ServiceCar
                 className="overflow-hidden"
               >
                 <SimpleAccordion>
-                  {categories.map((category, index) => (
+                  {detailedProps.categories.map((category: ServiceCategory, index: number) => (
                     <SimpleAccordionItem key={index} title={category.title}>
                       <div className="space-y-2">
-                        {category.options.map((option) => (
+                        {category.options.map((option: ServiceOption) => (
                           <SimpleCheckbox key={option.id} id={option.id} label={option.label} />
                         ))}
                       </div>
