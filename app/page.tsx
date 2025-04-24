@@ -95,8 +95,8 @@ export default function HomePage() {
               <span className="text-4xl font-bold text-white">RB</span>
             </div>
             <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text">
-              РЕШАЕМ БЫСТРО
-            </h1>
+            РЕШАЕМ БЫСТРО
+          </h1>
             <p className="text-xl md:text-2xl text-gray-800 dark:text-gray-200 mb-8 font-semibold tracking-wide">
               Строим будущее-ремонтируем настоящее!
             </p>
@@ -230,17 +230,17 @@ export default function HomePage() {
                       className="w-full h-12 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white hover:opacity-90"
                     >
                       Отправить запрос
-                    </Button>
+            </Button>
                   </form>
                 </DialogContent>
               </Dialog>
               <Dialog open={isSOSOpen} onOpenChange={setIsSOSOpen}>
                 <DialogTrigger asChild>
-                  <Button
+            <Button
                     className="w-[160px] h-[48px] bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white font-medium hover:opacity-90"
-                  >
+            >
                     SOS 24/7
-                  </Button>
+            </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-md">
                   <div className="text-center p-4">
@@ -282,21 +282,21 @@ export default function HomePage() {
                   </div>
                 </DialogContent>
               </Dialog>
-            </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Services Section */}
+      {/* Services Section */}
         <section className="py-20">
-          <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-4">
               Наши услуги
             </h2>
-            <p className="text-center text-gray-600 dark:text-gray-400 mb-12">
-              Профессиональные решения ваших задач в строительстве, ремонте и IT-сфере
-            </p>
-            
-            {/* Строительные услуги */}
+          <p className="text-center text-gray-600 dark:text-gray-400 mb-12">
+            Профессиональные решения ваших задач в строительстве, ремонте и IT-сфере
+          </p>
+
+          {/* Строительные услуги */}
             <div className="mb-16">
               <h3 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-8">
                 Строительные услуги
@@ -304,18 +304,18 @@ export default function HomePage() {
               <div className="flex flex-wrap -mx-2">
                 {constructionServices.map((service, index) => (
                   <div key={index} className="w-full px-2 mb-4 sm:w-1/2 lg:w-1/5">
-                    <ServiceCard
+            <ServiceCard
                       variant="simple"
                       title={service.title}
                       description={service.description}
                       href={service.href}
                       icon={service.icon}
-                    />
+            />
                   </div>
                 ))}
               </div>
-            </div>
-            
+          </div>
+
             {/* IT и образовательные услуги */}
             <div className="mt-16">
               <h3 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-8">
@@ -324,7 +324,7 @@ export default function HomePage() {
               <div className="flex flex-wrap -mx-2">
                 {itEducationServices.map((service, index) => (
                   <div key={index} className="w-full px-2 mb-4 sm:w-1/2">
-                    <ServiceCard
+              <ServiceCard
                       variant="simple"
                       title={service.title}
                       description={service.description}
@@ -333,36 +333,16 @@ export default function HomePage() {
                     />
                   </div>
                 ))}
-              </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
         {/* Features Section */}
         <section className="py-20">
           <div className="container">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="text-4xl mb-4">⚡</div>
-                <h3 className="text-xl font-semibold mb-2">Быстрое решение</h3>
-                <p className="text-muted-foreground">
-                  Выполняем работы в кратчайшие сроки без потери качества
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl mb-4">💰</div>
-                <h3 className="text-xl font-semibold mb-2">Доступные цены</h3>
-                <p className="text-muted-foreground">
-                  Предлагаем оптимальные цены и гибкую систему скидок
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl mb-4">✅</div>
-                <h3 className="text-xl font-semibold mb-2">Гарантия качества</h3>
-                <p className="text-muted-foreground">
-                  Даём гарантию на все виды работ и используемые материалы
-                </p>
-              </div>
+              {/* Удаляем весь блок с преимуществами */}
             </div>
           </div>
         </section>

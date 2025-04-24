@@ -1,8 +1,8 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
-import Header from '@/components/header'
-import { Footer } from '@/components/footer'
-import { ThemeProvider } from '@/components/theme-provider'
+import Header from '@/app/components/header'
+import Footer from './components/footer'
+import type { Metadata } from "next"
 
 const inter = Inter({ 
   subsets: ['latin', 'cyrillic'],
@@ -10,7 +10,7 @@ const inter = Inter({
   variable: '--font-inter',
 })
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Решаем Быстро - Профессиональные услуги',
   description: 'Компания "Решаем Быстро" - ваш надежный партнер в сфере ремонта, строительства и IT-услуг',
   icons: {
@@ -26,16 +26,9 @@ export default function RootLayout({
   return (
     <html lang="ru" suppressHydrationWarning className={inter.variable}>
       <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Header />
-          <main className="min-h-screen">{children}</main>
-          <Footer />
-        </ThemeProvider>
+        <Header />
+        <main className="min-h-screen">{children}</main>
+        <Footer />
       </body>
     </html>
   )
