@@ -1,4 +1,4 @@
-// File: C:\Users\konfe\OneDrive\Рабочий стол\MARFINo\app\layout.tsx
+// File: C:\RBBBBB\app\layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

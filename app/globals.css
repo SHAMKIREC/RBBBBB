@@ -2,49 +2,51 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
-  --primary: 221.2 83.2% 53.3%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96.1%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96.1%;
-  --accent-foreground: 222.2 47.4% 11.2%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 221.2 83.2% 53.3%;
-  --radius: 20px;
-}
-
-.dark {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-  --card: 222.2 84% 4.9%;
-  --card-foreground: 210 40% 98%;
-  --popover: 222.2 84% 4.9%;
-  --popover-foreground: 210 40% 98%;
-  --primary: 217.2 91.2% 59.8%;
-  --primary-foreground: 222.2 47.4% 11.2%;
-  --secondary: 217.2 32.6% 17.5%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 224.3 76.3% 48%;
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+  }
+ 
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
 }
 
 @layer base {
@@ -56,96 +58,60 @@
   }
 }
 
-/* Анимация для кнопки SOS */
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.8;
-  }
+.gradient-border {
+  position: relative;
+  border: none;
 }
 
-.animate-pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-/* Стили для градиентной рамки */
-.border-gradient-to-r {
-  border-image: linear-gradient(to right, #FF7A00, #FF0000) 1;
-  border-image-slice: 1;
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 0.5rem;
+  padding: 2px;
+  background: linear-gradient(to right, #FF7A00, #FF0000);
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 /* Стили для формы */
-.form-container {
-  @apply bg-white p-8 shadow-lg;
-  border: 2px solid;
-  border-image: linear-gradient(to right, #FF7A00, #FF0000) 1;
-  border-image-slice: 1;
-  border-radius: 20px !important;
+.dialog-content {
+  animation: dialogShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Стили для полей формы */
-.form-input {
-  @apply w-full p-3 bg-white text-black transition-all duration-300 ease-in-out;
-  border: 2px solid;
-  border-image: linear-gradient(to right, #FF7A00, #FF0000) 1;
-  border-image-slice: 1;
-  border-radius: 20px !important;
-}
-
-.form-input:focus {
-  @apply outline-none;
-  border-radius: 20px !important;
-}
-
-.form-input::placeholder {
-  @apply text-gray-400;
-}
-
-.form-input.error {
-  @apply border-red-500;
-  border-radius: 20px !important;
-}
-
-/* Стили для кнопки */
-.form-button {
-  @apply w-full bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white font-medium py-3 transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0;
-  border-radius: 20px !important;
-}
-
-.form-button:focus {
-  @apply outline-none;
-  border-radius: 20px !important;
-}
-
-/* Стили для чекбокса */
-.form-checkbox {
-  @apply border-[#FF7A00] data-[state=checked]:bg-gradient-to-r from-[#FF7A00] to-[#FF0000];
-  border-radius: 20px !important;
-}
-
-/* Стили для радиокнопок */
-.form-radio {
-  @apply border-[#FF7A00] text-[#FF7A00] data-[state=checked]:bg-gradient-to-r from-[#FF7A00] to-[#FF0000];
-  border-radius: 20px !important;
+@keyframes dialogShow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
 }
 
 /* Стили для полей ввода */
-input, textarea, button {
-  border-radius: 20px !important;
+input, textarea, select, button {
+  border-radius: 10px !important;
 }
 
-input:focus, textarea:focus, button:focus {
-  border-radius: 20px !important;
+input:focus, textarea:focus, select:focus {
+  border-color: #FF7A00 !important;
   outline: none !important;
-  box-shadow: none !important;
+  box-shadow: 0 0 0 1px #FF7A00 !important;
 }
 
-/* Стили для диалогового окна */
-.dialog-content {
-  border-radius: 20px !important;
+/* Стили для радио-кнопок */
+[data-state="checked"].radio-group-item {
+  background: linear-gradient(to right, #FF7A00, #FF0000) !important;
+  border: none;
 }
 
 /* Анимация для модального окна */
@@ -160,29 +126,12 @@ input:focus, textarea:focus, button:focus {
   }
 }
 
-@keyframes modalOut {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-}
-
 [data-state="open"] .dialog-content {
   animation: modalIn 0.2s ease-out;
-  border-radius: 20px !important;
-}
-
-[data-state="closed"] .dialog-content {
-  animation: modalOut 0.2s ease-in;
-  border-radius: 20px !important;
 }
 
 /* Стили для затемненной подложки */
 .dialog-overlay {
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
-}
+} 

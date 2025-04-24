@@ -1,23 +1,40 @@
-import type React from "react"
-import { ThemeProvider } from "@/components/theme-provider"
-import Header from "@/components/header"
-import "./globals.css"
+import './globals.css'
+import { Inter } from 'next/font/google'
+import Header from '@/components/header'
+import { Footer } from '@/components/footer'
+import { ThemeProvider } from '@/components/theme-provider'
+
+const inter = Inter({ 
+  subsets: ['latin', 'cyrillic'],
+  display: 'swap',
+  variable: '--font-inter',
+})
 
 export const metadata = {
-  title: "РЕШАЕМ БЫСТРО - Строительство и ремонт",
-  description: "Профессиональные решения для строительства и ремонта",
-    generator: 'v0.dev'
+  title: 'Решаем Быстро - Профессиональные услуги',
+  description: 'Компания "Решаем Быстро" - ваш надежный партнер в сфере ремонта, строительства и IT-услуг',
+  icons: {
+    icon: '/logo.svg',
+  },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="ru" suppressHydrationWarning>
-      <body>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="flex-1">{children}</main>
-          </div>
+    <html lang="ru" suppressHydrationWarning className={inter.variable}>
+      <body className={inter.className}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Header />
+          <main className="min-h-screen">{children}</main>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
