@@ -47,35 +47,35 @@ export default function Header() {
         <nav className="flex items-center space-x-6 ml-6">
           <Link href="/services" className="text-sm font-medium transition-colors hover:text-primary">
             Услуги
-          </Link>
+                  </Link>
           <Link href="/calculator" className="text-sm font-medium transition-colors hover:text-primary">
             Калькулятор
-          </Link>
+                  </Link>
           <Link href="/reviews" className="text-sm font-medium transition-colors hover:text-primary">
             Отзывы
-          </Link>
+                  </Link>
           <Link href="/blog" className="text-sm font-medium transition-colors hover:text-primary">
             Блог
-          </Link>
+                  </Link>
           <Link href="/contacts" className="text-sm font-medium transition-colors hover:text-primary">
             Контакты
-          </Link>
-        </nav>
+            </Link>
+          </nav>
 
         <div className="flex items-center space-x-4 ml-auto">
           <ThemeSwitcher />
-          
+
           {/* Кнопка SOS с модальным окном */}
           <Dialog open={isSOSOpen} onOpenChange={setIsSOSOpen}>
             <DialogTrigger asChild>
-              <Button 
-                className={cn(
+                <Button
+                  className={cn(
                   "bg-red-500 hover:bg-red-600 text-white font-medium px-4 py-2 rounded",
                   isBlinking && "animate-pulse"
-                )}
-              >
-                SOS 24/7
-              </Button>
+                  )}
+                >
+                  SOS 24/7
+                </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">
               <div className="text-center p-4">
@@ -118,12 +118,12 @@ export default function Header() {
             </DialogContent>
           </Dialog>
 
-          <Link
+              <Link
             href="/auth"
             className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2"
-          >
+              >
             Войти
-          </Link>
+              </Link>
         </div>
       </div>
     </header>
