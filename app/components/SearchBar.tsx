@@ -3,9 +3,10 @@
 import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Fuse from 'fuse.js'
-import { services, ServiceItem } from '@/app/data/services'
 import { FaSearch } from 'react-icons/fa'
+import { services } from '../data/services'
 
+// Настройки для fuzzy поиска
 const fuseOptions = {
   keys: ['title', 'description'],
   threshold: 0.3,
@@ -17,121 +18,109 @@ const fuse = new Fuse(services, fuseOptions)
 
 export default function SearchBar() {
   const [query, setQuery] = useState('')
-  const [results, setResults] = useState<ServiceItem[]>([])
-  const [isOpen, setIsOpen] = useState(false)
+  const [results, setResults] = useState<any[]>([])
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
+  const searchRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
-  const wrapperRef = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
 
+  // Закрытие выпадающего списка при клике вне компонента
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
-        setIsOpen(false)
-        setIsFocused(false)
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setIsDropdownVisible(false)
       }
     }
-
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const handleSearch = (value: string) => {
+  // Обработка поискового запроса
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
     setQuery(value)
+    
     if (value.length > 1) {
-      const searchResults = fuse.search(value).map(result => result.item)
+      const searchResults = fuse.search(value)
       setResults(searchResults)
-      setIsOpen(true)
+      setIsDropdownVisible(true)
     } else {
       setResults([])
-      setIsOpen(false)
+      setIsDropdownVisible(false)
     }
   }
 
-  const handleSelect = (service: ServiceItem) => {
-    router.push(service.url)
+  // Выбор результата поиска
+  const handleSelect = (url: string) => {
+    router.push(url)
     setQuery('')
     setResults([])
-    setIsOpen(false)
-    setIsFocused(false)
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (results.length > 0) {
-      handleSelect(results[0])
-    }
+    setIsDropdownVisible(false)
   }
 
   return (
-    <div ref={wrapperRef} className="relative flex-1 max-w-xl">
-      <form onSubmit={handleSubmit} className="relative">
+    <div ref={searchRef} className="relative w-full">
+      <div className="relative flex items-center">
         <input
-          ref={inputRef}
           type="text"
           value={query}
-          onChange={(e) => handleSearch(e.target.value)}
-          onFocus={() => setIsFocused(true)}
+          onChange={handleSearch}
+          onFocus={() => {
+            setIsFocused(true)
+            setIsDropdownVisible(query.length > 1)
+          }}
+          onBlur={() => setIsFocused(false)}
           placeholder="Поиск по сайту..."
-          className={`w-full px-4 py-2 pl-11 pr-4 bg-white dark:bg-neutral-800 
-                    border-2 rounded-xl transition-all duration-200
-                    text-neutral-900 dark:text-neutral-100 placeholder-neutral-400
-                    ${isFocused 
-                      ? 'border-orange-500 shadow-lg shadow-orange-500/10' 
-                      : 'border-neutral-200 dark:border-neutral-700'
-                    }
-                    focus:outline-none focus:border-orange-500 dark:focus:border-orange-500`}
+          className="
+            w-full px-4 py-2 pr-10
+            bg-white dark:bg-neutral-800
+            text-neutral-900 dark:text-neutral-100
+            placeholder-neutral-500 dark:placeholder-neutral-400
+            border border-neutral-200 dark:border-neutral-700
+            rounded-lg
+            focus:outline-none focus:border-[#FF3A2D] dark:focus:border-[#FF3A2D]
+            transition duration-200
+          "
         />
-        <button
-          type="submit"
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 
-                   hover:text-orange-500 transition-colors p-1"
-          aria-label="Поиск"
-        >
-          <FaSearch className="w-4 h-4" />
-        </button>
-      </form>
+        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+          <FaSearch className="w-4 h-4 text-neutral-400 dark:text-neutral-500" />
+        </div>
+      </div>
 
-      {/* Выпадающий список результатов */}
-      {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-neutral-800 
-                      rounded-xl shadow-xl border border-neutral-200 dark:border-neutral-700 
-                      max-h-[calc(100vh-200px)] overflow-y-auto z-50
-                      backdrop-blur-sm bg-opacity-95 dark:bg-opacity-95">
+      {/* Выпадающий список с результатами */}
+      {isDropdownVisible && (
+        <div className="
+          absolute top-full left-0 right-0 mt-2
+          bg-white dark:bg-neutral-800
+          border border-neutral-200 dark:border-neutral-700
+          rounded-lg shadow-lg z-50
+          max-h-[300px] overflow-y-auto
+        ">
           {results.length > 0 ? (
-            <ul className="divide-y divide-neutral-200 dark:divide-neutral-700">
-              {results.map((service) => (
-                <li 
-                  key={service.id}
-                  onClick={() => handleSelect(service)}
-                  className="p-4 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 
-                           cursor-pointer transition-colors"
-                >
-                  <div className="flex items-start gap-3">
-                    <span className="text-2xl flex-shrink-0">{service.icon}</span>
-                    <div>
-                      <h4 className="font-medium text-neutral-900 dark:text-white">
-                        {service.title}
-                      </h4>
-                      <p className="text-sm text-neutral-500 dark:text-neutral-400 line-clamp-2">
-                        {service.description}
-                      </p>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          ) : query.length > 1 ? (
-            <div className="p-6 text-center">
-              <span className="text-4xl mb-3 block">🔍</span>
-              <p className="text-neutral-500 dark:text-neutral-400">
-                Ничего не найдено
-              </p>
-              <p className="text-sm text-neutral-400 dark:text-neutral-500 mt-1">
-                Попробуйте изменить запрос
-              </p>
+            results.map((result) => (
+              <div
+                key={result.item.id}
+                onClick={() => handleSelect(result.item.url)}
+                className="
+                  p-3 hover:bg-neutral-100 dark:hover:bg-neutral-700
+                  cursor-pointer
+                  border-b border-neutral-200 dark:border-neutral-700
+                  last:border-none
+                "
+              >
+                <div className="text-neutral-900 dark:text-neutral-100 font-medium">
+                  {result.item.title}
+                </div>
+                <div className="text-sm text-neutral-500 dark:text-neutral-400 mt-1 line-clamp-2">
+                  {result.item.description}
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="p-3 text-neutral-500 dark:text-neutral-400 text-center">
+              Ничего не найдено
             </div>
-          ) : null}
+          )}
         </div>
       )}
     </div>

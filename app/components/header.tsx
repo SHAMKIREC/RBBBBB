@@ -15,15 +15,17 @@ export default function Header() {
           {/* Логотип */}
           <Link href="/" className="flex items-center gap-2 flex-shrink-0">
             <div className="flex items-center">
-              <div className="h-8 w-8 bg-[#FF3A2D] rounded flex items-center justify-center">
+              <div className="h-8 w-8 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] rounded flex items-center justify-center">
                 <span className="text-white font-bold text-sm">RB</span>
               </div>
-              <span className="ml-2 text-lg font-bold">РЕШАЕМ БЫСТРО</span>
+              <span className="ml-2 text-lg font-bold bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text">
+                РЕШАЕМ БЫСТРО
+              </span>
             </div>
           </Link>
 
           {/* Поисковая строка */}
-          <div className="hidden md:block flex-1 mx-4 lg:mx-8 max-w-md">
+          <div className="hidden md:block flex-1 mx-4 lg:mx-8 max-w-xl">
             <SearchBar />
           </div>
 
@@ -46,13 +48,13 @@ export default function Header() {
             </Link>
             <Link
               href="/emergency"
-              className="px-4 py-2 bg-[#FF3A2D] text-white font-medium rounded hover:bg-[#E62E22] transition-colors"
+              className="px-4 py-2 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white font-medium rounded hover:opacity-90 transition-opacity"
             >
               SOS 24/7
             </Link>
             <Link
               href="/login"
-              className="px-4 py-2 border-2 border-[#FF3A2D] text-[#FF3A2D] font-medium rounded hover:bg-[#FF3A2D] hover:text-white transition-colors"
+              className="px-4 py-2 border-2 border-[#FF3A2D] text-transparent bg-clip-text bg-gradient-to-r from-[#FF7A00] to-[#FF0000] font-medium rounded hover:bg-gradient-to-r hover:from-[#FF7A00] hover:to-[#FF0000] hover:text-white transition-colors"
             >
               Войти
             </Link>
@@ -94,10 +96,10 @@ export default function Header() {
               <Link href="/contacts" className="mobile-nav-link">
                 Контакты
               </Link>
-              <Link href="/emergency" className="mobile-nav-link text-[#FF3A2D] font-medium">
+              <Link href="/emergency" className="mobile-nav-link bg-gradient-to-r from-[#FF7A00] to-[#FF0000] bg-clip-text text-transparent font-medium">
                 SOS 24/7
               </Link>
-              <Link href="/login" className="mobile-nav-link text-[#FF3A2D] font-medium">
+              <Link href="/login" className="mobile-nav-link bg-gradient-to-r from-[#FF7A00] to-[#FF0000] bg-clip-text text-transparent font-medium">
                 Войти
               </Link>
             </nav>
@@ -107,10 +109,10 @@ export default function Header() {
 
       <style jsx>{`
         .nav-link {
-          @apply text-neutral-700 hover:text-[#FF3A2D] font-medium transition-colors;
+          @apply text-neutral-700 dark:text-neutral-200 hover:text-[#FF3A2D] dark:hover:text-[#FF3A2D] font-medium transition-colors;
         }
         .mobile-nav-link {
-          @apply px-3 py-2 text-base font-medium text-neutral-700 hover:text-[#FF3A2D] rounded-lg hover:bg-neutral-100;
+          @apply px-3 py-2 text-base font-medium text-neutral-700 dark:text-neutral-200 hover:text-[#FF3A2D] dark:hover:text-[#FF3A2D] rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800;
         }
       `}</style>
     </header>
