@@ -93,14 +93,15 @@ export default function RemontPage() {
         <main className="container mx-auto px-4 py-12">
           {/* Hero Section */}
           <section className="text-center mb-16">
-            <div className="w-24 h-24 rounded-[20px] bg-gradient-to-r from-[#FF7A00] to-[#FF0000] flex items-center justify-center mb-6 mx-auto">
-              <span className="text-4xl">🛠️</span>
+            <div className="w-24 h-24 rounded-[20px] bg-gradient-to-r from-[#FF7A00] to-[#FF0000] flex items-center justify-center mb-6 mx-auto shadow-[0_4px_8px_rgba(0,0,0,0.5)]">
+              <span className="text-4xl drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]">🛠️</span>
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text">
               Ремонтные работы
             </h1>
             <p className="text-xl md:text-2xl text-white max-w-3xl mx-auto mb-8 font-bold">
-              Комплексный ремонт квартир, офисов и коммерческих помещений: от косметического до капитального. Работаем с материалами премиум-класса. Гарантия 3 года!
+              Комплексный ремонт квартир, офисов и коммерческих помещений: от косметического до капитального. 
+              <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text"> Гарантия 3 года!</span>
             </p>
           </section>
         </main>
