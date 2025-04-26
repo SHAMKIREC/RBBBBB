@@ -20,16 +20,16 @@ import { Icon } from '@iconify/react'
 const services = [
   {
     title: "Ремонт",
-    description: "Комплексный ремонт квартир, офисов и коммерческих помещений",
+    description: "Комплексный ремонт квартир, офисов и коммерческих помещений: от косметического до капитального.",
     href: "/services/remont",
-    icon: "🔨",
+    icon: "🛠️",
     category: "construction"
   },
   {
     title: "Инженерные системы",
     description: "Проектирование и монтаж инженерных систем",
     href: "/services/engineering",
-    icon: "⚡",
+    icon: "🔌",
     category: "construction"
   },
   {
@@ -43,7 +43,7 @@ const services = [
     title: "Окна и двери",
     description: "Монтаж, установка и ремонт окон и дверей",
     href: "/services/windows-doors",
-    icon: "🚪",
+    icon: "🪟",
     category: "construction"
   },
   {
@@ -55,16 +55,16 @@ const services = [
   },
   {
     title: "IT-услуги",
-    description: "Широкий спектр IT-услуг для бизнеса и частных лиц",
+    description: "Разработка сайтов, поддержка IT-инфраструктуры, автоматизация процессов — полный спектр IT-услуг для бизнеса и новых клиентов",
     href: "/services/it",
     icon: "💻",
     category: "it-education"
   },
   {
     title: "Академическая поддержка",
-    description: "Полный спектр услуг по академической поддержке",
+    description: "Помогаем студентам с курсами, дипломами и проектами. Академическая поддержка на каждом этапе",
     href: "/services/academic",
-    icon: "📚",
+    icon: "🎓",
     category: "it-education"
   }
 ]
@@ -95,8 +95,8 @@ export default function HomePage() {
               <span className="text-4xl font-bold text-white">RB</span>
             </div>
             <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text">
-            РЕШАЕМ БЫСТРО
-          </h1>
+              РЕШАЕМ БЫСТРО
+            </h1>
             <p className="text-xl md:text-2xl text-gray-800 dark:text-gray-200 mb-8 font-semibold tracking-wide">
               Строим будущее-ремонтируем настоящее!
             </p>
@@ -230,17 +230,17 @@ export default function HomePage() {
                       className="w-full h-12 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white hover:opacity-90"
                     >
                       Отправить запрос
-            </Button>
+                    </Button>
                   </form>
                 </DialogContent>
               </Dialog>
               <Dialog open={isSOSOpen} onOpenChange={setIsSOSOpen}>
                 <DialogTrigger asChild>
-            <Button
+                  <Button
                     className="w-[160px] h-[48px] bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white font-medium hover:opacity-90"
-            >
+                  >
                     SOS 24/7
-            </Button>
+                  </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-md">
                   <div className="text-center p-4">
@@ -282,21 +282,21 @@ export default function HomePage() {
                   </div>
                 </DialogContent>
               </Dialog>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Services Section */}
+        {/* Services Section */}
         <section className="py-20">
-        <div className="container mx-auto px-4">
+          <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-4">
               Наши услуги
             </h2>
-          <p className="text-center text-gray-600 dark:text-gray-400 mb-12">
-            Профессиональные решения ваших задач в строительстве, ремонте и IT-сфере
-          </p>
+            <p className="text-center text-gray-600 dark:text-gray-400 mb-12">
+              Профессиональные решения ваших задач в строительстве, ремонте и IT-сфере
+            </p>
 
-          {/* Строительные услуги */}
+            {/* Строительные услуги */}
             <div className="mb-16">
               <h3 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-8">
                 Строительные услуги
@@ -304,27 +304,7 @@ export default function HomePage() {
               <div className="flex flex-wrap -mx-2">
                 {constructionServices.map((service, index) => (
                   <div key={index} className="w-full px-2 mb-4 sm:w-1/2 lg:w-1/5">
-            <ServiceCard
-                      variant="simple"
-                      title={service.title}
-                      description={service.description}
-                      href={service.href}
-                      icon={service.icon}
-            />
-                  </div>
-                ))}
-              </div>
-          </div>
-
-            {/* IT и образовательные услуги */}
-            <div className="mt-16">
-              <h3 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-8">
-                IT и образовательные услуги
-              </h3>
-              <div className="flex flex-wrap -mx-2">
-                {itEducationServices.map((service, index) => (
-                  <div key={index} className="w-full px-2 mb-4 sm:w-1/2">
-              <ServiceCard
+                    <ServiceCard
                       variant="simple"
                       title={service.title}
                       description={service.description}
@@ -333,10 +313,30 @@ export default function HomePage() {
                     />
                   </div>
                 ))}
+              </div>
+            </div>
+
+            {/* IT и образовательные услуги */}
+            <div className="mt-16">
+              <h3 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-8">
+                IT & Образовательные услуги
+              </h3>
+              <div className="flex flex-wrap -mx-2">
+                {itEducationServices.map((service, index) => (
+                  <div key={index} className="w-full px-2 mb-4 sm:w-1/2">
+                    <ServiceCard
+                      variant="simple"
+                      title={service.title}
+                      description={service.description}
+                      href={service.href}
+                      icon={service.icon}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
         {/* Features Section */}
         <section className="py-20">

@@ -13,16 +13,18 @@ interface ServiceCardProps {
 }
 
 export function ServiceCard({ icon, title, description, href }: ServiceCardProps) {
+  const isITService = title === "IT-услуги"
+  
   return (
-    <div className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 h-[280px] border border-gray-100 p-6 flex flex-col">
+    <div className={`bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 p-6 flex flex-col ${isITService ? 'h-[320px]' : 'h-[280px]'}`}>
       {/* Верхняя часть карточки */}
-      <div className="flex items-start gap-4 mb-4">
-        <span className="text-3xl">{icon}</span>
-        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+      <div className="flex items-start gap-4 mb-6">
+        <span className="text-4xl">{icon}</span>
+        <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
       </div>
       
       {/* Описание */}
-      <p className="text-sm text-gray-600 leading-relaxed">
+      <p className="text-lg font-medium text-gray-600 leading-relaxed">
         {description}
       </p>
 
