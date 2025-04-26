@@ -121,17 +121,20 @@ export function ServiceCard(props: ServiceCardProps) {
   // Если это простой вариант (для главной страницы)
   if (props.variant === "simple") {
     return (
-      <Card className="relative bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden">
-        <CardContent className="p-6">
-          <div className="flex flex-col h-full">
-            <div className="text-4xl mb-4">{icon}</div>
-            <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">{title}</h3>
-            <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">{description}</p>
+      <Card className="bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 h-[280px]">
+        <CardContent className="p-6 flex flex-col h-full">
+          <div className="flex items-start gap-4 mb-4">
+            <span className="text-3xl">{icon}</span>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</h3>
+          </div>
+          <p className="text-gray-600 dark:text-gray-400 text-sm flex-grow">{description}</p>
+          <div className="mt-auto pt-4">
             <Link 
               href={props.href} 
-              className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium inline-flex items-center mt-auto"
+              className="w-full bg-[#2563EB] text-white px-4 py-2.5 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center gap-2"
             >
-              Подробнее →
+              Подробнее
+              <span className="text-sm">▼</span>
             </Link>
           </div>
         </CardContent>
