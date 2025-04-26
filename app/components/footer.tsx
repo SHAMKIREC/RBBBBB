@@ -9,14 +9,14 @@ export default function Footer() {
   const [isPolicyOpen, setPolicyOpen] = useState(false);
 
   return (
-    <footer className="bg-neutral-900 text-neutral-200 px-4 sm:px-6 py-8 sm:py-12">
+    <footer className="bg-neutral-900 text-neutral-200 py-8 sm:py-12">
       {/* Логотип и название */}
-      <div className="max-w-7xl mx-auto mb-8 sm:mb-12 flex items-center justify-center sm:justify-start gap-2">
-        <div className="flex items-center">
+      <div className="max-w-7xl mx-auto mb-8 sm:mb-12">
+        <div className="flex items-center pl-4">
           <div className="h-7 w-7 sm:h-8 sm:w-8 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] rounded flex items-center justify-center">
-            <span className="text-white font-bold text-xs sm:text-sm">RB</span>
+            <span className="text-white font-bold text-xs sm:text-sm leading-none">RB</span>
           </div>
-          <span className="ml-2 text-base sm:text-lg font-bold bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text">
+          <span className="ml-2 text-base sm:text-lg font-bold bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text leading-none">
             РЕШАЕМ БЫСТРО
           </span>
         </div>
