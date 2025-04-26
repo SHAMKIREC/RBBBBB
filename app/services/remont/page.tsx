@@ -1,0 +1,218 @@
+"use client"
+
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Check, ChevronDown } from "lucide-react"
+import { Checkbox } from "@/components/ui/checkbox"
+
+interface ServiceCategory {
+  title: string
+  items: string[]
+}
+
+const services: ServiceCategory[] = [
+  {
+    title: "Косметический ремонт",
+    items: [
+      "Покраска стен и потолков (акриловые, латексные составы)",
+      "Оклейка обоями (бумажные, флизелиновые, виниловые)",
+      "Укладка напольных покрытий (ламинат, паркет, линолеум)",
+      "Замена розеток и выключателей",
+      "Установка межкомнатных дверей",
+      "Монтаж декоративных панелей",
+      "Обновление сантехнических приборов",
+      "Установка плинтусов и галтелей",
+      "Покрытие лаком деревянных поверхностей",
+      "Монтаж карнизов для штор"
+    ]
+  },
+  {
+    title: "Капитальный ремонт",
+    items: [
+      "Полный демонтаж перегородок и конструкций",
+      "Перепланировка помещений (согласование в БТИ)",
+      "Замена электропроводки и щитков",
+      "Монтаж систем вентиляции и кондиционирования",
+      "Установка новых окон и дверных блоков",
+      "Гидроизоляция ванных комнат и санузлов",
+      "Выравнивание стен штукатуркой и шпаклевкой",
+      "Заливка стяжки пола с нивелированием",
+      "Устройство звукоизоляции стен и потолков",
+      "Установка встроенных систем хранения"
+    ]
+  },
+  {
+    title: "Спецработы",
+    items: [
+      "Укладка плитки (керамическая, керамогранит, клинкер)",
+      "Затирка и герметизация швов плитки",
+      "Монтаж натяжных и гипсокартонных потолков",
+      "Установка теплых полов (электрические, водяные)",
+      "Декоративная штукатурка (венецианская, фактурная)",
+      "Монтаж встроенных шкафов и ниш"
+    ]
+  },
+  {
+    title: "Дополнительные услуги",
+    items: [
+      "Вывоз строительного мусора",
+      "Химчистка мягкой мебели после ремонта",
+      "Установка декоративных лестниц"
+    ]
+  }
+]
+
+export default function RemontPage() {
+  const [openCategories, setOpenCategories] = useState<string[]>([])
+  const [isOrderDialogOpen, setIsOrderDialogOpen] = useState(false)
+  const [selectedServices, setSelectedServices] = useState<string[]>([])
+
+  const toggleCategory = (title: string) => {
+    setOpenCategories(prev =>
+      prev.includes(title)
+        ? prev.filter(cat => cat !== title)
+        : [...prev, title]
+    )
+  }
+
+  const toggleService = (service: string) => {
+    setSelectedServices(prev =>
+      prev.includes(service)
+        ? prev.filter(s => s !== service)
+        : [...prev, service]
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-white dark:bg-gray-900">
+      <main className="container mx-auto px-4 py-12">
+        {/* Hero Section */}
+        <section className="text-center mb-16">
+          <div className="w-24 h-24 rounded-[20px] bg-gradient-to-r from-[#FF7A00] to-[#FF0000] flex items-center justify-center mb-6 mx-auto">
+            <span className="text-4xl">🛠️</span>
+          </div>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text">
+            Ремонт
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-800 dark:text-gray-200 max-w-3xl mx-auto mb-8 font-bold">
+            Комплексный ремонт квартир, офисов и коммерческих помещений: от косметического до капитального. Работаем с материалами премиум-класса. Гарантия 3 года!
+          </p>
+        </section>
+
+        {/* Services List */}
+        <section className="max-w-4xl mx-auto">
+          {services.map((category) => (
+            <div key={category.title} className="mb-8">
+              <button
+                onClick={() => toggleCategory(category.title)}
+                className="w-full flex items-center justify-between text-left p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              >
+                <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+                  {category.title}
+                </h2>
+                <ChevronDown
+                  className={`w-6 h-6 transition-transform ${
+                    openCategories.includes(category.title) ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+              
+              {openCategories.includes(category.title) && (
+                <div className="mt-4 space-y-4 pl-6">
+                  {category.items.map((item, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <Checkbox
+                        id={`${category.title}-${index}`}
+                        checked={selectedServices.includes(item)}
+                        onCheckedChange={() => toggleService(item)}
+                        className="mt-1"
+                      />
+                      <label
+                        htmlFor={`${category.title}-${index}`}
+                        className="text-lg text-gray-700 dark:text-gray-300 cursor-pointer"
+                      >
+                        {item}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </section>
+
+        {/* Order Button */}
+        <div className="text-center mt-16">
+          <Button
+            onClick={() => setIsOrderDialogOpen(true)}
+            className="bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white px-8 py-4 rounded-lg font-medium hover:opacity-90 transition-all text-lg"
+          >
+            Заказать услугу
+          </Button>
+        </div>
+      </main>
+
+      {/* Order Dialog */}
+      <Dialog open={isOrderDialogOpen} onOpenChange={setIsOrderDialogOpen}>
+        <DialogContent className="sm:max-w-[480px] p-6">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-8 h-8 rounded bg-[#FF4D00] flex items-center justify-center">
+              <span className="text-white font-bold">RB</span>
+            </div>
+            <span className="text-[#FF4D00] font-bold">Решаем Быстро</span>
+          </div>
+          
+          <h2 className="text-xl font-medium mb-2">Заказать ремонт</h2>
+          <p className="text-sm text-gray-600 mb-6">
+            Оставьте заявку, и мы свяжемся с вами для обсуждения деталей ремонта в течение <span className="font-bold text-[#FF4D00]">5 минут</span>
+          </p>
+
+          <form className="space-y-4">
+            <div>
+              <Label>Имя</Label>
+              <Input 
+                placeholder="Ваше имя"
+                className="border-[#FF4D00] focus:border-[#FF4D00]"
+              />
+            </div>
+            
+            <div>
+              <Label>Телефон</Label>
+              <Input 
+                placeholder="Ваш номер телефона"
+                className="border-[#FF4D00] focus:border-[#FF4D00]"
+              />
+            </div>
+
+            <div>
+              <Label>Адрес объекта</Label>
+              <Input 
+                placeholder="Адрес помещения для ремонта"
+                className="border-[#FF4D00] focus:border-[#FF4D00]"
+              />
+            </div>
+
+            <div>
+              <Label>Комментарий</Label>
+              <Textarea 
+                placeholder="Опишите ваши пожелания или задайте вопрос"
+                className="border-[#FF4D00] focus:border-[#FF4D00] min-h-[100px]"
+              />
+            </div>
+
+            <Button 
+              type="submit"
+              className="w-full bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white hover:opacity-90"
+            >
+              Отправить заявку
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </div>
+  )
+} 
