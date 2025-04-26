@@ -89,27 +89,31 @@ export default function RemontPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
-      <main className="container mx-auto px-4 py-12">
-        {/* Hero Section */}
-        <section className="text-center mb-16">
-          <div className="w-24 h-24 rounded-[20px] bg-gradient-to-r from-[#FF7A00] to-[#FF0000] flex items-center justify-center mb-6 mx-auto">
-            <span className="text-4xl">🛠️</span>
-          </div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text">
-            Ремонт
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-800 dark:text-gray-200 max-w-3xl mx-auto mb-8 font-bold">
-            Комплексный ремонт квартир, офисов и коммерческих помещений: от косметического до капитального. Работаем с материалами премиум-класса. Гарантия 3 года!
-          </p>
-        </section>
+      <div className="w-full bg-gradient-to-r from-blue-800 to-blue-600 text-white">
+        <main className="container mx-auto px-4 py-12">
+          {/* Hero Section */}
+          <section className="text-center mb-16">
+            <div className="w-24 h-24 rounded-[20px] bg-gradient-to-r from-[#FF7A00] to-[#FF0000] flex items-center justify-center mb-6 mx-auto">
+              <span className="text-4xl">🛠️</span>
+            </div>
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white">
+              Ремонтные работы
+            </h1>
+            <p className="text-xl md:text-2xl text-white max-w-3xl mx-auto mb-8 font-bold">
+              Комплексный ремонт квартир, офисов и коммерческих помещений: от косметического до капитального. Работаем с материалами премиум-класса. Гарантия 3 года!
+            </p>
+          </section>
+        </main>
+      </div>
 
-        {/* Services List */}
-        <section className="max-w-4xl mx-auto">
+      {/* Services List */}
+      <main className="container mx-auto px-4 -mt-16">
+        <section className="max-w-4xl mx-auto bg-[#FFE4D6] dark:bg-gray-900 rounded-lg shadow-lg p-8">
           {services.map((category) => (
             <div key={category.title} className="mb-8">
               <button
                 onClick={() => toggleCategory(category.title)}
-                className="w-full flex items-center justify-between text-left p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                className="w-full flex items-center justify-between text-left p-4 bg-white/60 dark:bg-gray-800 rounded-lg hover:bg-white/90 dark:hover:bg-gray-700 transition-colors"
               >
                 <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
                   {category.title}
@@ -122,7 +126,7 @@ export default function RemontPage() {
               </button>
               
               {openCategories.includes(category.title) && (
-                <div className="mt-4 space-y-4 pl-6">
+                <div className="mt-4 space-y-4 pl-6 bg-white/30 dark:bg-gray-800/30 p-4 rounded-lg">
                   {category.items.map((item, index) => (
                     <div key={index} className="flex items-start gap-3">
                       <Checkbox
@@ -133,7 +137,7 @@ export default function RemontPage() {
                       />
                       <label
                         htmlFor={`${category.title}-${index}`}
-                        className="text-lg text-gray-700 dark:text-gray-300 cursor-pointer"
+                        className="text-lg text-gray-700 dark:text-gray-300 cursor-pointer hover:text-gray-900 dark:hover:text-white transition-colors"
                       >
                         {item}
                       </label>
