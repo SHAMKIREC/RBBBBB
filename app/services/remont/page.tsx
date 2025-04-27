@@ -67,8 +67,36 @@ const services: ServiceCategory[] = [
   }
 ]
 
+const faqQuestions = [
+  {
+    question: "Сколько времени занимает ремонт?",
+    answer: "Сроки зависят от типа ремонта: косметический ремонт квартиры - от 2 недель, капитальный - от 1.5 месяцев. Точные сроки определяются после осмотра объекта."
+  },
+  {
+    question: "Предоставляете ли вы гарантию на работы?",
+    answer: "Да, мы предоставляем гарантию 3 года на все виды работ. Гарантийные обязательства прописываются в договоре."
+  },
+  {
+    question: "Работаете ли вы со своим материалом?",
+    answer: "Да, мы можем взять на себя закупку всех необходимых материалов. Также вы можете предоставить свои материалы - мы проверим их качество и применимость."
+  },
+  {
+    question: "Как происходит оплата?",
+    answer: "Работа выполняется поэтапно. Оплата разбивается на части: предоплата 30%, промежуточные платежи по завершению этапов, финальный расчет после приемки работ."
+  },
+  {
+    question: "Заключаете ли вы договор?",
+    answer: "Обязательно. Мы заключаем официальный договор, где прописываются все виды работ, сроки, стоимость и гарантийные обязательства."
+  },
+  {
+    question: "Убираете ли вы за собой мусор?",
+    answer: "Да, уборка и вывоз строительного мусора включены в стоимость работ. Мы оставляем объект полностью готовым к эксплуатации."
+  }
+]
+
 export default function RemontPage() {
   const [openCategories, setOpenCategories] = useState<string[]>([])
+  const [openFaqs, setOpenFaqs] = useState<number[]>([])
   const [isOrderDialogOpen, setIsOrderDialogOpen] = useState(false)
   const [selectedServices, setSelectedServices] = useState<string[]>([])
   const [formData, setFormData] = useState({
@@ -91,6 +119,14 @@ export default function RemontPage() {
       prev.includes(service)
         ? prev.filter(s => s !== service)
         : [...prev, service]
+    )
+  }
+
+  const toggleFaq = (index: number) => {
+    setOpenFaqs(prev =>
+      prev.includes(index)
+        ? prev.filter(i => i !== index)
+        : [...prev, index]
     )
   }
 
@@ -136,27 +172,28 @@ export default function RemontPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
-      <div className="w-full bg-gradient-to-r from-blue-800 to-blue-600 text-white">
-        <main className="container mx-auto px-4 py-12">
-          {/* Hero Section */}
-          <section className="text-center mb-16">
+      <div className="w-full bg-gradient-to-r from-blue-800 to-blue-600 text-white pb-32">
+        <div className="container mx-auto px-4 pt-12">
+          <section className="text-center">
             <div className="w-24 h-24 rounded-[20px] bg-gradient-to-r from-[#FF7A00] to-[#FF0000] flex items-center justify-center mb-6 mx-auto shadow-[0_4px_8px_rgba(0,0,0,0.5)]">
               <span className="text-4xl drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]">🛠️</span>
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text">
+            <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text">
               Ремонтные работы
             </h1>
-            <p className="text-xl md:text-2xl text-white max-w-3xl mx-auto mb-8 font-bold">
-              Комплексный ремонт квартир, офисов и коммерческих помещений: от косметического до капитального. 
-              <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text"> Гарантия 3 года!</span>
+            <p className="text-xl md:text-2xl text-white max-w-3xl mx-auto font-bold">
+              Комплексный ремонт квартир, офисов и коммерческих помещений: от косметического до капитального.
+            </p>
+            <p className="text-xl md:text-2xl bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text font-bold mt-2">
+              Гарантия 3 года!
             </p>
           </section>
-        </main>
+        </div>
       </div>
 
       {/* Services List */}
-      <main className="container mx-auto px-4 -mt-16">
-        <section className="max-w-4xl mx-auto bg-[#FFE4D6] dark:bg-gray-900 rounded-lg shadow-lg p-8">
+      <section className="max-w-4xl mx-auto px-4 -mt-24">
+        <div className="bg-[#FFE4D6] dark:bg-gray-900 rounded-lg shadow-lg p-6">
           {services.map((category) => (
             <div key={category.title} className="mb-8">
               <button
@@ -195,7 +232,7 @@ export default function RemontPage() {
               )}
             </div>
           ))}
-        </section>
+        </div>
 
         {/* Order Button */}
         <div className="text-center mt-16">
@@ -206,7 +243,58 @@ export default function RemontPage() {
             Заказать услугу
           </Button>
         </div>
-      </main>
+
+        {/* FAQ Section */}
+        <section className="max-w-4xl mx-auto mt-20 px-4">
+          <h2 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text">
+            Часто задаваемые вопросы
+          </h2>
+          <div className="space-y-4">
+            {faqQuestions.map((faq, index) => (
+              <div 
+                key={index} 
+                className="bg-white/60 dark:bg-gray-800 rounded-lg overflow-hidden shadow-md"
+              >
+                <button
+                  onClick={() => toggleFaq(index)}
+                  className="w-full flex items-center justify-between p-6 text-left hover:bg-white/80 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-3">
+                    <span className="text-[#FF4D00]">❓</span>
+                    {faq.question}
+                  </h3>
+                  <ChevronDown
+                    className={`w-6 h-6 text-[#FF4D00] transition-transform duration-300 ${
+                      openFaqs.includes(index) ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                
+                <AnimatePresence>
+                  {openFaqs.includes(index) && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ 
+                        duration: 0.3,
+                        ease: "easeInOut"
+                      }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-6 pb-6">
+                        <p className="text-gray-700 dark:text-gray-300 pt-2 border-t border-gray-200 dark:border-gray-700">
+                          {faq.answer}
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
+          </div>
+        </section>
+      </section>
 
       {/* Order Dialog */}
       <Dialog open={isOrderDialogOpen} onOpenChange={handleCloseDialog}>

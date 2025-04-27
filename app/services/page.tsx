@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ServiceCard } from "@/components/ServiceCard"
+import { ServiceCard } from "@/components/service-card"
 
 export default function ServicesPage() {
   return (
@@ -13,14 +13,16 @@ export default function ServicesPage() {
           description="Комплексный ремонт квартир, домов и коммерческих помещений"
           href="/services/remont"
           icon="🏠"
+          variant="simple"
         />
         
         {/* Строительство */}
         <ServiceCard
           title="Строительство"
-          description="Строительство домов и объектов под ключ"
+          description="Возводим надёжные жилые дома и коммерческие здания — под ключ, в срок и с гарантией качества."
           href="/services/building"
           icon="🏗️"
+          variant="simple"
         />
         
         {/* IT-услуги */}
@@ -29,6 +31,7 @@ export default function ServicesPage() {
           description="Разработка сайтов и IT-консультации"
           href="/services/it"
           icon="💻"
+          variant="simple"
         />
       </div>
 
@@ -41,18 +44,21 @@ export default function ServicesPage() {
             description="Установка и ремонт окон и дверей"
             href="/services/remont/okna-i-dveri"
             icon="🚪"
+            variant="simple"
           />
           <ServiceCard
             title="Кровля и фасады"
             description="Монтаж и ремонт кровли, фасадные работы"
             href="/services/remont/krovlya-i-fasady"
             icon="🏠"
+            variant="simple"
           />
           <ServiceCard
             title="Инженерные системы"
             description="Установка и проектирование инженерных систем под ключ: электричество, отопление, водоснабжение и вентиляция — с гарантией качества."
             href="/services/remont/inzhenernye-sistemy"
             icon="⚡"
+            variant="simple"
           />
         </div>
       </div>
@@ -66,12 +72,14 @@ export default function ServicesPage() {
             description="Возведение жилых домов любой сложности"
             href="/services/building/domov"
             icon="🏡"
+            variant="simple"
           />
           <ServiceCard
             title="Строительство под ключ"
             description="Полный цикл строительства от проекта до сдачи"
             href="/services/building/pod-klyuch"
             icon="🔑"
+            variant="simple"
           />
         </div>
       </div>
@@ -85,12 +93,14 @@ export default function ServicesPage() {
             description="Создание современных веб-сайтов и приложений"
             href="/services/it/web-development"
             icon="🌐"
+            variant="simple"
           />
           <ServiceCard
             title="Поддержка и консультации"
             description="IT-поддержка и консультации для бизнеса"
             href="/services/it/support"
             icon="💡"
+            variant="simple"
           />
         </div>
       </div>
