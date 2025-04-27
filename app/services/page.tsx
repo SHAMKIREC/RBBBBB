@@ -50,7 +50,7 @@ export default function ServicesPage() {
           />
           <ServiceCard
             title="Инженерные системы"
-            description="Проектирование и монтаж инженерных систем"
+            description="Установка и проектирование инженерных систем под ключ: электричество, отопление, водоснабжение и вентиляция — с гарантией качества."
             href="/services/remont/inzhenernye-sistemy"
             icon="⚡"
           />
