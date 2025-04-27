@@ -833,6 +833,9 @@ video {
 .-mt-24 {
   margin-top: -6rem;
 }
+.mt-20 {
+  margin-top: 5rem;
+}
 .line-clamp-2 {
   overflow: hidden;
   display: -webkit-box;
@@ -1927,6 +1930,9 @@ video {
 .pt-12 {
   padding-top: 3rem;
 }
+.pb-6 {
+  padding-bottom: 1.5rem;
+}
 .text-left {
   text-align: left;
 }
@@ -2917,6 +2923,10 @@ input:focus, textarea:focus, select:focus {
 .hover\:bg-\[\#F4511E\]:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(244 81 30 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-white\/80:hover {
+  background-color: rgb(255 255 255 / 0.8);
 }
 
 .hover\:bg-gradient-to-r:hover {

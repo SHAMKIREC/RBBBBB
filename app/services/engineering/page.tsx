@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ChevronDown } from "lucide-react"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 
 const services: ServiceCategory[] = [
   {
@@ -70,8 +70,36 @@ interface ServiceCategory {
   items: string[]
 }
 
+const faqQuestions = [
+  {
+    question: "Сколько времени занимает монтаж инженерных систем?",
+    answer: "Сроки зависят от типа и сложности систем: монтаж электрики - от 5 дней, отопления - от 7 дней, водоснабжения - от 4 дней. Точные сроки определяются после осмотра объекта."
+  },
+  {
+    question: "Предоставляете ли вы гарантию на работы?",
+    answer: "Да, мы предоставляем гарантию 3 года на все виды инженерных работ. Гарантийные обязательства прописываются в договоре."
+  },
+  {
+    question: "Работаете ли вы с определенными производителями оборудования?",
+    answer: "Мы работаем с проверенными производителями инженерного оборудования и можем порекомендовать оптимальные варианты под ваш бюджет. Также возможна установка оборудования, предоставленного заказчиком."
+  },
+  {
+    question: "Как происходит оплата?",
+    answer: "Работа выполняется поэтапно. Оплата разбивается на части: предоплата 30%, промежуточные платежи по завершению монтажа каждой системы, финальный расчет после тестирования и запуска."
+  },
+  {
+    question: "Нужны ли разрешения и согласования?",
+    answer: "Да, для некоторых видов работ требуются согласования. Мы помогаем в получении всей необходимой документации и работаем только в соответствии с нормативами."
+  },
+  {
+    question: "Осуществляете ли вы обслуживание после монтажа?",
+    answer: "Да, мы предлагаем сервисное обслуживание установленных систем. Также проводим регулярные проверки и настройку оборудования по желанию клиента."
+  }
+]
+
 export default function EngineeringPage() {
   const [openCategories, setOpenCategories] = useState<string[]>([])
+  const [openFaqs, setOpenFaqs] = useState<number[]>([])
   const [isOrderDialogOpen, setIsOrderDialogOpen] = useState(false)
   const [selectedServices, setSelectedServices] = useState<string[]>([])
   const [formData, setFormData] = useState({
@@ -94,6 +122,14 @@ export default function EngineeringPage() {
       prev.includes(service)
         ? prev.filter(s => s !== service)
         : [...prev, service]
+    )
+  }
+
+  const toggleFaq = (index: number) => {
+    setOpenFaqs(prev =>
+      prev.includes(index)
+        ? prev.filter(i => i !== index)
+        : [...prev, index]
     )
   }
 
@@ -200,6 +236,57 @@ export default function EngineeringPage() {
               Заказать услугу
             </Button>
           </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="max-w-4xl mx-auto mt-20 px-4">
+        <h2 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text">
+          Часто задаваемые вопросы
+        </h2>
+        <div className="space-y-4">
+          {faqQuestions.map((faq, index) => (
+            <div 
+              key={index} 
+              className="bg-white/60 dark:bg-gray-800 rounded-lg overflow-hidden shadow-md"
+            >
+              <button
+                onClick={() => toggleFaq(index)}
+                className="w-full flex items-center justify-between p-6 text-left hover:bg-white/80 dark:hover:bg-gray-700 transition-colors"
+              >
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-3">
+                  <span className="text-[#FF4D00]">❓</span>
+                  {faq.question}
+                </h3>
+                <ChevronDown
+                  className={`w-6 h-6 text-[#FF4D00] transition-transform duration-300 ${
+                    openFaqs.includes(index) ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+              
+              <AnimatePresence>
+                {openFaqs.includes(index) && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ 
+                      duration: 0.3,
+                      ease: "easeInOut"
+                    }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-6 pb-6">
+                      <p className="text-gray-700 dark:text-gray-300 pt-2 border-t border-gray-200 dark:border-gray-700">
+                        {faq.answer}
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ))}
         </div>
       </section>
 

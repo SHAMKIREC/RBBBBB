@@ -1,5 +1,5 @@
 import { ServiceCard } from "@/components/service-card"
-import { Footer } from "@/components/footer"
+import Footer from "@/app/components/footer"
 import { PageHeader } from "@/components/page-header"
 
 export default function ConstructionPage() {
@@ -16,7 +16,7 @@ export default function ConstructionPage() {
             <ServiceCard
               icon={<span className="text-[#FF5722]">🏗️</span>}
               title="Строительство"
-              description="Строительство жилых и коммерческих объектов любой сложности. От проектирования до сдачи в эксплуатацию."
+              description="Возводим надёжные жилые дома и коммерческие здания — под ключ, в срок и с гарантией качества."
               categories={[
                 {
                   title: "Жилое строительство",
