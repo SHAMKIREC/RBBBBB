@@ -7,7 +7,7 @@ export default function ConstructionPage() {
     <div className="flex flex-col min-h-screen">
       <PageHeader
         title="Строительство"
-        description="Строительство жилых и коммерческих объектов любой сложности. От проектирования до сдачи в эксплуатацию."
+        description="Возводим надёжные жилые дома и коммерческие здания — под ключ, в срок и с гарантией качества."
       />
 
       <section className="py-16 bg-gray-50 dark:bg-gray-900">
