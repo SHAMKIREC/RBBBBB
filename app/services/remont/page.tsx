@@ -245,53 +245,48 @@ export default function RemontPage() {
         </div>
 
         {/* FAQ Section */}
-        <section className="max-w-4xl mx-auto mt-20 px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text">
-            Часто задаваемые вопросы
-          </h2>
-          <div className="space-y-4">
-            {faqQuestions.map((faq, index) => (
-              <div 
-                key={index} 
-                className="bg-white/60 dark:bg-gray-800 rounded-lg overflow-hidden shadow-md"
-              >
-                <button
-                  onClick={() => toggleFaq(index)}
-                  className="w-full flex items-center justify-between p-6 text-left hover:bg-white/80 dark:hover:bg-gray-700 transition-colors"
-                >
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-3">
-                    <span className="text-[#FF4D00]">❓</span>
-                    {faq.question}
-                  </h3>
-                  <ChevronDown
-                    className={`w-6 h-6 text-[#FF4D00] transition-transform duration-300 ${
-                      openFaqs.includes(index) ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-                
-                <AnimatePresence>
-                  {openFaqs.includes(index) && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ 
-                        duration: 0.3,
-                        ease: "easeInOut"
-                      }}
-                      className="overflow-hidden"
-                    >
-                      <div className="px-6 pb-6">
-                        <p className="text-gray-700 dark:text-gray-300 pt-2 border-t border-gray-200 dark:border-gray-700">
-                          {faq.answer}
-                        </p>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            ))}
+        <section className="py-16">
+          <div className="max-w-4xl mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text">
+              Часто задаваемые вопросы
+            </h2>
+            <div className="space-y-6">
+              {faqQuestions.map((item, index) => (
+                <div key={index} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                  <button
+                    onClick={() => toggleFaq(index)}
+                    className="w-full flex items-center gap-4 p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text font-bold text-2xl">
+                      ?
+                    </span>
+                    <span className="flex-1 text-lg font-medium text-gray-900 dark:text-white">
+                      {item.question}
+                    </span>
+                    <ChevronDown
+                      className={`w-6 h-6 text-gray-500 transition-transform duration-300 ${
+                        openFaqs.includes(index) ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                  <AnimatePresence>
+                    {openFaqs.includes(index) && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-6 pb-6 text-gray-600 dark:text-gray-300 border-t border-gray-100 dark:border-gray-700">
+                          {item.answer}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
       </section>
