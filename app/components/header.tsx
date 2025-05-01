@@ -2,13 +2,16 @@
 
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { FaBars, FaTimes, FaShoppingCart } from 'react-icons/fa'
+import { FaBars, FaTimes, FaShoppingCart, FaWhatsapp, FaTelegram } from 'react-icons/fa'
 import { HiSun, HiMoon } from 'react-icons/hi'
 import SearchBar from './SearchBar'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from '@radix-ui/react-dropdown-menu'
+import { Phone } from 'lucide-react'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(false)
+  const [isSOSOpen, setIsSOSOpen] = useState(false)
 
   useEffect(() => {
     if (isDarkMode) {
@@ -71,12 +74,89 @@ export default function Header() {
                 "☀️"
               )}
             </button>
-            <Link
-              href="/emergency"
-              className="px-4 py-2 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white font-medium rounded hover:opacity-90 transition-opacity"
-            >
-              SOS 24/7
-            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="px-4 py-2 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white font-medium rounded hover:opacity-90 transition-opacity">
+                  SOS 24/7
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-[320px] p-3 bg-[#FFD6CC] dark:bg-[#2A1A15] rounded-md border-2 border-[#FF4D00]">
+                <div className="flex flex-col gap-2">
+                  <div className="text-lg font-semibold text-black dark:text-white">
+                    Экстренный вызов сотрудника
+                  </div>
+                  
+                  <button 
+                    onClick={() => setIsSOSOpen(!isSOSOpen)} 
+                    className="w-full px-4 py-3 mt-1 text-base font-medium text-white relative rounded-md hover:opacity-90 transition-opacity flex items-center justify-center gap-2 bg-[#FF4D00]"
+                  >
+                    <span className="relative z-10 text-lg">▼</span>
+                    <span className="relative z-10">Авария? Звоните даже ночью!</span>
+                    <span className="relative z-10 text-lg">▼</span>
+                  </button>
+
+                  {/* Контакты сразу под кнопкой */}
+                  <div className="flex flex-col gap-2 mt-2">
+                    <a
+                      href="tel:+79085509037"
+                      className="flex items-center justify-center gap-2 py-1.5 text-sm font-medium text-black hover:opacity-90"
+                    >
+                      <Phone className="h-5 w-5 text-black" />
+                      +7 908 550 90 37
+                    </a>
+                    <a
+                      href="https://wa.me/79085509037"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 py-1.5 text-sm font-medium text-black hover:opacity-90"
+                    >
+                      <FaWhatsapp className="h-6 w-6 text-[#25D366]" />
+                      WhatsApp
+                    </a>
+                    <a
+                      href="https://t.me/+79085509037"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 py-1.5 text-sm font-medium text-black hover:opacity-90"
+                    >
+                      <FaTelegram className="h-6 w-6 text-[#229ED9]" />
+                      Telegram
+                    </a>
+                  </div>
+
+                  {isSOSOpen && (
+                    <div className="space-y-6 mt-4 pt-4 border-t border-[#FF3A2D]/20">
+                      <div className="space-y-3">
+                        <h3 className="text-lg font-bold text-[#FF3A2D]">Срочно решаем любые проблемы:</h3>
+                        <ul className="list-disc pl-5 space-y-2 text-black dark:text-white">
+                          <li>Протечки и затопления</li>
+                          <li>Поломки оборудования</li>
+                          <li>Электрические неисправности</li>
+                          <li>Аварийные ситуации</li>
+                        </ul>
+                      </div>
+
+                      <div className="space-y-3">
+                        <h3 className="text-lg font-bold text-[#FF3A2D]">Как мы работаем:</h3>
+                        <ul className="list-disc pl-5 space-y-2 text-black dark:text-white">
+                          <li>Выезд в течение часа</li>
+                          <li>Работаем 24/7 без выходных</li>
+                          <li>Оперативное устранение проблем</li>
+                        </ul>
+                      </div>
+
+                      <div className="space-y-3">
+                        <h3 className="text-lg font-bold text-[#FF3A2D]">Гарантии:</h3>
+                        <ul className="list-disc pl-5 space-y-2 text-black dark:text-white">
+                          <li>Фиксированная смета</li>
+                          <li>Гарантия на работы</li>
+                        </ul>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Link
               href="/login"
               className="px-4 py-2 border-2 border-[#FF3A2D] text-transparent bg-clip-text bg-gradient-to-r from-[#FF7A00] to-[#FF0000] font-medium rounded hover:bg-gradient-to-r hover:from-[#FF7A00] hover:to-[#FF0000] hover:text-white transition-colors"
