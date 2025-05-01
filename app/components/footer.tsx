@@ -37,7 +37,7 @@ export default function Footer() {
               <Link href="/services/engineering" className="hover:text-white transition-colors">Инженерные системы</Link>
             </li>
             <li className="flex items-center gap-2">
-              <span>🏠</span>
+              <span>🏗️</span>
               <Link href="/services/building" className="hover:text-white transition-colors">Строительство</Link>
             </li>
             <li className="flex items-center gap-2">
@@ -45,7 +45,7 @@ export default function Footer() {
               <Link href="/services/windows-doors" className="hover:text-white transition-colors">Окна и двери</Link>
             </li>
             <li className="flex items-center gap-2">
-              <span>🏗️</span>
+              <span>🏠</span>
               <Link href="/services/roof-facade" className="hover:text-white transition-colors">Кровля и фасады</Link>
             </li>
             <li className="flex items-center gap-2">
@@ -76,7 +76,7 @@ export default function Footer() {
               <Link href="/business/supplier" className="hover:text-white transition-colors">Как стать поставщиком</Link>
             </li>
             <li className="flex items-center gap-2">
-              <span>🛠️</span>
+              <span>🤝</span>
               <Link href="/business/service-partner" className="hover:text-white transition-colors">Как стать партнёром по услугам</Link>
             </li>
           </ul>
