@@ -1,10 +1,7 @@
 {
-  "/services/remont/page": "app/services/remont/page.js",
-  "/page": "app/page.js",
-  "/services/roof-facade/page": "app/services/roof-facade/page.js",
-  "/services/construction/page": "app/services/construction/page.js",
   "/services/windows-doors/page": "app/services/windows-doors/page.js",
-  "/services/it/page": "app/services/it/page.js",
-  "/services/roofing-facades/page": "app/services/roofing-facades/page.js",
+  "/page": "app/page.js",
+  "/services/construction/page": "app/services/construction/page.js",
+  "/services/remont/page": "app/services/remont/page.js",
   "/services/engineering/page": "app/services/engineering/page.js"
 }
