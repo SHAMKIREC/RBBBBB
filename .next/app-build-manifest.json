@@ -20,6 +20,31 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/services/engineering/page.js"
+    ],
+    "/services/construction/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/services/construction/page.js"
+    ],
+    "/services/windows-doors/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/services/windows-doors/page.js"
+    ],
+    "/services/roof-facade/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/services/roof-facade/page.js"
+    ],
+    "/services/roofing-facades/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/services/roofing-facades/page.js"
+    ],
+    "/services/it/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/services/it/page.js"
     ]
   }
 }
