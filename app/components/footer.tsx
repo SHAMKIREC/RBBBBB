@@ -37,11 +37,11 @@ export default function Footer() {
               <Link href="/services/engineering" className="hover:text-white transition-colors">Инженерные системы</Link>
             </li>
             <li className="flex items-center gap-2">
-              <span>🪟</span>
+              <span>🏠</span>
               <Link href="/services/building" className="hover:text-white transition-colors">Строительство</Link>
             </li>
             <li className="flex items-center gap-2">
-              <span>🏠</span>
+              <span>🪟</span>
               <Link href="/services/windows-doors" className="hover:text-white transition-colors">Окна и двери</Link>
             </li>
             <li className="flex items-center gap-2">

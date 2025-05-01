@@ -12,55 +12,63 @@ import { motion, AnimatePresence } from "framer-motion"
 
 const services: ServiceCategory[] = [
   {
-    title: "Электрические системы",
+    title: "Электрика",
     items: [
-      "Проектирование электрических систем",
       "Монтаж электропроводки",
-      "Установка электрощитов и автоматики",
-      "Подключение силового оборудования",
+      "Установка электрощитов",
+      "Подключение электроприборов",
+      "Замена розеток и выключателей",
+      "Установка светильников",
       "Монтаж систем освещения",
-      "Установка розеток и выключателей",
-      "Заземление и молниезащита",
-      "Подключение бытовой техники"
+      "Электрическая диагностика",
+      "Устранение неисправностей",
+      "Подключение бытовой техники",
+      "Монтаж систем защиты"
     ]
   },
   {
-    title: "Отопление и вентиляция",
+    title: "Отопление",
     items: [
-      "Проектирование систем отопления",
       "Монтаж радиаторов отопления",
-      "Установка котельного оборудования",
-      "Монтаж теплых полов",
-      "Установка систем вентиляции",
-      "Монтаж кондиционеров",
-      "Установка рекуператоров",
-      "Пусконаладка систем"
+      "Установка котлов",
+      "Теплый пол",
+      "Обслуживание систем отопления",
+      "Замена труб отопления",
+      "Балансировка системы",
+      "Установка термостатов",
+      "Ремонт котлов",
+      "Промывка системы отопления",
+      "Установка бойлеров"
     ]
   },
   {
     title: "Водоснабжение",
     items: [
-      "Проектирование водоснабжения",
       "Монтаж водопровода",
-      "Установка фильтров очистки",
-      "Монтаж канализации",
       "Установка сантехники",
-      "Монтаж насосного оборудования",
-      "Гидроизоляция помещений",
-      "Установка водонагревателей"
+      "Канализационные системы",
+      "Замена труб",
+      "Установка фильтров",
+      "Монтаж насосов",
+      "Установка счетчиков",
+      "Ремонт сантехники",
+      "Устранение протечек",
+      "Водоподготовка"
     ]
   },
   {
-    title: "Системы безопасности",
+    title: "Вентиляция",
     items: [
-      "Установка видеонаблюдения",
-      "Монтаж пожарной сигнализации",
-      "Установка систем контроля доступа",
-      "Монтаж охранной сигнализации",
-      "Установка домофонов",
-      "Системы умного дома",
-      "Автоматизация процессов",
-      "Диспетчеризация"
+      "Монтаж приточной вентиляции",
+      "Установка вытяжной вентиляции",
+      "Монтаж вентиляционных каналов",
+      "Установка рекуператоров",
+      "Монтаж систем кондиционирования",
+      "Установка воздуховодов",
+      "Монтаж вентиляционных решеток",
+      "Установка вентиляторов",
+      "Обслуживание вентиляционных систем",
+      "Чистка вентиляционных каналов"
     ]
   }
 ]
@@ -73,27 +81,27 @@ interface ServiceCategory {
 const faqQuestions = [
   {
     question: "Сколько времени занимает монтаж инженерных систем?",
-    answer: "Сроки зависят от типа и сложности систем: монтаж электрики - от 5 дней, отопления - от 7 дней, водоснабжения - от 4 дней. Точные сроки определяются после осмотра объекта."
+    answer: "Сроки выполнения работ зависят от площади и сложности объекта. В среднем монтаж занимает от 1 до 3 недель. Точные сроки определяются после осмотра объекта и составления проекта."
   },
   {
     question: "Предоставляете ли вы гарантию на работы?",
-    answer: "Да, мы предоставляем гарантию 3 года на все виды инженерных работ. Гарантийные обязательства прописываются в договоре."
+    answer: "Да, мы предоставляем гарантию 3 года на все виды работ. Гарантия распространяется как на используемые материалы, так и на качество монтажа."
   },
   {
     question: "Работаете ли вы с определенными производителями оборудования?",
-    answer: "Мы работаем с проверенными производителями инженерного оборудования и можем порекомендовать оптимальные варианты под ваш бюджет. Также возможна установка оборудования, предоставленного заказчиком."
+    answer: "Мы работаем со всеми ведущими производителями инженерного оборудования. Можем как предложить оптимальные варианты, так и установить оборудование по выбору заказчика при его соответствии нормам."
   },
   {
     question: "Как происходит оплата?",
-    answer: "Работа выполняется поэтапно. Оплата разбивается на части: предоплата 30%, промежуточные платежи по завершению монтажа каждой системы, финальный расчет после тестирования и запуска."
+    answer: "Оплата производится поэтапно: предоплата 40% после подписания договора, промежуточные платежи по завершении этапов работ, окончательный расчет после приемки работ."
   },
   {
     question: "Нужны ли разрешения и согласования?",
-    answer: "Да, для некоторых видов работ требуются согласования. Мы помогаем в получении всей необходимой документации и работаем только в соответствии с нормативами."
+    answer: "Да, для некоторых видов работ требуются разрешения и согласования. Мы помогаем в получении всей необходимой документации и работаем только в соответствии с нормативами."
   },
   {
     question: "Осуществляете ли вы обслуживание после монтажа?",
-    answer: "Да, мы предлагаем сервисное обслуживание установленных систем. Также проводим регулярные проверки и настройку оборудования по желанию клиента."
+    answer: "Да, мы предоставляем услуги по техническому обслуживанию установленных систем. Это включает регулярные проверки, настройку и профилактические работы."
   }
 ]
 
@@ -103,10 +111,10 @@ export default function EngineeringPage() {
   const [isOrderDialogOpen, setIsOrderDialogOpen] = useState(false)
   const [selectedServices, setSelectedServices] = useState<string[]>([])
   const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    address: "",
-    comment: ""
+    name: '',
+    phone: '',
+    email: '',
+    message: ''
   })
 
   const toggleCategory = (title: string) => {
@@ -144,7 +152,7 @@ export default function EngineeringPage() {
     setIsOrderDialogOpen(true)
     setFormData(prev => ({
       ...prev,
-      comment: selectedServices.join('\n')
+      message: selectedServices.join('\n')
     }))
   }
 
@@ -152,10 +160,10 @@ export default function EngineeringPage() {
     setIsOrderDialogOpen(false)
     setSelectedServices([])
     setFormData({
-      name: "",
-      phone: "",
-      address: "",
-      comment: ""
+      name: '',
+      phone: '',
+      email: '',
+      message: ''
     })
   }
 
@@ -178,8 +186,10 @@ export default function EngineeringPage() {
               Инженерные системы
             </h1>
             <p className="text-xl md:text-2xl text-white max-w-3xl mx-auto font-bold">
-              Установка и проектирование инженерных систем под ключ: электричество, отопление, водоснабжение и вентиляция.
-              <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text"> Гарантия 3 года!</span>
+              Профессиональный монтаж и обслуживание всех типов инженерных систем для вашего комфорта.
+            </p>
+            <p className="text-xl md:text-2xl bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text font-bold mt-2">
+              Гарантия 3 года!
             </p>
           </section>
         </div>
@@ -189,49 +199,57 @@ export default function EngineeringPage() {
       <section className="max-w-4xl mx-auto px-4 -mt-24">
         <div className="bg-[#FFE4D6] dark:bg-gray-900 rounded-lg shadow-lg p-6">
           {services.map((category) => (
-            <div key={category.title} className="mb-4">
+            <div key={category.title} className="mb-8">
               <button
                 onClick={() => toggleCategory(category.title)}
-                className="w-full flex items-center justify-between text-left p-4 bg-white/60 dark:bg-gray-800 rounded-lg hover:bg-white/90 dark:hover:bg-gray-700 transition-colors"
+                className="w-full flex items-center justify-between p-6 bg-white dark:bg-gray-800 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
-                <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+                <span className="text-xl font-medium text-gray-900 dark:text-white">
                   {category.title}
-                </h2>
+                </span>
                 <ChevronDown
-                  className={`w-6 h-6 transition-transform ${
+                  className={`w-6 h-6 text-gray-500 transition-transform duration-300 ${
                     openCategories.includes(category.title) ? "rotate-180" : ""
                   }`}
                 />
               </button>
-              
-              {openCategories.includes(category.title) && (
-                <div className="mt-2 space-y-3 pl-6 bg-white/30 dark:bg-gray-800/30 p-4 rounded-lg">
-                  {category.items.map((item, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <Checkbox
-                        id={`${category.title}-${index}`}
-                        checked={selectedServices.includes(item)}
-                        onCheckedChange={() => toggleService(item)}
-                        className="mt-1"
-                      />
-                      <label
-                        htmlFor={`${category.title}-${index}`}
-                        className="text-lg text-gray-700 dark:text-gray-300 cursor-pointer hover:text-gray-900 dark:hover:text-white transition-colors"
-                      >
-                        {item}
-                      </label>
+              <AnimatePresence mode="wait">
+                {openCategories.includes(category.title) && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="mt-4 space-y-4 pl-8">
+                      {category.items.map((item, index) => (
+                        <div key={index} className="flex items-start gap-4">
+                          <Checkbox
+                            id={`${category.title}-${index}`}
+                            checked={selectedServices.includes(item)}
+                            onCheckedChange={() => toggleService(item)}
+                            className="mt-1"
+                          />
+                          <label
+                            htmlFor={`${category.title}-${index}`}
+                            className="text-lg text-gray-700 dark:text-gray-300 cursor-pointer"
+                          >
+                            {item}
+                          </label>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           ))}
 
-          {/* Order Button */}
           <div className="text-center mt-8">
             <Button
               onClick={handleOpenDialog}
-              className="bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white px-8 py-4 rounded-lg font-medium hover:opacity-90 transition-all text-lg"
+              className="bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white px-8 py-3 rounded-lg text-lg font-medium hover:opacity-90 transition-opacity"
             >
               Заказать услугу
             </Button>
@@ -240,58 +258,53 @@ export default function EngineeringPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="max-w-4xl mx-auto mt-20 px-4">
-        <h2 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text">
-          Часто задаваемые вопросы
-        </h2>
-        <div className="space-y-4">
-          {faqQuestions.map((faq, index) => (
-            <div 
-              key={index} 
-              className="bg-white/60 dark:bg-gray-800 rounded-lg overflow-hidden shadow-md"
-            >
-              <button
-                onClick={() => toggleFaq(index)}
-                className="w-full flex items-center justify-between p-6 text-left hover:bg-white/80 dark:hover:bg-gray-700 transition-colors"
-              >
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-3">
-                  <span className="text-[#FF4D00]">❓</span>
-                  {faq.question}
-                </h3>
-                <ChevronDown
-                  className={`w-6 h-6 text-[#FF4D00] transition-transform duration-300 ${
-                    openFaqs.includes(index) ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-              
-              <AnimatePresence>
-                {openFaqs.includes(index) && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ 
-                      duration: 0.3,
-                      ease: "easeInOut"
-                    }}
-                    className="overflow-hidden"
-                  >
-                    <div className="px-6 pb-6">
-                      <p className="text-gray-700 dark:text-gray-300 pt-2 border-t border-gray-200 dark:border-gray-700">
-                        {faq.answer}
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          ))}
+      <section className="py-16">
+        <div className="max-w-4xl mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text">
+            Часто задаваемые вопросы
+          </h2>
+          <div className="space-y-6">
+            {faqQuestions.map((item, index) => (
+              <div key={index} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                <button
+                  onClick={() => toggleFaq(index)}
+                  className="w-full flex items-center gap-4 p-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text font-bold text-2xl">
+                    ?
+                  </span>
+                  <span className="flex-1 text-lg font-medium text-gray-900 dark:text-white">
+                    {item.question}
+                  </span>
+                  <ChevronDown
+                    className={`w-6 h-6 text-gray-500 transition-transform duration-300 ${
+                      openFaqs.includes(index) ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                <AnimatePresence mode="wait">
+                  {openFaqs.includes(index) && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-6 pb-6 text-gray-600 dark:text-gray-300 border-t border-gray-100 dark:border-gray-700">
+                        {item.answer}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Order Dialog */}
-      <Dialog open={isOrderDialogOpen} onOpenChange={handleCloseDialog}>
+      <Dialog open={isOrderDialogOpen} onOpenChange={setIsOrderDialogOpen}>
         <DialogContent className="sm:max-w-[480px] p-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -300,61 +313,63 @@ export default function EngineeringPage() {
             transition={{ duration: 0.3 }}
           >
             <div className="flex items-center gap-2 mb-2">
-              <div className="w-8 h-8 rounded bg-[#FF4D00] flex items-center justify-center">
+              <div className="w-8 h-8 rounded bg-gradient-to-r from-[#FF7A00] to-[#FF0000] flex items-center justify-center">
                 <span className="text-white font-bold">RB</span>
               </div>
-              <span className="text-[#FF4D00] font-bold">Решаем Быстро</span>
+              <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text font-bold">
+                Решаем Быстро
+              </span>
             </div>
             
-            <h2 className="text-xl font-medium mb-2">Заказать монтаж</h2>
+            <h2 className="text-xl font-medium mb-2">Заказать услугу</h2>
             <p className="text-sm text-gray-600 mb-6">
               Оставьте заявку, и мы свяжемся с вами для обсуждения проекта в течение <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text">5 минут</span>
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label>Имя</Label>
-                <Input 
-                  placeholder="Ваше имя"
+                <Label htmlFor="name">Ваше имя</Label>
+                <Input
+                  id="name"
                   value={formData.name}
                   onChange={(e) => handleFormChange('name', e.target.value)}
-                  className="border-[#FF4D00] focus:border-[#FF4D00]"
+                  placeholder="Иван Иванов"
+                  required
                 />
               </div>
-              
               <div>
-                <Label>Телефон</Label>
-                <Input 
-                  placeholder="Ваш номер телефона"
+                <Label htmlFor="phone">Телефон</Label>
+                <Input
+                  id="phone"
                   value={formData.phone}
                   onChange={(e) => handleFormChange('phone', e.target.value)}
-                  className="border-[#FF4D00] focus:border-[#FF4D00]"
+                  placeholder="+7 (999) 999-99-99"
+                  required
                 />
               </div>
-
               <div>
-                <Label>Адрес объекта</Label>
-                <Input 
-                  placeholder="Адрес для монтажа систем"
-                  value={formData.address}
-                  onChange={(e) => handleFormChange('address', e.target.value)}
-                  className="border-[#FF4D00] focus:border-[#FF4D00]"
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  value={formData.email}
+                  onChange={(e) => handleFormChange('email', e.target.value)}
+                  placeholder="example@example.com"
+                  required
                 />
               </div>
-
               <div>
-                <Label>Комментарий</Label>
-                <Textarea 
-                  placeholder="Опишите ваши пожелания или задайте вопрос"
-                  value={formData.comment}
-                  onChange={(e) => handleFormChange('comment', e.target.value)}
-                  className="border-[#FF4D00] focus:border-[#FF4D00] min-h-[100px]"
+                <Label htmlFor="message">Комментарий</Label>
+                <Textarea
+                  id="message"
+                  value={formData.message}
+                  onChange={(e) => handleFormChange('message', e.target.value)}
+                  placeholder="Опишите ваши пожелания"
+                  className="min-h-[100px]"
                 />
               </div>
-
-              <Button 
+              <Button
                 type="submit"
-                className="w-full bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white hover:opacity-90"
+                className="w-full bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white"
               >
                 Отправить заявку
               </Button>
