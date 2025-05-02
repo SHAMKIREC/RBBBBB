@@ -9,21 +9,21 @@ export default function Footer() {
   const [isPolicyOpen, setPolicyOpen] = useState(false);
 
   return (
-    <footer className="bg-neutral-900 text-neutral-200 py-8 sm:py-12">
+    <footer className="bg-neutral-900 text-neutral-200 py-4 sm:py-6">
       {/* Логотип и название */}
-      <div className="max-w-7xl mx-auto mb-8 sm:mb-12">
-        <div className="flex items-center pl-4">
-          <div className="h-7 w-7 sm:h-8 sm:w-8 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] rounded flex items-center justify-center">
-            <span className="text-white font-bold text-xs sm:text-sm leading-none">RB</span>
+      <div className="max-w-7xl mx-auto px-2 mb-12">
+        <div className="flex items-center flex-shrink-0 -ml-12">
+          <div className="h-8 w-8 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] rounded flex items-center justify-center">
+            <span className="text-white font-bold text-sm leading-none">RB</span>
           </div>
-          <span className="ml-2 text-base sm:text-lg font-bold bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text leading-none">
+          <span className="ml-2 text-lg font-bold bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text leading-none">
             РЕШАЕМ БЫСТРО
           </span>
         </div>
       </div>
 
       {/* Основная сетка */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+      <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 -mt-4">
         {/* 1. Наши услуги */}
         <div>
           <h4 className="text-lg font-bold mb-4">Наши услуги</h4>
