@@ -23,18 +23,16 @@ export default function Header() {
 
   return (
     <header className="bg-neutral-900 text-neutral-200 shadow-sm sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto px-2">
         <div className="flex items-center justify-between h-16">
           {/* Логотип */}
-          <Link href="/" className="flex items-center flex-shrink-0 pl-4">
-            <div className="flex items-center">
-              <div className="h-8 w-8 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] rounded flex items-center justify-center">
-                <span className="text-white font-bold text-sm leading-none">RB</span>
-              </div>
-              <span className="ml-2 text-lg font-bold bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text leading-none">
-                РЕШАЕМ БЫСТРО
-              </span>
+          <Link href="/" className="flex items-center flex-shrink-0 -ml-12">
+            <div className="h-8 w-8 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] rounded flex items-center justify-center">
+              <span className="text-white font-bold text-sm leading-none">RB</span>
             </div>
+            <span className="ml-2 text-lg font-bold bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text leading-none">
+              РЕШАЕМ БЫСТРО
+            </span>
           </Link>
 
           {/* Поисковая строка */}

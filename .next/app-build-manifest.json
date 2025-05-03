@@ -16,20 +16,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/services/remont/page.js"
     ],
-    "/services/windows-doors/page": [
+    "/services/it/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/services/windows-doors/page.js"
+      "static/chunks/app/services/it/page.js"
     ],
-    "/services/engineering/page": [
+    "/contacts/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/services/engineering/page.js"
-    ],
-    "/services/construction/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/services/construction/page.js"
+      "static/chunks/app/contacts/page.js"
     ]
   }
 }
