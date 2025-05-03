@@ -129,34 +129,32 @@ export default function Footer() {
         </div>
 
         {/* 5. Контакты */}
-        <div>
+        <div id="contacts" className="space-y-3">
           <h4 className="text-lg font-bold mb-4">Контакты</h4>
-          <div className="space-y-3">
-            <p>
-              <span className="block text-neutral-400">✉️ Email:</span>
-              <a href="mailto:rb.service24@mail.ru" className="text-white hover:text-orange-500 transition-colors">
-                rb.service24@mail.ru
-              </a>
-            </p>
-            <p>
-              <span className="block text-neutral-400">💻 IT:</span>
-              <a href="tel:+79330306949" className="text-white hover:text-orange-500 transition-colors">
-                +7 933 030 69 49
-              </a>
-            </p>
-            <p>
-              <span className="block text-neutral-400">🏛️ Номер компании:</span>
-              <a href="tel:+79372296949" className="text-white hover:text-orange-500 transition-colors">
-                +7 937 229 69 49
-              </a>
-            </p>
-            <p>
-              <span className="block text-neutral-400">🛠️ Строительство:</span>
-              <a href="tel:+79085509037" className="text-white hover:text-orange-500 transition-colors">
-                +7 908 550 90 37
-              </a>
-            </p>
-          </div>
+          <p>
+            <span className="block text-neutral-400">✉️ Email:</span>
+            <a href="mailto:rb.service24@mail.ru" className="text-white hover:text-orange-500 transition-colors">
+              rb.service24@mail.ru
+            </a>
+          </p>
+          <p>
+            <span className="block text-neutral-400">💻 IT:</span>
+            <a href="tel:+79330306949" className="text-white hover:text-orange-500 transition-colors">
+              +7 933 030 69 49
+            </a>
+          </p>
+          <p>
+            <span className="block text-neutral-400">🏛️ Номер компании:</span>
+            <a href="tel:+79372296949" className="text-white hover:text-orange-500 transition-colors">
+              +7 937 229 69 49
+            </a>
+          </p>
+          <p>
+            <span className="block text-neutral-400">🛠️ Строительство:</span>
+            <a href="tel:+79085509037" className="text-white hover:text-orange-500 transition-colors">
+              +7 908 550 90 37
+            </a>
+          </p>
         </div>
       </div>
 
