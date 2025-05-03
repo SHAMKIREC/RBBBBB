@@ -54,9 +54,10 @@ export default function Header() {
             <Link href="/blog" className="nav-link">
               Блог
             </Link>
-            <Link href="/contacts" className="nav-link">
-              Контакты
-            </Link>
+            <li className="flex items-center gap-2">
+              <span>📞</span>
+              <a href="#contacts" className="hover:text-white transition-colors">Контакты</a>
+            </li>
             <Link href="/shop" className="nav-link flex items-center gap-2">
               <FaShoppingCart className="w-5 h-5" />
               <span>Магазин</span>
@@ -124,6 +125,28 @@ export default function Header() {
 
                   {isSOSOpen && (
                     <div className="space-y-6 mt-4 pt-4 border-t border-[#FF3A2D]/20">
+                      <div className="space-y-3">
+                        <h3 className="text-lg font-bold text-[#FF3A2D]">Контакты:</h3>
+                        <div className="space-y-2 text-black dark:text-white">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xl">✉️</span>
+                            <span>Email: rb.service24@mail.ru</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xl">💻</span>
+                            <span>IT: +7 933 030 69 49</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xl">🏛️</span>
+                            <span>Номер компании: +7 937 229 69 49</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xl">🛠️</span>
+                            <span>Строительство: +7 908 550 90 37</span>
+                          </div>
+                        </div>
+                      </div>
+
                       <div className="space-y-3">
                         <h3 className="text-lg font-bold text-[#FF3A2D]">Срочно решаем любые проблемы:</h3>
                         <ul className="list-disc pl-5 space-y-2 text-black dark:text-white">
@@ -195,9 +218,6 @@ export default function Header() {
               </Link>
               <Link href="/blog" className="mobile-nav-link">
                 Блог
-              </Link>
-              <Link href="/contacts" className="mobile-nav-link">
-                Контакты
               </Link>
               <Link href="/shop" className="mobile-nav-link flex items-center gap-2">
                 <FaShoppingCart className="w-5 h-5" />
