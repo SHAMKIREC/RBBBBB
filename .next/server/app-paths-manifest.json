@@ -1,7 +1,6 @@
 {
-  "/services/windows-doors/page": "app/services/windows-doors/page.js",
   "/page": "app/page.js",
-  "/services/construction/page": "app/services/construction/page.js",
-  "/services/remont/page": "app/services/remont/page.js",
-  "/services/engineering/page": "app/services/engineering/page.js"
+  "/services/it/page": "app/services/it/page.js",
+  "/contacts/page": "app/contacts/page.js",
+  "/services/remont/page": "app/services/remont/page.js"
 }
