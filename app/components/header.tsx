@@ -43,9 +43,35 @@ export default function Header() {
 
           {/* Навигация для десктопов */}
           <nav className="hidden md:flex items-center space-x-6 pr-4">
-            <Link href="/services" className="nav-link">
-              Услуги
-            </Link>
+            {/* Выпадающий список услуг */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="nav-link cursor-pointer flex items-center gap-1 bg-transparent border-none shadow-none px-0 py-0 rounded-none focus:outline-none focus:ring-0 group">
+                  <span className="transition-colors group-hover:bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-[#FF7A00] group-hover:to-[#FF0000] group-data-[state=open]:bg-clip-text group-data-[state=open]:text-transparent group-data-[state=open]:bg-gradient-to-r group-data-[state=open]:from-[#FF7A00] group-data-[state=open]:to-[#FF0000]">Услуги</span>
+                  <span className="ml-1">▼</span>
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-[#FFE4D6] text-black min-w-[260px] shadow-lg border border-[#FF7A00]/30 rounded-xl p-0 z-50">
+                {/* Подпись и основные услуги */}
+                <div className="px-4 pt-3 pb-1 text-xs font-bold tracking-wider uppercase bg-clip-text text-transparent bg-gradient-to-r from-[#FF7A00] to-[#C80000]">Основные услуги</div>
+                <Link href="/services/remont" className="block px-4 py-2 rounded-none transition-colors hover:bg-[#FFD1B3] text-black">Ремонт</Link>
+                <Link href="/services/engineering" className="block px-4 py-2 rounded-none transition-colors hover:bg-[#FFD1B3] text-black">Инженерные системы</Link>
+                <Link href="/services/construction" className="block px-4 py-2 rounded-none transition-colors hover:bg-[#FFD1B3] text-black">Строительство</Link>
+                <Link href="/services/windows-doors" className="block px-4 py-2 rounded-none transition-colors hover:bg-[#FFD1B3] text-black">Окна и двери</Link>
+                <Link href="/services/roofing-facades" className="block px-4 py-2 rounded-none transition-colors hover:bg-[#FFD1B3] text-black">Кровля и фасады</Link>
+                <Link href="/services/it" className="block px-4 py-2 rounded-none transition-colors hover:bg-[#FFD1B3] text-black">IT-услуги</Link>
+                <Link href="/services/academic" className="block px-4 py-2 rounded-none transition-colors hover:bg-[#FFD1B3] text-black">Академическая поддержка</Link>
+                {/* Градиентная разделительная полоса */}
+                <div className="my-4 mx-2 h-[3px] rounded bg-gradient-to-r from-[#FF7A00] to-[#C80000]" />
+                <div className="px-4 pb-1 text-xs font-bold tracking-wider uppercase bg-clip-text text-transparent bg-gradient-to-r from-[#FF7A00] to-[#C80000]">Дополнительные услуги</div>
+                <div className="bg-[#FFE4D6] rounded-b-xl">
+                  <Link href="/services/callout" className="block px-4 py-2 rounded-none transition-colors hover:bg-[#FFD1B3] text-black">Выезд специалиста</Link>
+                  <Link href="/services/delivery" className="block px-4 py-2 rounded-none transition-colors hover:bg-[#FFD1B3] text-black">Доставка стройматериалов</Link>
+                  <Link href="/services/garbage" className="block px-4 py-2 rounded-none transition-colors hover:bg-[#FFD1B3] text-black">Вывоз мусора</Link>
+                  <Link href="/services/estimate" className="block px-4 py-2 rounded-none transition-colors hover:bg-[#FFD1B3] text-black">Смета на ремонтные работы</Link>
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Link href="/calculator" className="nav-link">
               Калькулятор
             </Link>
@@ -188,9 +214,29 @@ export default function Header() {
             </div>
             
             <nav className="flex flex-col space-y-1">
-              <Link href="/services" className="mobile-nav-link">
-                Услуги
-              </Link>
+              {/* Выпадающий список услуг для мобильного меню */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="mobile-nav-link cursor-pointer flex items-center gap-1">
+                    Услуги
+                    <span className="ml-1">▼</span>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-white text-black min-w-[260px] shadow-lg border rounded-lg p-0 z-50">
+                  <Link href="/services/remont" className="block px-4 py-2 hover:bg-blue-50 transition-colors">Ремонт</Link>
+                  <Link href="/services/engineering" className="block px-4 py-2 hover:bg-blue-50 transition-colors">Инженерные системы</Link>
+                  <Link href="/services/construction" className="block px-4 py-2 hover:bg-blue-50 transition-colors">Строительство</Link>
+                  <Link href="/services/windows-doors" className="block px-4 py-2 hover:bg-blue-50 transition-colors">Окна и двери</Link>
+                  <Link href="/services/roofing-facades" className="block px-4 py-2 hover:bg-blue-50 transition-colors">Кровля и фасады</Link>
+                  <Link href="/services/it" className="block px-4 py-2 hover:bg-blue-50 transition-colors">IT-услуги</Link>
+                  <Link href="/services/academic" className="block px-4 py-2 hover:bg-blue-50 transition-colors">Академическая поддержка</Link>
+                  <div className="my-2 border-t border-gray-200" />
+                  <Link href="/services/callout" className="block px-4 py-2 hover:bg-blue-50 transition-colors">Выезд специалиста</Link>
+                  <Link href="/services/delivery" className="block px-4 py-2 hover:bg-blue-50 transition-colors">Доставка стройматериалов</Link>
+                  <Link href="/services/garbage" className="block px-4 py-2 hover:bg-blue-50 transition-colors">Вывоз мусора</Link>
+                  <Link href="/services/estimate" className="block px-4 py-2 hover:bg-blue-50 transition-colors">Смета на ремонтные работы</Link>
+                </DropdownMenuContent>
+              </DropdownMenu>
               <Link href="/calculator" className="mobile-nav-link">
                 Калькулятор
               </Link>
