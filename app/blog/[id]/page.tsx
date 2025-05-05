@@ -53,20 +53,23 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
   }
 
   return (
-    <div className="container py-12">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen w-full bg-[#FFE4D6] py-12">
+      <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg p-8">
         {/* Хлебные крошки */}
         <nav className="mb-8">
-          <ol className="flex items-center space-x-2 text-sm text-muted-foreground">
+          <ol className="flex items-center space-x-2 bg-[#FFE4D6] rounded-lg shadow-sm px-4 py-2 text-sm">
             <li>
-              <Link href="/" className="hover:text-primary">Главная</Link>
+              <Link href="/" className="flex items-center gap-1 text-[#2563EB] hover:underline font-medium">
+                <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 24 24'><path fill='currentColor' d='M12 3.25a.75.75 0 0 1 .53.22l8.25 8.25a.75.75 0 1 1-1.06 1.06l-.72-.72V20a.75.75 0 0 1-.75.75h-4.5a.75.75 0 0 1-.75-.75v-4.25h-2.5V20a.75.75 0 0 1-.75.75h-4.5A.75.75 0 0 1 5 20v-8.16l-.72.72a.75.75 0 1 1-1.06-1.06l8.25-8.25a.75.75 0 0 1 .53-.22Z'/></svg>
+                Главная
+              </Link>
             </li>
-            <li>/</li>
+            <li className="text-neutral-400">›</li>
             <li>
-              <Link href="/blog" className="hover:text-primary">Блог</Link>
+              <Link href="/blog" className="text-[#2563EB] hover:underline font-medium">Блог</Link>
             </li>
-            <li>/</li>
-            <li className="text-foreground">{post.title}</li>
+            <li className="text-neutral-400">›</li>
+            <li className="font-bold text-neutral-900">{post.title}</li>
           </ol>
         </nav>
 
@@ -93,7 +96,7 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
               {post.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="bg-neutral-100 dark:bg-neutral-800 px-2 py-1 rounded-full"
+                  className="bg-neutral-100 px-2 py-1 rounded-full"
                 >
                   {tag}
                 </span>
@@ -102,32 +105,30 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
           </div>
         </div>
 
-        {/* Изображение */}
-        <div className="relative h-96 mb-8 rounded-lg overflow-hidden">
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${post.image})` }}
+        {/* Картинка под метаданными, на месте вопроса */}
+        <div className="relative w-full max-w-2xl mx-auto h-64 mb-8 rounded-2xl overflow-hidden shadow-md flex items-center justify-center bg-[#FFE4D6]">
+          <img
+            src={post.image || '/no-image.svg'}
+            alt={post.title}
+            className="max-w-full max-h-full object-contain object-center"
+            style={{ display: post.image || '/no-image.svg' ? 'block' : 'none' }}
           />
         </div>
 
         {/* Содержимое статьи */}
         <article
-          className="prose prose-lg dark:prose-invert max-w-none"
+          className="prose prose-lg max-w-none"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
 
         {/* Навигация */}
-        <div className="mt-12 pt-8 border-t">
-          <div className="flex justify-between">
-            <Button variant="outline" asChild>
-              <Link href="/blog">← Назад к списку статей</Link>
-            </Button>
-            <Button variant="outline" asChild>
-              <Link href={`/blog/${Number(params.id) + 1}`}>
-                Следующая статья →
-              </Link>
-            </Button>
-          </div>
+        <div className="mt-12 pt-8 border-t flex justify-center">
+          <Button
+            asChild
+            className="bg-[#2563EB] hover:bg-[#1d4ed8] text-white font-bold rounded-lg shadow-none border-none transition-all duration-200 text-base py-3 px-8"
+          >
+            <Link href="/blog">← Назад к блогу</Link>
+          </Button>
         </div>
       </div>
     </div>
