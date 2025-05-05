@@ -68,7 +68,7 @@
   position: absolute;
   inset: 0;
   border-radius: 0.5rem;
-  padding: 2px;
+  padding: 1px;
   background: linear-gradient(to right, #FF7A00, #FF0000);
   -webkit-mask: 
     linear-gradient(#fff 0 0) content-box, 
