@@ -104,6 +104,50 @@ export default function ReviewsPage() {
       likes: 18,
       dislikes: 0
     },
+    {
+      id: 41,
+      name: "Павел Новиков",
+      service: "Ремонт",
+      rating: 5,
+      text: "Очень доволен ремонтом! Всё сделали быстро и качественно.",
+      date: "2024-04-01",
+      photos: ["/reviews/repair/photo9.jpg"],
+      likes: 9,
+      dislikes: 0
+    },
+    {
+      id: 42,
+      name: "Сергей Кузьмин",
+      service: "Ремонт",
+      rating: 4,
+      text: "Работа выполнена хорошо, но хотелось бы чуть быстрее.",
+      date: "2024-04-02",
+      photos: ["/reviews/repair/photo10.jpg"],
+      likes: 7,
+      dislikes: 1
+    },
+    {
+      id: 43,
+      name: "Анна Морозова",
+      service: "Ремонт",
+      rating: 5,
+      text: "Спасибо за отличный сервис! Буду рекомендовать друзьям.",
+      date: "2024-04-03",
+      photos: ["/reviews/repair/photo11.jpg"],
+      likes: 11,
+      dislikes: 0
+    },
+    {
+      id: 44,
+      name: "Виктория Лебедева",
+      service: "Ремонт",
+      rating: 5,
+      text: "Все понравилось, особенно отношение к деталям.",
+      date: "2024-04-04",
+      photos: ["/reviews/repair/photo12.jpg"],
+      likes: 13,
+      dislikes: 0
+    },
 
     // Инженерные системы (6 отзывов)
     {
@@ -308,119 +352,132 @@ export default function ReviewsPage() {
         <div className="relative bg-[#FFE4D6] rounded-xl shadow-lg p-6 mb-8">
           <div className="absolute left-0 top-0 w-full h-1 rounded-t-xl bg-gradient-to-r from-orange-400 to-red-500" />
           <span className="text-lg font-semibold text-orange-600 flex items-center gap-2 mb-4">
-            <FaFilter className="text-orange-500" />
-            Фильтры
+                  <FaFilter className="text-orange-500" />
+                  Фильтры
           </span>
           <div className="flex flex-wrap gap-4 items-center">
-            {/* Фильтр по услугам */}
-            <select
+                {/* Фильтр по услугам */}
+                  <select
               className="px-4 py-2 rounded-md border border-neutral-200 bg-white text-neutral-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
-              value={filters.service}
-              onChange={(e) => setFilters({ ...filters, service: e.target.value })}
-            >
-              <option value="">Выберите услугу</option>
-              <option value="Ремонт">Ремонт</option>
-              <option value="Инженерные системы">Инженерные системы</option>
-              <option value="Строительство">Строительство</option>
-              <option value="Окна и двери">Окна и двери</option>
-              <option value="Кровля и фасады">Кровля и фасады</option>
-              <option value="IT-услуги">IT-услуги</option>
-              <option value="Академическая поддержка">Академическая поддержка</option>
-            </select>
-            {/* Фильтр по дате */}
-            <select
+                    value={filters.service}
+                    onChange={(e) => setFilters({ ...filters, service: e.target.value })}
+                  >
+                    <option value="">Выберите услугу</option>
+                    <option value="Ремонт">Ремонт</option>
+                    <option value="Инженерные системы">Инженерные системы</option>
+                    <option value="Строительство">Строительство</option>
+                    <option value="Окна и двери">Окна и двери</option>
+                    <option value="Кровля и фасады">Кровля и фасады</option>
+                    <option value="IT-услуги">IT-услуги</option>
+                    <option value="Академическая поддержка">Академическая поддержка</option>
+                  </select>
+                {/* Фильтр по дате */}
+                  <select
               className="px-4 py-2 rounded-md border border-neutral-200 bg-white text-neutral-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
-              value={filters.date}
-              onChange={(e) => setFilters({ ...filters, date: e.target.value })}
-            >
-              <option value="newest">Сначала новые</option>
-              <option value="oldest">Сначала старые</option>
-            </select>
-            {/* Фильтр по медиа */}
-            <input
-                type="checkbox"
-                checked={filters.hasMedia}
-                onChange={(e) => setFilters({ ...filters, hasMedia: e.target.checked })}
+                    value={filters.date}
+                    onChange={(e) => setFilters({ ...filters, date: e.target.value })}
+                  >
+                    <option value="newest">Сначала новые</option>
+                    <option value="oldest">Сначала старые</option>
+                  </select>
+                {/* Фильтр по медиа */}
+                  <input
+                    type="checkbox"
+                    checked={filters.hasMedia}
+                    onChange={(e) => setFilters({ ...filters, hasMedia: e.target.checked })}
                 className="rounded border-neutral-300 bg-white text-orange-500 focus:ring-orange-500"
-              />
+                  />
               <span className="text-neutral-900">Только с фото/видео</span>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
       {/* Основной контент - как в блоге */}
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto px-4 py-4">
         <div className="flex flex-col gap-8">
           {/* Список отзывов */}
           {filters.service ? (
             <div className="space-y-4">
               <h2 className="text-2xl font-bold text-orange-600 mb-4">{filters.service}</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
                 {currentReviews.map((review) => (
-                  <div key={review.id} className="bg-white rounded-xl shadow p-6 flex flex-col h-full hover:shadow-lg transition-shadow">
-                    <div className="mb-4">
-                      <h3 className="text-lg font-semibold text-neutral-900 mb-1">{review.name}</h3>
-                      <p className="text-sm text-neutral-400 mb-2">{review.service}</p>
-                      <p className="text-neutral-800 mb-4 line-clamp-3">{review.text}</p>
-                      {/* Медиа */}
-                      {(Array.isArray(review.photos) && review.photos.length > 0) || review.video ? (
-                        <div className="grid grid-cols-2 gap-2 mb-4">
-                          {review.photos?.map((photo, index) => (
-                            <div key={index} className="relative aspect-square rounded-lg overflow-hidden">
-                              <FaCamera className="absolute top-2 right-2 text-white drop-shadow-lg z-10" />
-                              <img
-                                src={photo}
-                                alt={`Фото отзыва ${index + 1}`}
-                                className="w-full h-full object-cover rounded-lg"
-                              />
-                            </div>
-                          ))}
-                          {review.video && (
-                            <div className="relative aspect-square rounded-lg overflow-hidden">
-                              <FaVideo className="absolute top-2 right-2 text-white drop-shadow-lg z-10" />
-                              <img
-                                src={review.video}
-                                alt="Видео отзыва"
-                                className="w-full h-full object-cover rounded-lg"
-                              />
-                            </div>
-                          )}
-                        </div>
-                      ) : null}
-                    </div>
-                    {/* Ответ компании */}
-                    {review.companyResponse && (
-                      <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-4 mb-4">
-                        <p className="font-semibold text-neutral-900">Ответ компании:</p>
-                        <p className="mt-2 text-sm text-neutral-500">{review.companyResponse}</p>
+                  <div key={review.id} className="bg-[#FFE4D6] rounded-2xl shadow-lg p-6 h-[480px] hover:shadow-xl transition-shadow border border-neutral-200">
+                    <div className="flex flex-col justify-between h-full">
+                      <div className="mb-4">
+                        <h3 className="text-lg font-bold text-neutral-900 mb-1">{review.name}</h3>
+                        <p className="text-sm text-neutral-500 mb-2">{review.service}</p>
+                        <p className="text-neutral-900 mb-4 line-clamp-3">{review.text}</p>
+                        {/* Медиа */}
+                        {(Array.isArray(review.photos) && review.photos.length > 0) || review.video ? (
+                          <div className="grid grid-cols-2 gap-2 mb-4">
+                            {review.photos?.map((photo, index) => (
+                              <div key={index} className="relative aspect-square rounded-lg overflow-hidden">
+                                <FaCamera className="absolute top-2 right-2 text-white drop-shadow-lg z-10" />
+                                <img
+                                  src={photo}
+                                  alt={`Фото отзыва ${index + 1}`}
+                                  className="w-full h-full object-cover rounded-lg"
+                                />
+                              </div>
+                            ))}
+                            {review.video && (
+                              <div className="relative aspect-square rounded-lg overflow-hidden">
+                                <FaVideo className="absolute top-2 right-2 text-white drop-shadow-lg z-10" />
+                                <img
+                                  src={review.video}
+                                  alt="Видео отзыва"
+                                  className="w-full h-full object-cover rounded-lg"
+                                />
+                              </div>
+                            )}
+                          </div>
+                        ) : null}
                       </div>
-                    )}
-                    {/* Футер карточки */}
-                    <div className="flex gap-4 mt-auto items-center">
-                      <button className="flex items-center gap-1 text-neutral-400 hover:text-orange-500">
-                        <FaThumbsUp />
-                        <span>{review.likes}</span>
-                      </button>
-                      <button className="flex items-center gap-1 text-neutral-400 hover:text-orange-500">
-                        <FaThumbsDown />
-                        <span>{review.dislikes}</span>
-                      </button>
-                      <span className="text-neutral-400 ml-auto text-xs">{review.date}</span>
+                      {/* Ответ компании */}
+                      {review.companyResponse && (
+                        <div className="bg-white border border-neutral-200 rounded-lg p-4 mb-4">
+                          <p className="font-semibold text-neutral-900">Ответ компании:</p>
+                          <p className="mt-2 text-sm text-neutral-500">{review.companyResponse}</p>
+                        </div>
+                      )}
+                      {/* Футер карточки */}
+                      <div className="flex gap-4 mt-auto items-center">
+                        <button className="flex items-center gap-1 text-[#2563EB] hover:text-[#1d4ed8] font-medium">
+                          <FaThumbsUp />
+                          <span>{review.likes}</span>
+                        </button>
+                        <button className="flex items-center gap-1 text-[#2563EB] hover:text-[#1d4ed8] font-medium">
+                          <FaThumbsDown />
+                          <span>{review.dislikes}</span>
+                        </button>
+                        <span className="text-neutral-400 ml-auto text-xs">{review.date}</span>
+                      </div>
                     </div>
                   </div>
+                ))}
+                {Array.from({ length: 6 - currentReviews.length }).map((_, i) => (
+                  <div key={"placeholder-" + i} className="bg-transparent shadow-none p-6 h-[480px] border-none" />
                 ))}
               </div>
               {/* Пагинация */}
               {totalPages > 1 && (
-                <div className="flex justify-center gap-2 mt-8">
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                    <button
-                      key={page}
-                      className={`px-4 py-2 rounded-md border ${currentPage === page ? 'bg-orange-500 text-white border-orange-500' : 'border-neutral-200 text-neutral-800 hover:bg-neutral-100'} transition-all`}
-                      onClick={() => handlePageChange(page)}
-                    >
-                      {page}
-                    </button>
-                  ))}
+                <div className="flex justify-center gap-4 mt-8">
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="w-10 h-10 flex items-center justify-center border border-orange-300 rounded-xl text-gray-500 bg-white hover:bg-orange-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <span className="text-2xl">&#60;</span>
+                  </button>
+                  <span className="w-10 h-10 flex items-center justify-center rounded-xl bg-orange-500 text-white font-bold text-lg border-2 border-orange-500">
+                    {currentPage}
+                  </span>
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="w-10 h-10 flex items-center justify-center border border-orange-300 rounded-xl text-gray-500 bg-white hover:bg-orange-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <span className="text-2xl">&#62;</span>
+                  </button>
                 </div>
               )}
             </div>

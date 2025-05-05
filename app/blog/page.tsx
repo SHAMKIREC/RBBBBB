@@ -82,6 +82,73 @@ const blogPosts = [
     author: "Анна Соколова",
     readTime: "9 мин",
   },
+  // Дополнительные статьи для отображения пагинации
+  {
+    id: 7,
+    title: "Современные материалы для отделки стен",
+    excerpt: "Какие материалы выбрать для стильного и долговечного ремонта стен.",
+    date: "12.11.2023",
+    category: "remont",
+    tags: ["ремонт", "материалы", "стены"],
+    image: "/blog/walls.jpg",
+    author: "Павел Орлов",
+    readTime: "4 мин",
+  },
+  {
+    id: 8,
+    title: "Топ-5 ошибок при ремонте кухни",
+    excerpt: "Чего стоит избегать, чтобы ремонт кухни прошёл без проблем.",
+    date: "20.11.2023",
+    category: "remont",
+    tags: ["ремонт", "кухня", "ошибки"],
+    image: "/blog/kitchen.jpg",
+    author: "Светлана Миронова",
+    readTime: "5 мин",
+  },
+  {
+    id: 9,
+    title: "Как выбрать подрядчика для строительства дома",
+    excerpt: "На что обратить внимание при выборе строительной компании.",
+    date: "01.12.2023",
+    category: "building",
+    tags: ["строительство", "подрядчик", "советы"],
+    image: "/blog/contractor.jpg",
+    author: "Виктор Сергеев",
+    readTime: "7 мин",
+  },
+  {
+    id: 10,
+    title: "Дизайн ванной комнаты: современные тренды",
+    excerpt: "Как сделать ванную комнату стильной и функциональной.",
+    date: "10.12.2023",
+    category: "design",
+    tags: ["дизайн", "ванная", "тренды"],
+    image: "/blog/bathroom.jpg",
+    author: "Ольга Кузнецова",
+    readTime: "6 мин",
+  },
+  {
+    id: 11,
+    title: "Умный дом: технологии для комфорта и безопасности",
+    excerpt: "Какие системы стоит внедрить в современном доме.",
+    date: "18.12.2023",
+    category: "it",
+    tags: ["умный дом", "технологии", "безопасность"],
+    image: "/blog/smart-home.jpg",
+    author: "Денис Громов",
+    readTime: "8 мин",
+  },
+  {
+    id: 12,
+    title: "Как выбрать окна для квартиры",
+    excerpt: "Плюсы и минусы разных видов окон, советы по выбору.",
+    date: "25.12.2023",
+    category: "windows-doors",
+    tags: ["окна", "выбор", "советы"],
+    image: "/blog/windows.jpg",
+    author: "Ирина Лебедева",
+    readTime: "5 мин",
+  },
 ]
 
 const categories = [
@@ -219,42 +286,36 @@ export default function BlogPage() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
             {currentPosts.map((post) => (
-              <Card key={post.id} className="h-full flex flex-col hover:shadow-lg transition-shadow">
-                <div className="relative h-48 overflow-hidden rounded-t-lg">
+              <Card key={post.id} className="flex flex-col hover:shadow-lg transition-shadow rounded-2xl border border-neutral-200 bg-[#FFE4D6] p-3 min-h-[420px] h-full">
+                <div className="relative h-16 overflow-hidden rounded-t-2xl">
                   <div
                     className="absolute inset-0 bg-cover bg-center"
                     style={{ backgroundImage: `url(${post.image})` }}
                   />
                 </div>
-                <CardHeader>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-                    <FaCalendarAlt />
-                    <span>{post.date}</span>
-                    <span>•</span>
-                    <FaUser />
-                    <span>{post.author}</span>
-                    <span>•</span>
-                    <span>{post.readTime}</span>
-                  </div>
-                  <CardTitle className="line-clamp-2">{post.title}</CardTitle>
+                <CardHeader className="pb-1 pt-1">
+                  <CardTitle className="line-clamp-2 text-lg font-bold">{post.title}</CardTitle>
                 </CardHeader>
-                <CardContent className="flex-grow">
-                  <p className="text-muted-foreground line-clamp-3">{post.excerpt}</p>
-                  <div className="flex flex-wrap gap-2 mt-4">
+                <CardContent className="flex-grow pt-0 pb-1">
+                  <p className="text-neutral-700 text-sm line-clamp-3 mb-2">{post.excerpt}</p>
+                  <div className="flex flex-wrap gap-2 mt-2">
                     {post.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="text-xs bg-neutral-100 px-2 py-1 rounded-full"
+                        className="text-xs bg-neutral-100 px-2 py-1 rounded-full border border-orange-300 text-neutral-900"
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
                 </CardContent>
-                <CardFooter className="flex justify-between items-center">
-                  <Button variant="outline" size="sm" asChild>
+                <CardFooter className="pt-0">
+                  <Button
+                    asChild
+                    className="w-full bg-[#2563EB] hover:bg-[#1d4ed8] text-white font-bold rounded-lg shadow-none border-none transition-all duration-200 text-base py-2 mt-2"
+                  >
                     <Link href={`/blog/${post.id}`}>Читать далее</Link>
                   </Button>
                 </CardFooter>
@@ -265,17 +326,24 @@ export default function BlogPage() {
 
         {/* Пагинация */}
         {totalPages > 1 && (
-          <div className="flex justify-center gap-2 mt-8">
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <Button
-                key={page}
-                variant={currentPage === page ? "default" : "outline"}
-                size="sm"
-                onClick={() => handlePageChange(page)}
-              >
-                {page}
-              </Button>
-            ))}
+          <div className="flex justify-center gap-4 mt-8">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="w-10 h-10 flex items-center justify-center border border-orange-300 rounded-xl text-gray-500 bg-white hover:bg-orange-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <span className="text-2xl">&#60;</span>
+            </button>
+            <span className="w-10 h-10 flex items-center justify-center rounded-xl bg-orange-500 text-white font-bold text-lg border-2 border-orange-500">
+              {currentPage}
+            </span>
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="w-10 h-10 flex items-center justify-center border border-orange-300 rounded-xl text-gray-500 bg-white hover:bg-orange-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <span className="text-2xl">&#62;</span>
+            </button>
           </div>
         )}
       </div>

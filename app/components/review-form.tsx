@@ -51,7 +51,7 @@ export default function ReviewForm() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-orange-500 hover:bg-orange-600 text-white text-lg rounded-full px-6 py-2 shadow">
+        <Button className="bg-[#2563EB] hover:bg-[#1d4ed8] text-white text-lg rounded-full px-6 py-2 shadow">
           Оставить отзыв
         </Button>
       </DialogTrigger>
