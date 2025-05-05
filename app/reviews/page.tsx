@@ -282,7 +282,7 @@ export default function ReviewsPage() {
   const filteredReviews = useMemo(() => {
     if (!filters.service) return []
     return groupedReviews[filters.service]
-      ?.filter(review => !filters.hasMedia || review.photos?.length || review.video) || []
+      ?.filter(review => !filters.hasMedia || (Array.isArray(review.photos) && review.photos.length > 0) || review.video) || []
   }, [filters, groupedReviews])
 
   // Пагинация
@@ -299,177 +299,138 @@ export default function ReviewsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Хедер страницы */}
-      <div className="bg-card border-b border-border shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <h1 className="text-3xl font-bold text-foreground">Отзывы клиентов</h1>
-          <p className="mt-2 text-muted-foreground">Узнайте, что говорят о нас наши клиенты</p>
+      <div className="max-w-4xl mx-auto mt-8">
+        <div className="rounded-2xl bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white px-6 py-10 mb-8 shadow-lg text-left">
+          <h1 className="text-4xl font-bold mb-2">Отзывы клиентов</h1>
+          <p className="text-xl opacity-90">Узнайте, что говорят о нас наши клиенты</p>
+        </div>
+        {/* Фильтры в одном выделенном блоке */}
+        <div className="relative bg-[#FFE4D6] rounded-xl shadow-lg p-6 mb-8">
+          <div className="absolute left-0 top-0 w-full h-1 rounded-t-xl bg-gradient-to-r from-orange-400 to-red-500" />
+          <span className="text-lg font-semibold text-orange-600 flex items-center gap-2 mb-4">
+            <FaFilter className="text-orange-500" />
+            Фильтры
+          </span>
+          <div className="flex flex-wrap gap-4 items-center">
+            {/* Фильтр по услугам */}
+            <select
+              className="px-4 py-2 rounded-md border border-neutral-200 text-neutral-800 focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-neutral-900 dark:text-white dark:border-neutral-700"
+              value={filters.service}
+              onChange={(e) => setFilters({ ...filters, service: e.target.value })}
+            >
+              <option value="">Выберите услугу</option>
+              <option value="Ремонт">Ремонт</option>
+              <option value="Инженерные системы">Инженерные системы</option>
+              <option value="Строительство">Строительство</option>
+              <option value="Окна и двери">Окна и двери</option>
+              <option value="Кровля и фасады">Кровля и фасады</option>
+              <option value="IT-услуги">IT-услуги</option>
+              <option value="Академическая поддержка">Академическая поддержка</option>
+            </select>
+            {/* Фильтр по дате */}
+            <select
+              className="px-4 py-2 rounded-md border border-neutral-200 text-neutral-800 focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-neutral-900 dark:text-white dark:border-neutral-700"
+              value={filters.date}
+              onChange={(e) => setFilters({ ...filters, date: e.target.value })}
+            >
+              <option value="newest">Сначала новые</option>
+              <option value="oldest">Сначала старые</option>
+            </select>
+            {/* Фильтр по медиа */}
+            <label className="flex items-center gap-2 text-neutral-800 dark:text-white">
+              <input
+                type="checkbox"
+                checked={filters.hasMedia}
+                onChange={(e) => setFilters({ ...filters, hasMedia: e.target.checked })}
+                className="rounded border-neutral-300 text-orange-500 focus:ring-orange-500 dark:bg-neutral-900 dark:border-neutral-700"
+              />
+              <span>Только с фото/видео</span>
+            </label>
+          </div>
         </div>
       </div>
-
-      {/* Основной контент */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      {/* Основной контент - как в блоге */}
+      <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="flex flex-col gap-8">
-          {/* Фильтры */}
-          <div className="bg-card border border-border rounded-lg shadow-sm p-6">
-            <div className="flex flex-wrap gap-4 items-center">
-              <h2 className="text-xl font-semibold gradient-text flex items-center gap-2">
-                <FaFilter className="text-orange-500" />
-                Фильтры
-              </h2>
-
-              {/* Фильтр по услугам */}
-              <select
-                className="px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-foreground"
-                value={filters.service}
-                onChange={(e) => setFilters({ ...filters, service: e.target.value })}
-              >
-                <option value="">Выберите услугу</option>
-                <option value="Ремонт">Ремонт</option>
-                <option value="Инженерные системы">Инженерные системы</option>
-                <option value="Строительство">Строительство</option>
-                <option value="Окна и двери">Окна и двери</option>
-                <option value="Кровля и фасады">Кровля и фасады</option>
-                <option value="IT-услуги">IT-услуги</option>
-                <option value="Академическая поддержка">Академическая поддержка</option>
-              </select>
-
-              {filters.service && (
-                <>
-                  {/* Фильтр по дате */}
-                  <select
-                    className="px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-foreground"
-                    value={filters.date}
-                    onChange={(e) => setFilters({ ...filters, date: e.target.value })}
-                  >
-                    <option value="newest">Сначала новые</option>
-                    <option value="oldest">Сначала старые</option>
-                  </select>
-
-                  {/* Фильтр по медиа */}
-                  <label className="flex items-center gap-2 text-foreground">
-                    <input
-                      type="checkbox"
-                      checked={filters.hasMedia}
-                      onChange={(e) => setFilters({ ...filters, hasMedia: e.target.checked })}
-                      className="rounded border-border text-orange-500 focus:ring-orange-500"
-                    />
-                    <span>Только с фото/видео</span>
-                  </label>
-                </>
-              )}
-            </div>
-          </div>
-
           {/* Список отзывов */}
           {filters.service ? (
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold gradient-text">{filters.service}</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <h2 className="text-2xl font-bold text-orange-600 mb-4">{filters.service}</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {currentReviews.map((review) => (
-                  <div key={review.id} className="bg-card border border-border rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
-                    <div className="flex justify-between items-start mb-4">
-                      <div>
-                        <h3 className="text-lg font-semibold text-foreground">{review.name}</h3>
-                        <p className="text-sm text-muted-foreground">{review.service}</p>
-                      </div>
+                  <div key={review.id} className="bg-white rounded-xl shadow p-6 flex flex-col h-full hover:shadow-lg transition-shadow">
+                    <div className="mb-4">
+                      <h3 className="text-lg font-semibold text-neutral-900 mb-1">{review.name}</h3>
+                      <p className="text-sm text-neutral-400 mb-2">{review.service}</p>
+                      <p className="text-neutral-800 mb-4 line-clamp-3">{review.text}</p>
+                      {/* Медиа */}
+                      {(Array.isArray(review.photos) && review.photos.length > 0) || review.video ? (
+                        <div className="grid grid-cols-2 gap-2 mb-4">
+                          {review.photos?.map((photo, index) => (
+                            <div key={index} className="relative aspect-square rounded-lg overflow-hidden">
+                              <FaCamera className="absolute top-2 right-2 text-white drop-shadow-lg z-10" />
+                              <img
+                                src={photo}
+                                alt={`Фото отзыва ${index + 1}`}
+                                className="w-full h-full object-cover rounded-lg"
+                              />
+                            </div>
+                          ))}
+                          {review.video && (
+                            <div className="relative aspect-square rounded-lg overflow-hidden">
+                              <FaVideo className="absolute top-2 right-2 text-white drop-shadow-lg z-10" />
+                              <img
+                                src={review.video}
+                                alt="Видео отзыва"
+                                className="w-full h-full object-cover rounded-lg"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      ) : null}
                     </div>
-
-                    <p className="text-foreground mb-4 line-clamp-3">{review.text}</p>
-
-                    {/* Медиа */}
-                    {(review.photos || review.video) && (
-                      <div className="grid grid-cols-2 gap-2 mb-4">
-                        {review.photos?.map((photo, index) => (
-                          <div key={index} className="relative aspect-square">
-                            <FaCamera className="absolute top-2 right-2 text-white drop-shadow-lg z-10" />
-                            <img
-                              src={photo}
-                              alt={`Фото отзыва ${index + 1}`}
-                              className="w-full h-full object-cover rounded-lg border border-border"
-                            />
-                          </div>
-                        ))}
-                        {review.video && (
-                          <div className="relative aspect-square">
-                            <FaVideo className="absolute top-2 right-2 text-white drop-shadow-lg z-10" />
-                            <img
-                              src={review.video}
-                              alt="Видео отзыва"
-                              className="w-full h-full object-cover rounded-lg border border-border"
-                            />
-                          </div>
-                        )}
-                      </div>
-                    )}
-
                     {/* Ответ компании */}
                     {review.companyResponse && (
-                      <div className="bg-secondary border border-border rounded-lg p-4 mb-4">
-                        <p className="font-semibold text-foreground">Ответ компании:</p>
-                        <p className="mt-2 text-sm text-muted-foreground">{review.companyResponse}</p>
+                      <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-4 mb-4">
+                        <p className="font-semibold text-neutral-900">Ответ компании:</p>
+                        <p className="mt-2 text-sm text-neutral-500">{review.companyResponse}</p>
                       </div>
                     )}
-
                     {/* Футер карточки */}
-                    <div className="flex justify-between items-center text-sm">
-                      <div className="flex gap-4">
-                        <button className="flex items-center gap-1 text-muted-foreground hover:text-orange-500">
-                          <FaThumbsUp />
-                          <span>{review.likes}</span>
-                        </button>
-                        <button className="flex items-center gap-1 text-muted-foreground hover:text-orange-500">
-                          <FaThumbsDown />
-                          <span>{review.dislikes}</span>
-                        </button>
-                      </div>
-                      <span className="text-muted-foreground">{review.date}</span>
+                    <div className="flex gap-4 mt-auto items-center">
+                      <button className="flex items-center gap-1 text-neutral-400 hover:text-orange-500">
+                        <FaThumbsUp />
+                        <span>{review.likes}</span>
+                      </button>
+                      <button className="flex items-center gap-1 text-neutral-400 hover:text-orange-500">
+                        <FaThumbsDown />
+                        <span>{review.dislikes}</span>
+                      </button>
+                      <span className="text-neutral-400 ml-auto text-xs">{review.date}</span>
                     </div>
                   </div>
                 ))}
               </div>
-
               {/* Пагинация */}
               {totalPages > 1 && (
-                <div className="flex justify-center items-center gap-2 mt-8">
-                  <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="p-2 rounded-lg border border-border hover:bg-secondary disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <FaChevronLeft />
-                  </button>
-                  
+                <div className="flex justify-center gap-2 mt-8">
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                     <button
                       key={page}
+                      className={`px-4 py-2 rounded-md border ${currentPage === page ? 'bg-orange-500 text-white border-orange-500' : 'border-neutral-200 text-neutral-800 hover:bg-neutral-100'} transition-all`}
                       onClick={() => handlePageChange(page)}
-                      className={`px-4 py-2 rounded-lg border border-border ${
-                        currentPage === page
-                          ? 'bg-orange-500 text-white'
-                          : 'hover:bg-secondary'
-                      }`}
                     >
                       {page}
                     </button>
                   ))}
-
-                  <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className="p-2 rounded-lg border border-border hover:bg-secondary disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <FaChevronRight />
-                  </button>
                 </div>
               )}
             </div>
           ) : (
             <div className="text-center py-12">
-              <p className="text-xl text-muted-foreground">Выберите услугу, чтобы увидеть отзывы</p>
+              <p className="text-xl text-neutral-400">Выберите услугу, чтобы увидеть отзывы</p>
             </div>
           )}
-
           {/* Кнопка добавления отзыва */}
           <div className="flex justify-center">
             <ReviewForm />
