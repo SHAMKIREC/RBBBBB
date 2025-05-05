@@ -314,7 +314,7 @@ export default function ReviewsPage() {
           <div className="flex flex-wrap gap-4 items-center">
             {/* Фильтр по услугам */}
             <select
-              className="px-4 py-2 rounded-md border border-neutral-200 text-neutral-800 focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-neutral-900 dark:text-white dark:border-neutral-700"
+              className="px-4 py-2 rounded-md border border-neutral-200 bg-white text-neutral-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
               value={filters.service}
               onChange={(e) => setFilters({ ...filters, service: e.target.value })}
             >
@@ -329,7 +329,7 @@ export default function ReviewsPage() {
             </select>
             {/* Фильтр по дате */}
             <select
-              className="px-4 py-2 rounded-md border border-neutral-200 text-neutral-800 focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-neutral-900 dark:text-white dark:border-neutral-700"
+              className="px-4 py-2 rounded-md border border-neutral-200 bg-white text-neutral-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
               value={filters.date}
               onChange={(e) => setFilters({ ...filters, date: e.target.value })}
             >
@@ -337,15 +337,13 @@ export default function ReviewsPage() {
               <option value="oldest">Сначала старые</option>
             </select>
             {/* Фильтр по медиа */}
-            <label className="flex items-center gap-2 text-neutral-800 dark:text-white">
-              <input
+            <input
                 type="checkbox"
                 checked={filters.hasMedia}
                 onChange={(e) => setFilters({ ...filters, hasMedia: e.target.checked })}
-                className="rounded border-neutral-300 text-orange-500 focus:ring-orange-500 dark:bg-neutral-900 dark:border-neutral-700"
+                className="rounded border-neutral-300 bg-white text-orange-500 focus:ring-orange-500"
               />
-              <span>Только с фото/видео</span>
-            </label>
+              <span className="text-neutral-900">Только с фото/видео</span>
           </div>
         </div>
       </div>

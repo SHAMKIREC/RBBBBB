@@ -169,16 +169,16 @@ export default function BlogPage() {
                 placeholder="Поиск по статьям..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-white text-neutral-900 border-neutral-200 dark:bg-neutral-900 dark:text-white dark:border-neutral-700"
+                className="pl-10 bg-white text-neutral-900 border-neutral-200"
               />
             </div>
             <Select value={category} onValueChange={setCategory}>
-              <SelectTrigger className="w-[200px] bg-white text-neutral-900 border-neutral-200 dark:bg-neutral-900 dark:text-white dark:border-neutral-700">
+              <SelectTrigger className="w-[200px] bg-white text-neutral-900 border-neutral-200">
                 <SelectValue placeholder="Выберите категорию" />
               </SelectTrigger>
-              <SelectContent className="bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white border-neutral-200 dark:border-neutral-700">
+              <SelectContent className="bg-white text-neutral-900 border-neutral-200">
                 {categories.map((cat) => (
-                  <SelectItem key={cat.value} value={cat.value} className="bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white">
+                  <SelectItem key={cat.value} value={cat.value} className="bg-white text-neutral-900">
                     {cat.label}
                   </SelectItem>
                 ))}
@@ -188,20 +188,22 @@ export default function BlogPage() {
           {/* Теги */}
           <div className="flex flex-wrap gap-2">
             <Button
-              variant={!selectedTag ? "default" : "outline"}
               size="sm"
               onClick={() => setSelectedTag(null)}
-              className="bg-white text-orange-600 border border-orange-500 dark:bg-neutral-900 dark:text-orange-400 dark:border-orange-700"
+              className={`
+                bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white border-none shadow
+              `}
             >
               Все теги
             </Button>
             {allTags.map((tag) => (
               <Button
                 key={tag}
-                variant={selectedTag === tag ? "default" : "outline"}
                 size="sm"
                 onClick={() => setSelectedTag(tag)}
-                className="bg-white text-orange-600 border border-orange-500 dark:bg-neutral-900 dark:text-orange-400 dark:border-orange-700"
+                className={`
+                  bg-white border border-neutral-200 text-neutral-900 ${selectedTag === tag ? 'font-bold' : ''}
+                `}
               >
                 {tag}
               </Button>
@@ -244,7 +246,7 @@ export default function BlogPage() {
                     {post.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="text-xs bg-neutral-100 dark:bg-neutral-800 px-2 py-1 rounded-full"
+                        className="text-xs bg-neutral-100 px-2 py-1 rounded-full"
                       >
                         {tag}
                       </span>
