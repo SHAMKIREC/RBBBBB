@@ -164,6 +164,38 @@ const categories = [
 
 const postsPerPage = 6
 
+// Исправленный список тегов без дублей и схожих значений
+const allTags = [
+  "ремонт",
+  "материалы",
+  "советы",
+  "дизайн",
+  "тренды",
+  "интерьер",
+  "строительство",
+  "дом",
+  "планирование",
+  "экономия",
+  "бюджет",
+  "веб-дизайн",
+  "IT-услуги",
+  "разработка",
+  "энергоэффективность",
+  "стены",
+  "кухня",
+  "ошибки",
+  "подрядчик",
+  "ванная",
+  "умный дом",
+  "технологии",
+  "безопасность",
+  "окна и двери",
+  "выбор",
+  "инженерные системы",
+  "кровля и фасады",
+  "академическая поддержка"
+];
+
 export default function BlogPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [category, setCategory] = useState("all")
@@ -174,15 +206,6 @@ export default function BlogPage() {
   useEffect(() => {
     setCurrentPage(1)
   }, [searchQuery, category, selectedTag])
-
-  // Получение всех уникальных тегов
-  const allTags = useMemo(() => {
-    const tags = new Set<string>()
-    blogPosts.forEach(post => {
-      post.tags.forEach(tag => tags.add(tag))
-    })
-    return Array.from(tags)
-  }, [])
 
   // Фильтрация статей
   const filteredPosts = useMemo(() => {
