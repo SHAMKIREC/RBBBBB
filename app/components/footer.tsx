@@ -28,33 +28,47 @@ export default function Footer() {
         <div>
           <h4 className="text-lg font-bold mb-4">Наши услуги</h4>
           <ul className="space-y-2">
-            <li className="flex items-center gap-2">
-              <span>🛠️</span>
-              <Link href="/services/remont" className="hover:text-white transition-colors">Ремонт</Link>
+            <li>
+              <Link href="/services/remont" className="flex items-center gap-2 hover:text-white transition-colors">
+                <span>🛠️</span>
+                <span>Ремонт</span>
+              </Link>
             </li>
-            <li className="flex items-center gap-2">
-              <span>🔌</span>
-              <Link href="/services/engineering" className="hover:text-white transition-colors">Инженерные системы</Link>
+            <li>
+              <Link href="/services/engineering" className="flex items-center gap-2 hover:text-white transition-colors">
+                <span>🔌</span>
+                <span>Инженерные системы</span>
+              </Link>
             </li>
-            <li className="flex items-center gap-2">
-              <span>🏗️</span>
-              <Link href="/services/building" className="hover:text-white transition-colors">Строительство</Link>
+            <li>
+              <Link href="/services/construction" className="flex items-center gap-2 hover:text-white transition-colors">
+                <span>🏗️</span>
+                <span>Строительство</span>
+              </Link>
             </li>
-            <li className="flex items-center gap-2">
-              <span>🪟</span>
-              <Link href="/services/windows-doors" className="hover:text-white transition-colors">Окна и двери</Link>
+            <li>
+              <Link href="/services/windows-doors" className="flex items-center gap-2 hover:text-white transition-colors">
+                <span>🪟</span>
+                <span>Окна и двери</span>
+              </Link>
             </li>
-            <li className="flex items-center gap-2">
-              <span>🏠</span>
-              <Link href="/services/roof-facade" className="hover:text-white transition-colors">Кровля и фасады</Link>
+            <li>
+              <Link href="/services/roof-facade" className="flex items-center gap-2 hover:text-white transition-colors">
+                <span>🏠</span>
+                <span>Кровля и фасады</span>
+              </Link>
             </li>
-            <li className="flex items-center gap-2">
-              <span>💻</span>
-              <Link href="/services/it" className="hover:text-white transition-colors">IT-услуги</Link>
+            <li>
+              <Link href="/services/it" className="flex items-center gap-2 hover:text-white transition-colors">
+                <span>💻</span>
+                <span>IT-услуги</span>
+              </Link>
             </li>
-            <li className="flex items-center gap-2">
-              <span>🎓</span>
-              <Link href="/services/academic" className="hover:text-white transition-colors">Академическая поддержка</Link>
+            <li>
+              <Link href="/services/academic" className="flex items-center gap-2 hover:text-white transition-colors">
+                <span>🎓</span>
+                <span>Академическая поддержка</span>
+              </Link>
             </li>
           </ul>
         </div>
