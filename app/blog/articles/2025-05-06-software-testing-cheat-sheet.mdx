@@ -1,0 +1,254 @@
+---
+title: "Software Testing Cheat Sheet"
+description: "Core Concepts
+
+
+
+  
+  
+  What is Software Testing?
+
+
+Process to verify software meets requirements and works as expected. Identifies bugs, gaps, and missing functionality before release. Ensures quali"
+date: "2025-05-06T17:37:01.000Z"
+author: "Sri Lakshmi"
+tags: []
+time_to_read: 6
+image: "/images/placeholder.jpg"
+---
+
+Core Concepts
+
+
+
+  
+  
+  What is Software Testing?
+
+
+Process to verify software meets requirements and works as expected. Identifies bugs, gaps, and missing functionality before release. Ensures quality, reliability, and proper functionality.
+Early Defect Detection: Finds bugs when they're cheaper to fix
+Quality Assurance: Ensures product meets standards and requirements
+Customer Satisfaction: Delivers reliable, functional products
+Risk Mitigation: Prevents costly failures in production
+Performance Verification: Confirms system performs as expected under various conditions
+Testing shows defects exist, not their absence
+Exhaustive testing is impossible - use risk-based approaches instead
+Early testing saves time and money
+Defects cluster in specific modules (80/20 rule)
+Pesticide paradox: Tests lose effectiveness if not updated regularly
+Testing depends on context - different applications need different approaches
+Bug-free doesn't mean useful - software must meet user needs
+Organization-level approach defining general testing principles, tools, and processes. Includes risk-based testing approaches and overall methodology.
+Project-specific document detailing what, when, how, and by whom testing will be performed. Includes:
+Scope and objectives
+Test deliverables
+Features to test/not test
+Testing schedule
+Resource allocation
+Entry/exit criteria
+Creation of test cases based on requirements. Includes test conditions, test data, expected results, and execution procedures. Ensures requirements coverage.
+Process of running test cases against the application. Involves:
+Preparing test environment
+Executing test scripts
+Logging results
+Reporting defects
+Retesting fixes
+Regression testing
+Manual Testing: Human execution following test cases
+Automated Testing: Using scripts and tools for repetitive tests
+Black Box: Testing without knowledge of internal code - focuses on inputs/outputs
+White Box: Testing with code knowledge - focuses on code paths and coverage
+Gray Box: Combination approach with limited internal knowledge
+Unit Testing: Tests individual components in isolation
+Integration Testing: Tests component interactions
+System Testing: Tests complete integrated system
+Acceptance Testing: Verifies user requirements are met
+Smoke Testing: Quick check for critical functionality
+Sanity Testing: Focused check after minor changes
+Regression Testing: Ensures changes don't break existing functionality
+Interface Testing: Verifies communication between components
+Performance Testing: Speed, scalability, stability
+Load Testing: Behavior under expected load
+Stress Testing: Behavior beyond normal capacity
+Security Testing: Vulnerability identification
+Usability Testing: User experience quality
+Compatibility Testing: Works across environments
+New: Bug identified and reported
+Assigned: Developer tasked with fixing
+Open/In Progress: Under investigation
+Fixed: Solution implemented
+Verified: QA confirms fix works
+Closed: Issue resolved
+Reopened: If issue returns after fix
+Severity: Impact on system functionality
+
+
+Critical: System crash, data loss
+Major: Feature unusable
+Minor: Feature works with limitations
+Trivial: Cosmetic issues
+Priority: Order of fix implementation
+
+
+High: Fix immediately
+Medium: Fix in current cycle
+Low: Fix when resources available
+Equivalence Partitioning: Divide inputs into valid/invalid groups, test one from each
+Boundary Value Analysis: Test at input boundaries (min/max values)
+Decision Table: Test logical combinations of inputs
+State Transition: Test system state changes
+Use Case Testing: Test user scenarios end-to-end
+Error Guessing: Test based on experience where errors likely occur
+Statement Coverage: Execute each line of code
+Branch Coverage: Execute each decision outcome (if/else paths)
+Path Coverage: Execute all possible code paths
+Loop Testing: Test loops at 0, 1, and multiple iterations
+Code Complexity: Test based on cyclomatic complexity
+Document outlining overall testing approach, scope, schedule, deliverables, and resources.
+Specific test condition with steps, data, and expected results:
+Test ID and description
+Preconditions
+Test steps
+Expected results
+Actual results
+Pass/Fail status
+Maps requirements to test cases ensuring complete test coverage. Tracks which requirements have passing/failing tests.
+Strategies for creating, maintaining and using test data. Includes synthetic data generation, data masking, and maintaining test data integrity across test cycles.
+Process to identify underlying causes of defects. Uses techniques like 5 Whys, Fishbone diagrams, and Pareto analysis to prevent recurrence.
+Systematic process to isolate, identify, and resolve bugs. Involves:
+Reproducing the issue
+Isolating the source
+Analyzing code or conditions
+Fixing the root cause
+Verifying the solution
+Tests continuously throughout development
+Whole team responsible for quality
+Test early, test often
+Automate regression tests
+Tests drive development (TDD)
+TDD (Test-Driven Development): Write tests before code
+BDD (Behavior-Driven Development): Tests based on user behavior 
+ATDD (Acceptance Test-Driven Development): Tests based on acceptance criteria
+Continuous Integration: Tests run automatically with code commits
+Testing Quadrants: Balance automated/manual, business/technology focused tests
+Repetitive tests (regression, smoke)
+Data-driven scenarios
+Performance/load testing
+High-risk functionality
+Cross-browser/platform tests
+Data-Driven: Separate test data from logic
+Keyword-Driven: Action keywords define test steps
+Hybrid: Combines multiple approaches
+BDD: Uses natural language specifications
+UI Automation: Selenium, Cypress, Playwright
+API Testing: Postman, RestAssured, SoapUI
+Mobile: Appium, XCUITest, Espresso
+Performance: JMeter, LoadRunner, Gatling
+CI/CD Integration: Jenkins, GitHub Actions, GitLab CI
+Defect Density: Defects per code size unit
+Defect Removal Efficiency: % of defects found before release
+Requirements Coverage: % of requirements tested
+Code Coverage: % of code executed during tests
+Test Execution Time: Time to run test suite
+Test Case Productivity: Defects found per test case
+Automation Coverage: % of tests automated
+Cost per Defect: Resources spent per defect found
+TestRail, Zephyr, qTest: Manage test cases and execution
+JIRA, Azure DevOps: Track defects and requirements
+Test execution progress
+Pass/fail ratios
+Defect trends
+Test coverage
+Open/closed defect counts
+Device fragmentation
+OS versions
+Network conditions
+Battery usage
+Interruptions handling
+Browser compatibility
+Responsive design
+Accessibility compliance
+Security (OWASP Top 10)
+Performance optimization
+Load Testing: Normal load behavior
+Stress Testing: Breaking point identification
+Endurance Testing: Long-duration stability
+Spike Testing: Sudden load increase handling
+Volume Testing: Data volume impact
+Response time
+Throughput
+Resource utilization
+Error rates
+Concurrent users capacity
+Authentication/authorization verification
+Input validation and sanitization
+Session management
+Data protection and encryption
+API security
+Vulnerability scanning
+Penetration testing
+Security code review
+Compliance checking
+Threat modeling
+Verification: Are we building the product right? (Reviews, inspections, walkthroughs)
+Validation: Are we building the right product? (Testing against requirements)
+Testing: Finding defects/bugs in software
+Debugging: Finding root cause and fixing bugs
+Severity: Impact on functionality (critical, major, minor, trivial)
+Priority: Order of fix implementation (high, medium, low)
+QA: Preventive process ensuring quality standards are met
+QC: Detective process finding defects in existing products
+Black Box: No knowledge of internals, focus on inputs/outputs
+White Box: Full knowledge of code internals, focus on coverage
+Grey Box: Limited knowledge of internals, combines both approaches
+Smoke: Basic verification that critical functionality works
+Sanity: Focused check of specific functionality after changes
+Regression: Ensuring unchanged areas still work after changes
+Retesting: Verifying fixed defects work properly
+Alpha: Testing by internal teams before release
+Beta: Testing by real users in real environments before full release
+Static: Reviewing code/documents without execution
+Dynamic: Testing with actual code execution
+Load: Testing at expected normal/peak loads
+Stress: Testing beyond normal capacity until breaking point
+Manual: Human execution of test cases
+Automated: Tool-based execution of scripted tests
+System: Testing complete integrated system against specifications
+Acceptance: Verifying system meets business/user requirements
+Functional: Testing what the system does
+Non-functional: Testing how the system performs (performance, usability, security)
+Test Plan: Project-specific detailed testing approach
+Test Strategy: Organization-level general testing guidelines
+Error: Mistake made by developer
+Defect/Bug: Implementation that doesn't match requirements
+Failure: System not performing required function
+Fault: Incorrect step/process/data definition
+SDLC: Software Development Life Cycle (requirements to maintenance)
+STLC: Software Testing Life Cycle (planning to closure)
+TDD: Test-Driven Development (write tests before code)
+BDD: Behavior-Driven Development (tests based on system behavior)
+Requirements gathering
+Design
+Implementation
+Testing
+Deployment
+Maintenance
+Waterfall: Sequential phases
+V-Model: Testing paired with each development phase
+Agile: Iterative, incremental approach
+Spiral: Risk-driven approach
+Prototype: Build-evaluate-refine cycle
+Requirements Analysis: Understand what to test
+Test Planning: Develop testing strategy
+Test Design: Create test cases
+Test Environment Setup: Prepare testing infrastructure
+Test Execution: Run tests, report defects
+Test Closure: Evaluate test completion criteria
+Entry: Conditions to start testing (requirements, code ready)
+Exit: Conditions to complete testing (coverage, defect thresholds)
+Risk-Based: Focus on highest-risk areas first
+Requirement-Based: Tests derived from requirements
+Exploratory: Simultaneous learning and testing
+Session-Based: Time-boxed exploratory testing
+This cheat sheet provides a quick reference for all essential software testing knowledge. Use it as a refresher before interviews or as a daily reference in your testing activities.

@@ -67,9 +67,13 @@
   },
   "devDependencies": {
     "@types/node": "^22.15.2",
+    "@types/node-fetch": "^2.6.12",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.4.21",
+    "dotenv": "^16.5.0",
+    "node-fetch": "^3.3.2",
+    "openai": "^4.97.0",
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3"
