@@ -1,0 +1,199 @@
+---
+title: "💅 💔 100 Days CSS in 10 Days — Because Who Needs a Girlfriend When You Have border-radius?"
+description: "Intro
+
+
+Ever doomscroll your way into developer rage? Yeah, me too.
+So yesterday I was minding my own business (aka avoiding Jira) when I stumbled upon a blog where some dude proudly declared:
+“Just f"
+date: "2025-05-06T20:09:35.000Z"
+author: "TechTales.io"
+tags: ["IT"]
+time_to_read: 9
+image: "/images/placeholder.jpg"
+---
+
+Intro
+
+
+Ever doomscroll your way into developer rage? Yeah, me too.
+So yesterday I was minding my own business (aka avoiding Jira) when I stumbled upon a blog where some dude proudly declared:
+“Just finished 100 Days CSS Challenge!! 🥳🔥💯”
+Cool flex, bro. But when I clicked in, expecting juicy breakdowns, clever hacks, or at least some trauma bonding... all I got was:
+copy-paste StackOverflow energy, and I felt like I’d just been catfished by a portfolio piece.
+So naturally, I did what any mentally unwell developer would do — I challenged myself to do 100 Days CSS in 10 Days.
+Because why suffer slowly when you can suffer FAST?
+This series is for my fellow caffeine-fueled, chaos-coded siblings who want to actually learn something — not just vibe check another tutorial.
+If you’re insane like me (or just really love frontend pain), here’s the OG CSS challenge that started it all:
+100 Days CSS Challenge on Codedrops
+Absolutely! Here’s your Step 1 rewritten with your signature edgy-single-dev humor, but without removing any technical value or code:
+Let’s be honest—starting from the top is for people who still believe "this meeting could’ve been an email." Around here, we build bottom-up, just like how I rebuild my confidence every time a CSS layout breaks at 2AM. This frame? It’s like your one stable situationship: centered, stylish, and never ghosting you (unless you forget position: absolute).
+To begin, I followed a bottom-up approach, starting from the background and progressively building forward toward the visible content. The first step was creating a .frame container. This acts as the main canvas for the entire design and is centrally aligned on the screen using position: absolute and CSS transform techniques.
+<div class="center"></div>
+
+I defined its dimensions (400x400px), added rounded corners and a soft box shadow for a modern look, and applied a gradient background to match the challenge theme. All other elements—like numbers and text—would be placed inside this frame, making it the foundational structure of the layout.
+.frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  height: 400px;
+  margin-top: -200px;
+  margin-left: -200px;
+  border-radius: 2px;
+  box-shadow: 4px 8px 16px 0 rgba(0,0,0,0.1);
+  overflow: hidden;
+  background: linear-gradient(to top right, #43389F 0%, #4ec6ca 100%);
+  color: #333;
+  font-family: 'Open Sans', Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+And let’s be real—if I had a rupee for every time I centered a div, I could afford therapy for the trauma caused by flexbox in 2016. This .frame is the CSS equivalent of building emotional walls but at least this one has consistent padding. 💅
+Centering in CSS is like finding true love on a dating app—technically possible, but mostly feels like witchcraft. Thankfully, unlike my ex, CSS at least listens when I say “just meet me halfway.”
+After setting up the .frame, I needed to make sure that all the inner content—like the numbers and text—was perfectly centered within it. To achieve this, I created a new div with the class .center and placed it inside the .frame.
+<div class="center"></div>
+
+Using CSS, I applied absolute positioning and used top: 50% and left: 50% along with transform: translate(-50%, -50%) to center it both vertically and horizontally within the frame. This ensures that no matter the content, it will always remain aligned in the center of the frame, creating a balanced and symmetrical layout.
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  justify-content: center;
+}
+
+Boom. Centered. Unlike my life.
+Time to throw some digits and depression into this design.
+Once the .center container was in place, I divided the main content into two logical sections: one for the numbers and another for the text. To keep things organized and maintain separation of concerns, I created two separate 
+elements: one with the class .number and another with the class .text.
+<div class="center">
+  <div class="number"></div>
+  <div class="text"></div>
+</div>
+
+Separate .number and .text blocks like you’re separating your feelings from your code review feedback.
+.number div would contain the visual representation of "100", while the .text div would hold the accompanying labels like "Days" and "CSS Challenge". Keeping them in separate containers also makes it easier to style and position them independently within the centered layout.
+Now came the real MVP moment: building the glorious "100" out of pure CSS. And let’s be honest—this is the kind of thing that makes a single programmer whisper sweet nothings like “border-radius, you complete me”. I wanted clean, modular, and chef’s kiss level styling, not a janky flexbox monstrosity cobbled together like your last relationship.
+Next, I focused on building the number "100" inside the .number container. To keep the structure modular and maintainable, I divided each part of the number into separate elements and styled them individually with dedicated classes.
+<div class="number">
+  <div class="one-small"></div>
+  <div class="one-large"></div>
+  <div class="ten-zero"></div>
+  <div class="unit-zero"></div>
+</div>
+
+
+I started with the number "1", which is made of two parts:
+A large vertical bar (.one-large)
+A small diagonal stroke (.one-small)
+
+
+
+.one-small{
+    position:absolute;
+    z-index:-1;
+    background-color:white;
+    height:40px;
+    width:20px;
+    transform: rotate(50deg);
+    left:-16px;
+    border-radius:4px;
+    box-shadow: 0 0 13px 0 rgba(0, 0, 0, 0.2);
+}
+
+.one-large{
+    position:absolute;
+    z-index:2;
+    background-color:white;
+    height:100px;
+    width:24px;
+    border-radius:3px;
+    box-shadow: 0 0 13px 0 rgba(0, 0, 0, 0.2);
+}
+
+The .one-large block forms the main body of the "1", styled with a white background, rounded corners, and a shadow to give it a lifted appearance. For the diagonal part, I used .one-small, rotated it using the transform: rotate(50deg) property, and carefully positioned it using left and z-index values so that it appears behind the large bar. This layering creates a realistic, stylized look for the number.
+🟦 Creating the Zeros ("0")
+.ten-zero for the tens place
+.unit-zero for the units place
+.ten-zero{
+    position:absolute;
+    z-index:1;
+    height:100px;
+    width:100px;
+    left:17px;
+    border-radius:50%;
+    border: 24px solid #fff;
+    box-sizing: border-box;
+    box-shadow: 0 0 13px 0 rgba(0, 0, 0, 0.2);
+
+
+
+
+}
+.unit-zero{
+    position:absolute;
+    z-index:-1;
+    height:100px;
+    width:100px;
+    left:100px;
+    border-radius:50%;
+    border: 24px solid #fff;
+    box-sizing: border-box;
+    box-shadow: 0 0 13px 0 rgba(0, 0, 0, 0.2);
+}
+
+Each zero is represented using a circle with a hollow center. I achieved this by using a div with a border instead of a background color, along with border-radius: 50% to make the element perfectly round. The thick border creates the visual of a ring or hollow zero.
+To make the first zero overlap partially behind the "1", I adjusted its left position and used z-index to layer it properly. The second zero was placed farther to the right using a higher left value. Shadows were added to both for more depth and realism.
+This layered construction with precise positioning and styling allowed me to create the number "100" entirely with CSS, without using any images or text.
+And just like that, I made "100" from scratch—no images, no fonts, no shady libraries. Just pure CSS and a will to flex on that one dev who still hardcodes <h1>100</h1> and calls it a day. Stay classy.
+With the number "100" strutting confidently on the screen like a freshly merged PR, it was time to give it some wingmen: text. After all, what’s “100” without “Days” and “CSS Challenge”? Just a lonely number looking for context—kind of like a programmer on a dating app with only a LeetCode screenshot for a profile pic.
+With the number "100" complete, I turned my attention to the text section. This part was meant to display the words "Days" and "CSS Challenge", so I structured it into two nested containers: .text-large for the word "Days" and .text-small for the subtitle.
+I placed both inside a parent .text container, which I styled to handle general properties like font, color, and position. By applying these styles to the parent, I ensured consistency and reduced redundancy in the child elements.
+<div class="text">
+  <div class="text-large">Days</div>
+  <div class="text-small">Css challenge</div>
+</div>
+
+
+For .text-large, I used a bold font weight, a large font size, and adjusted the line-height to make the word "Days" visually impactful. I also added a small top margin to create spacing from the number above.
+.text {
+  position: relative;
+  top: 100px;
+  color: white;
+  font-family: "Courier New";
+  text-transform: uppercase;
+  display: block;
+}
+
+.text-large {
+  font-weight: 700;
+  font-size: 82px;
+  margin-top: 6px;
+  line-height: 60px;
+}
+
+.text-small {
+  line-height: 30px;
+  letter-spacing: 0.04em;
+  font-size: 23px;
+  font-weight: 700;
+}
+
+
+It’s cool. I see you.
+“Nice jokes, now where’s the code so I can slap it into my Fromile™ submission?”
+Say less. Here's your dopamine drip:
+Full Code on Codepen (or wherever you're hosting it)
+.frame: Your design’s sugar daddy — center it, style it, flex it.
+.center: Dead-center alignment with translate(-50%, -50%).
+.number: Fake the "100" with divs, borders, and blind faith.
+.text: Two lines, bold and basic. Just like that one ex.
+Don’t just lurk like you're stalking your crush’s GitHub —
+LIKE, SHARE, COMMENT, AND SEND COOKIES 🔥
+Because I'm doing 100 days of CSS in 10 days, and my sanity is inversely proportional to my caffeine intake. ☕
+Got a challenge, tech rant, or simpy story you want me to roast/code? Drop it below 👇
+Let me know when you’re ready for Day 2 and I’ll bring the chaos.

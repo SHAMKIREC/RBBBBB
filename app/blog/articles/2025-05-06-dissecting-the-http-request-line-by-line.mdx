@@ -1,0 +1,320 @@
+---
+title: "Dissecting the HTTP Request — Line by Line"
+description: "Dissecting the HTTP Request — Line by Line
+
+
+
+  
+  
+  Demystifying HTTP for Web Developers, Part 2
+
+
+
+In Part 1 of this series, we traced the full journey of an HTTP request — from typing a URL in the"
+date: "2025-05-06T20:17:17.000Z"
+author: "Hasan Safwan"
+tags: ["IT"]
+time_to_read: 14
+image: "/images/placeholder.jpg"
+---
+
+Dissecting the HTTP Request — Line by Line
+
+
+
+  
+  
+  Demystifying HTTP for Web Developers, Part 2
+
+
+
+In Part 1 of this series, we traced the full journey of an HTTP request — from typing a URL in the browser, through DNS resolution and TCP handshakes, all the way to receiving the server’s response. But understanding the path a request travels is only half the story. To truly master HTTP, we now need to dissect the payload that actually moves across the wire: the HTTP request itself.
+Every interaction between a web client and a server begins with a carefully structured message — the request. It may look simple on the surface, but every line, header, and byte in that request carries meaning. If you’re building serious web applications, APIs, or even debugging flaky integrations, you can’t afford to treat the request as a black box.
+In this article, we’ll break down the HTTP request line by line:
+What makes a valid request?
+What parts are required, optional, or misunderstood?
+How do headers affect server behavior?
+And how can you inspect or even construct requests manually?
+We’ll explore both theory and hands-on examples using tools like curl, Wireshark, and even manual HTTP requests typed in PuTTY — because nothing builds real understanding like observing how servers respond to raw protocol input.
+By the end, you’ll be able to read and write HTTP requests like a network engineer — and debug them like one too.
+Let’s peel it apart.
+Before diving into advanced use cases, let’s first understand the bare minimum structure of a valid HTTP/1.1 request  — one that any compliant server will accept and respond to.
+According to RFC 9112 §2, the syntax of a client request message in HTTP/1.1 is as follows:
+<Request Line>
+<Header Fields>
+<CRLF>
+<Optional Message Body>
+
+Let’s look at the most minimal real-world example that fits this structure:
+GET / HTTP/1.1
+Host: example.com
+
+Even though it has only two lines, this message fully complies with the HTTP/1.1 protocol.
+GET / HTTP/1.1
+
+This line contains three elements, separated by single spaces:
+Method : GET
+→ Tells the server what action the client wants to perform.
+→ GET means “retrieve this resource without modifying anything.”
+→ Defined in RFC 9110 §9.3.1
+
+
+Request Target : /
+→ The path to the desired resource on the server.
+→ The simplest form is a relative path, but it can also be a full URI in proxy contexts.
+→ See RFC 9110 §7.1
+
+
+HTTP Version : HTTP/1.1
+→ Indicates the HTTP protocol version used for this message.
+→ Syntax defined in RFC 9112 §2.3
+
+
+
+If this line is malformed — missing spaces, an invalid method, or no version — the server will typically respond with 400 Bad Request.
+Host: example.com
+
+This is the only mandatory header in HTTP/1.1. It tells the server which hostname the client is trying to reach — something older versions of HTTP couldn’t do.
+What Are Headers?
+
+
+HTTP headers are key-value pairs that provide metadata about a request or response. They influence everything from content format to caching behavior to security. While we’ll explore headers in depth in the next article, for now just know that headers are how clients communicate intent and context to servers.
+HTTP/1.1 introduced the concept of virtual hosting , where a single server (and IP address) can serve multiple domains. The Host header is how the client specifies which domain it wants.
+“A client MUST send a Host header field in all HTTP/1.1 request messages.”
+
+ — RFC 9112 §3.2
+Without this header, the server will reject the request — typically with a 400 status code.
+In HTTP/2 and HTTP/3, requests are not sent as raw text but as structured binary frames. Instead of the Host header, the protocol uses a pseudo-header called :authority to represent the intended host.
+:method: GET
+:scheme: https
+:authority: example.com
+:path: /
+
+This is required per RFC 9113 §8.3.1 for HTTP/2 and similarly in HTTP/3. Many clients still send the traditional Host header as well for backward compatibility, but it's no longer required by the protocol.
+TL;DR:
+HTTP/1.1 requires Host.
+HTTP/2 and 3 use :authority instead.
+Both identify which virtual host the request is for.
+Even when no body is present, the end of the header section must be marked by an empty line (i.e., just \r\n).
+This is mandated by RFC 9112 §2.2:
+“A request message containing a non-empty header section MUST include at least one blank line (CRLF) separating the header fields from the body.”
+In manual testing tools like Telnet or PuTTY, forgetting this blank line will cause the server to hang — it’s still waiting for the end of the headers.
+This request has no body — and that’s perfectly valid. In fact, bodies are uncommon for GET requests.
+As explained in RFC 9110 §9.3.1:
+“Content received in a GET request has no generally defined semantics, cannot alter the meaning or target of the request, and might lead some implementations to reject the request and close the connection…”
+In contrast, POST, PUT, and PATCH requests often include bodies — which we’ll explore later in this article.
+This tiny two-line message:
+Is fully RFC-compliant.
+Works in practice with most HTTP servers.
+Serves as the perfect foundation for understanding and manually crafting HTTP requests.
+Next, we’ll enrich this structure with real-world headers like  User-Agent and  Accept, and see how they affect server behavior.
+The minimal request we discussed earlier — consisting of a GET line and a Host header — is technically valid and sufficient to elicit a server response. But in practice, most HTTP clients send additional headers that provide important context to the server: who the client is, what kind of content it prefers, and how the connection should behave.
+Let’s look at a more realistic example of a request generated by a typical command-line HTTP client:
+GET / HTTP/1.1
+Host: example.com
+User-Agent: curl/8.5.0
+Accept: */*
+
+Each of these headers is defined in RFC 9110, which governs HTTP semantics. While we’ll cover headers in depth in a dedicated future article, let’s walk through just enough to understand their presence and function in a typical request.
+User-Agent: curl/8.5.0
+
+The User-Agent header identifies the software making the request — typically a browser, mobile app, or command-line tool.
+According to RFC 9110 §10.1.5:
+“A user agent SHOULD send a User-Agent header field in each request.”
+In IETF language, SHOULD (as defined in RFC 2119) means this is a recommended but not strictly required behavior. That’s why our earlier minimal example — which omitted User-Agent entirely — still worked. A compliant HTTP/1.1 server must not reject a request just because this header is missing.
+However, in practice:
+Servers use User-Agent for analytics, feature detection, content negotiation, or filtering.
+Many web apps serve different versions of a site based on it.
+It’s one of the most spoofed headers on the Internet.
+Including it is common, but not mandatory.
+Accept: */*
+
+The Accept header tells the server which media types the client is willing to handle in the response.
+From RFC 9110 §12.5.1:
+“The “Accept” header field can be used by user agents to specify their preferences regarding response media types.”
+This example (*/*) means “I’ll accept any content type,” which is the default behavior for curl unless overridden. More specific values might include:
+text/html — for browsers expecting HTML
+application/json — for APIs
+image/webp,image/apng,*/* — a typical browser value with preference ordering
+The Accept header enables content negotiation , allowing the server to select the best available representation of the resource.
+While our example only includes two headers, real HTTP clients often send more. For instance:
+Connection: keep-alive — whether the connection should be reused (RFC 9112 Appendix-C.2.2)
+Accept-Encoding: gzip, deflate, br — what compression formats are supported (RFC 9110 §12.5.3)
+Referer — the address of the referring page (RFC 9110 §10.1.3)
+These will be explored in a dedicated deep dive.
+It’s worth noting that HTTP headers are designed to be extensible.
+From RFC 9110 §16.3:
+“HTTP’s most widely used extensibility point is the definition of new header and trailer fields.”
+This allows clients and servers to evolve independently. New headers can be added without breaking existing implementations — a key feature of HTTP’s long-term viability.
+While only the Host header is strictly required in HTTP/1.1, most real-world requests include headers like User-Agent and Accept.
+These headers are not mandatory, but they are highly recommended — and expected by many servers and APIs.
+HTTP headers provide metadata that shapes the request-response cycle, enabling things like compression, negotiation, and identity.
+We’ll dedicate an upcoming article to HTTP request headers in depth — including classifications, security concerns, and practical usage patterns.
+Next, let’s move beyond headers and look at requests that include a message body — essential for operations like form submissions and API updates.
+So far, we’ve examined GET requests, which retrieve resources without sending a message body. But many practical scenarios — logging in, submitting a form, or updating a record — require sending data to the server. That’s where methods like POST come into play.
+Let’s look at a complete HTTP/1.1 request with a JSON payload:
+POST /login HTTP/1.1
+Host: example.com
+Content-Type: application/json
+Content-Length: 48
+
+{"email":"user@example.com","password":"secret"}
+
+This is a valid and fully compliant request message. Let’s examine each part.
+Defined in RFC 9110 §9.3.3, the POST method tells the server to process the data included in the request body.
+“The POST method requests that the target resource process the representation enclosed in the request according to the resource’s own specific semantics.”
+Typical use cases include:
+Submitting forms
+Sending JSON to APIs
+Uploading files
+Executing custom commands
+POST is not idempotent  — repeating the same request may produce different results.
+Other body-supporting methods include:
+PUT — replaces an existing resource (RFC §9.3.4)
+PATCH — partial updates (RFC 5789)
+DELETE — removes a resource; body is allowed but not defined (RFC §9.3.5)
+Content-Type: application/json
+
+This header specifies the media type of the request body, allowing the server to interpret it correctly.
+“The Content-Type header field indicates the media type of the associated representation.” — RFC 9110 §8.3
+In this case, the body is JSON. Other common types include:
+application/x-www-form-urlencoded — for HTML form submissions
+multipart/form-data — for file uploads
+If omitted, the server might guess or reject the request, increasing the risk of failure or misinterpretation.
+Content-Length: 48
+
+This header tells the server exactly how many bytes to read from the message body.
+“A user agent that sends a request that contains a message body MUST send either a valid Content-Length header field or use the chunked transfer coding.” — RFC 9112 §6.3
+Let’s validate the value. The body is:
+{"email":"user@example.com","password":"secret"}
+
+This is exactly 48 bytes , calculated as follows (UTF-8, 1 byte per character):
+{ → 1
+"email" → 7
+: → 1
+"user@example.com" → 18
+, → 1
+"password" → 10
+: → 1
+"secret" → 8
+} → 1
+= 48 bytes
+
+
+
+If the Content-Length is incorrect — even by one byte — the server might hang, truncate the body, or return a 400 Bad Request.
+{"email":"user@example.com","password":"secret"}
+
+The bytes after the header section are the content of the message — in this example, a JSON object with login credentials. HTTP treats that content as an opaque octet stream: it merely moves the bytes. How those bytes are interpreted is left to the application and is signalled by fields such as Content‑Type.
+(See RFC 9110 § 6.4 and § 6.4.1 “Content Semantics”.)
+Can  GET Have a Body?
+Technically yes, but it’s discouraged.
+“Although request message framing is independent of the method used, content received in a GET request has no generally defined semantics” — RFC 9110 §9.3.1
+While the protocol doesn’t prohibit it, using a body with GET is:
+Non-standard
+Poorly supported across implementations
+Likely to cause inconsistent behavior
+Use POST, PUT, or PATCH when sending data.
+HTTP request bodies are used with methods like POST, PUT, and PATCH to send data to the server.
+The body must be accompanied by a valid Content-Type and a correctly calculated Content-Length.
+HTTP does not define the semantics of the body — it merely delivers the bytes.
+GET requests may include a body, but its usage is undefined and widely discouraged.
+Next, we’ll shift gears and construct real HTTP requests manually — using nothing but a terminal — to observe how servers behave when fed raw protocol input, one line at a time.
+At this point, we understand the structure of HTTP requests, and we’ve dissected both header-only and body-carrying examples. Now it’s time to make it real.
+In this section, we’ll:
+Send actual HTTP requests using curl and PuTTY
+Capture the network traffic using Wireshark
+Analyze the raw bytes being transmitted on the wire
+Understanding HTTP isn’t complete until you’ve seen how the request looks from the network’s point of view  — and verified that it aligns with your mental model.
+curl is a trusted command-line HTTP client available on most systems. It allows us to craft and send HTTP requests in a reproducible and scriptable way.
+We’ll start with a basic request:
+curl -v http://example.com/
+
+What to Expect:
+A GET / request using HTTP/1.1
+A Host header
+Typical default headers like User-Agent: curl/x.x.x and Accept: */*
+Step-by-Step Instructions
+Start Wireshark and begin capturing on the active network interface (e.g., Ethernet or Wi-Fi).
+Open a terminal and run:
+
+
+
+
+curl -v http://example.com/
+
+
+In Wireshark, apply this display filter to isolate the traffic:
+
+
+
+
+http && ip.addr == 96.7.128.175
+
+(Use the IP address shown in your terminal if different.)
+
+Inspect the request and response. Expand the “Hypertext Transfer Protocol” section in the Wireshark packet to view:
+ — Method, path, and version
+ — Headers (including Host, User-Agent, Accept)
+ — The response from the server
+
+To go even deeper, we’ll use PuTTY in Raw mode to manually construct an HTTP request by typing it line by line — just as a client would send it over TCP.
+This approach demonstrates the true text-based nature of HTTP/1.1.
+⚠️ Security Warning: Only Download PuTTY from the Official Site
+There are many fake or modified versions of PuTTY circulating online. Some are bundled with malware , keyloggers , or remote access trojans.
+Always download PuTTY only from its official site:
+
+https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html
+This is the original distribution maintained by its author, Simon Tatham. If you’re unsure, verify the SHA256 checksum of the executable before running it.
+Preparing the Environment
+Start Wireshark (if not already running) and begin capturing.
+Launch Terminal to issue a ping request to get the ip address (easier to filter and follow than typing example.com)
+
+Launch PuTTY :
+ — In the Session panel, set Connection type to Raw.
+ — For Host Name , enter: 23.192.228.80
+ — For Port , enter: 80
+
+Click Open. A terminal window appears. Now you’re connected directly to the server on TCP port 80 — but nothing has been sent yet.
+
+Manually Type the Request
+Type the following exactly (note the required blank line at the end):
+GET / HTTP/1.1
+Host: example.com
+
+
+(Hit Enter twice after the last line to signal the end of headers.)
+You should see the raw HTTP response come back — headers and HTML — directly in the terminal.
+
+Analyzing the Traffic
+In Wireshark:
+Filter by destination IP:
+
+
+
+
+ip.addr == 23.192.228.80
+
+Locate the TCP stream used by PuTTY.
+Follow the TCP stream (Right-click → Follow → TCP Stream).
+
+You’ll see exactly what you typed sent on the wire, and what came back from the server.
+
+This reinforces the core principle of HTTP/1.1: everything — request line, headers, even the blank line — is transmitted as plain ASCII over TCP.
+Tools like curl send complete, standards-compliant requests automatically.
+With PuTTY, you handcraft the entire HTTP message — seeing exactly what the server sees.
+Wireshark validates every byte, confirming your understanding of how HTTP works at the network level.
+Always be cautious with tool downloads — especially security-sensitive software like PuTTY.
+In the next section, we’ll wrap up and preview what’s coming in Part 3 — a deep dive into HTTP request headers — exploring how they’re classified, what they control, and how to use them effectively. After that, we’ll focus exclusively on HTTP request bodies and payload formats used in modern web APIs and applications.
+In this article, we dissected the structure of an HTTP request — not just theoretically, but line by line, byte by byte, and across real network traffic.
+We began with the minimal valid request , explained each required component according to IETF standards, and gradually layered in real-world headers like User-Agent and Accept. We explored the anatomy of a request with a message body , understanding how Content-Type and Content-Length govern payload semantics and integrity.
+Finally, we moved from concept to execution — crafting and observing real HTTP requests using curl, manually typing them in PuTTY , and validating the results in Wireshark. We treated HTTP not as an abstraction, but as a protocol we can reason about, inspect, and master.
+If Part 1 showed you how a request travels across the Internet, Part 2 showed you what that request actually contains  — and why every line matters.
+In Part 3 , we’ll zoom into a critical component of every request: the  headers.
+We’ll cover:
+How headers are classified (general, request-specific, entity, and extension)
+Header parsing and duplication rules
+Case sensitivity and normalization
+Real-world usage, abuse, and security implications
+Following that, we’ll explore HTTP request bodies and payload semantics in depth — including application/json, form encodings, and multipart payloads — with practical examples and pitfalls.
+This series is about building lasting, protocol-level understanding — and we’re just getting started.

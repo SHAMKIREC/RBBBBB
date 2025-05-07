@@ -1,0 +1,156 @@
+---
+title: "What is Docker and Why Should You Care?"
+description: "Look, I get it. When I started out 3 years ago, I was all about getting my apps online the quickest way possible. Vercel for my Next.js projects, Netlify for static sites, and PM2 to keep my Node.js a"
+date: "2025-05-06T20:39:39.000Z"
+author: "Jaskaran Deogan"
+tags: ["IT"]
+time_to_read: 4
+image: "/images/placeholder.jpg"
+---
+
+Look, I get it. When I started out 3 years ago, I was all about getting my apps online the quickest way possible. Vercel for my Next.js projects, Netlify for static sites, and PM2 to keep my Node.js apps running on that cheap VPS I rented. It worked... until it didn't.
+If you're like me, I highly encourage you to explore about Docker.
+I thought I had it all figured out:
+The One-Click Wonder: Push to GitHub, automatic deployment to a hosting platform. Magic! Until I needed custom environment configurations or hit the free tier limits.
+
+
+The PM2 Savior: SSH into my server, git pull, npm install, pm2 restart. Simple enough... except when dependencies broke, or node versions mismatched, or any of the other thousand things that could go wrong.
+
+
+The "It's Working, Don't Touch It" Server: That Ubuntu VPS running four different apps with a tangled mess of nginx configurations. Heaven forbid I needed to update anything!
+
+
+
+
+  
+  
+  Why It All Started Breaking Down
+
+
+As my projects grew, the cracks started showing:
+Dependency Hell: "Works on my machine" became my catchphrase.
+Configuration Nightmares: Each service had its own way of setting environment variables.
+Budget Stress: Free tiers ran out fast, and suddenly I was paying $50+ monthly for basic hosting.
+Scaling Issues: Adding new features meant fighting with deployment configurations.
+Popular Blunders:  I was once told by someone in the industry how their aws bill went up to 100k USD while their product was still in development. I also experienced myself with AWS where their elastic compute is just out of control. Someone new to this tech is bound to make mistakes which can result in huge loss for the company or you. 
+It's so powerful. You can run multiple containers on the same server/device just like that. 
+No more "but it works on my machine" moments. Docker ensures my app runs the same way everywhere. Everything my app needs is defined in a Dockerfile:
+FROM node:18-alpine
+WORKDIR /app
+COPY package.json .
+RUN npm install
+COPY . .
+RUN npm run build
+EXPOSE 3000
+CMD ["npm", "start"]
+
+I can now share my entire development setup with a teammate by sending them a single file. No more "First install Node 16, then PostgreSQL 13, then configure this environment variable..."
+With Docker, I test in an environment identical to production. No more "it worked in development" problems.
+Before, switching hosting providers meant learning a whole new deployment process. Now, I can take my containerized app anywhere that runs Docker.
+
+
+
+Component
+Minimum Requirements
+Recommended
+
+
+
+
+CPU
+2 cores
+4+ cores
+
+
+RAM
+4GB
+8GB+
+
+
+Disk Space
+10GB free
+20GB+ free
+
+
+OS
+Windows 10+, macOS 10.15+, Linux with kernel 3.10+
+Latest versions
+
+
+Docker Installation
+Docker Desktop or Docker Engine
+Latest stable version
+
+
+
+
+
+
+Resource
+Minimum
+Recommended
+
+
+
+
+CPU
+1 shared core
+2+ dedicated cores
+
+
+RAM
+512MB
+2GB+
+
+
+Storage
+5GB
+20GB+
+
+
+Bandwidth
+1GB/month
+100GB+/month
+
+
+Docker
+Docker Engine 20.10+
+Latest version
+
+
+
+Switching was surprisingly easy:
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+RUN npm run build
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
+
+node_modules
+.next
+.git
+
+# Build the Docker image
+docker build -t my-nextjs-app .
+
+# Run the container
+docker run -p 3000:3000 my-nextjs-app
+
+Just like that, my app was running in a consistent, portable environment.
+The biggest revelation was realizing I could replace multiple paid services with self-hosted alternatives:
+Database Costs: Instead of paying for a managed database, I run PostgreSQL in a container.
+Multiple Projects: I can host several Docker containers on a single affordable VPS instead of paying per-project.
+Form Handling: No need for form submission services when I can run a simple form-handling self-hosted service in a container.
+Analytics: Replaced paid analytics with a self-hosted open-source solution.
+Looking back, I wasted so much time fighting with deployment issues that Docker would have solved instantly. If you're still manually SSHing into servers or hitting the limits of one-click deploys, do yourself a favor and spend a day learning Docker.
+The knowledge transfers everywhere, works for any programming language or framework, and will save you countless hours of debugging environment-specific issues.
+Docker isn't just another tool in your stack—it's a completely different approach to development and deployment that makes everything else easier.
+Are you still using PM2 and praying your server doesn't crash? Still hitting free tier limits on deployment platforms? It might be time to containerize your way to developer happiness.

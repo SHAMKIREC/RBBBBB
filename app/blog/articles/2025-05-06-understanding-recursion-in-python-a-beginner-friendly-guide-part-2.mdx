@@ -1,0 +1,46 @@
+---
+title: "Understanding Recursion in Python: A Beginner-Friendly Guide Part 2"
+description: "Today, we'll walk through some fun and practical examples of more recursion in Python, all without using any built-in shortcuts or helper functions.
+Write a function reverse_string(s) that returns the"
+date: "2025-05-06T17:48:44.000Z"
+author: "Peter Muthama"
+tags: []
+time_to_read: 2
+image: "/images/placeholder.jpg"
+---
+
+Today, we'll walk through some fun and practical examples of more recursion in Python, all without using any built-in shortcuts or helper functions.
+Write a function reverse_string(s) that returns the reversed version of string s.
+If the string is empty or has one character, return it.
+Otherwise, take the last character and append it to the reversed substring.
+def reverse_string(s):
+    if len(s) <= 1:
+        return s
+    else:
+        return s[-1] + reverse_string(s[:-1])
+
+reverse_string("hello")  # Output: "olleh"
+
+Return the nth Fibonacci number using recursion with memoization to improve performance.
+Use a helper function with a memo dictionary.
+Cache results to avoid redundant calculations.
+def fibonacci(n: int) -> int:
+    memo = {}
+
+    def fib_helper(n: int) -> int:
+        if n in memo:
+            return memo[n]
+        if n == 0:
+            return 0
+        elif n == 1:
+            return 1
+
+        memo[n] = fib_helper(n - 1) + fib_helper(n - 2)
+        return memo[n]
+
+    return fib_helper(n)
+
+fibonacci(7)  # Output: 13
+
+Recursion teaches us to think differently, breaking down problems into smaller chunks until we reach a base case. While it's tempting to lean on built-in functions, solving problems recursively helps build a deeper understanding of logic and control flow.
+Try these problems out yourself, tweak them, and challenge yourself to come up with variations. Recursion might just become your favorite problem-solving tool!
