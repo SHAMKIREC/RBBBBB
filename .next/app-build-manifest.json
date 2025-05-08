@@ -6,50 +6,50 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
+    "/calculator/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/calculator/page.js"
+    ],
     "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/page.js"
     ],
-    "/services/remont/page": [
+    "/admin/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/services/remont/page.js"
+      "static/chunks/app/admin/layout.js"
     ],
-    "/services/engineering/page": [
+    "/admin/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/services/engineering/page.js"
-    ],
-    "/services/windows-doors/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/services/windows-doors/page.js"
+      "static/chunks/app/admin/page.js"
     ],
     "/services/academic/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/services/academic/page.js"
     ],
-    "/services/it/page": [
+    "/services/windows-doors/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/services/it/page.js"
+      "static/chunks/app/services/windows-doors/page.js"
     ],
-    "/services/roof-facade/page": [
+    "/blog/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/services/roof-facade/page.js"
+      "static/chunks/app/blog/page.js"
     ],
-    "/services/roofing-facades/page": [
+    "/blog/[id]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/services/roofing-facades/page.js"
+      "static/chunks/app/blog/[id]/page.js"
     ],
-    "/services/construction/page": [
+    "/reviews/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/services/construction/page.js"
+      "static/chunks/app/reviews/page.js"
     ]
   }
 }

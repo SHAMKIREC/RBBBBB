@@ -228,7 +228,7 @@ const blogPosts = [
   },
 ]
 
-export default function BlogPostPage({ params }: { params: { id: string } }) {
+export default async function BlogPostPage({ params }: { params: { id: string } }) {
   const post = blogPosts.find((p) => p.id === Number(params.id))
   if (!post) notFound()
   return <BlogPost post={post} />

@@ -232,16 +232,16 @@ export default function RemontPage() {
               )}
             </div>
           ))}
-        </div>
 
-        {/* Order Button */}
-        <div className="text-center mt-16">
+          {/* Кнопка внутри блока */}
+          <div className="text-center mt-8">
           <Button
             onClick={handleOpenDialog}
-            className="bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white px-8 py-4 rounded-lg font-medium hover:opacity-90 transition-all text-lg"
+              className="bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white px-8 py-3 rounded-lg text-lg font-medium hover:opacity-90 transition-opacity"
           >
             Заказать услугу
           </Button>
+          </div>
         </div>
 
         {/* FAQ Section */}

@@ -98,15 +98,58 @@
 }
 
 /* Стили для полей ввода */
+/* Удаляю глобальные квадратные стили для всех input, textarea, select, button */
+/*
 input, textarea, select, button {
-  border-radius: 10px !important;
+  border-radius: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transition: none !important;
+  background-clip: padding-box !important;
 }
 
-input:focus, textarea:focus, select:focus {
-  border-color: #FF7A00 !important;
+input:focus, textarea:focus, select:focus,
+input:hover, textarea:hover, select:hover,
+input:active, textarea:active, select:active {
+  border-radius: 0 !important;
   outline: none !important;
-  box-shadow: 0 0 0 1px #FF7A00 !important;
+  box-shadow: none !important;
+  transition: none !important;
+  background-clip: padding-box !important;
 }
+
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  border-radius: 0 !important;
+  box-shadow: 0 0 0 1000px #fff inset !important;
+  -webkit-box-shadow: 0 0 0 1000px #fff inset !important;
+  outline: none !important;
+  border: none !important;
+  transition: none !important;
+  background-clip: padding-box !important;
+}
+
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+  border-radius: 0 !important;
+}
+
+input::-moz-placeholder,
+textarea::-moz-placeholder {
+  border-radius: 0 !important;
+}
+
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+  border-radius: 0 !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  border-radius: 0 !important;
+}
+*/
 
 /* Стили для радио-кнопок */
 [data-state="checked"].radio-group-item {
