@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Icon } from "@/components/ui/icon";
+import { Calculator } from "@/components/Calculator";
+import { HeroRequestForm } from "@/components/hero-request-form";
 
 // Компонент анимированного дефиса (эффект "швырнули палку")
 function ThrownDash({ onComplete }: { onComplete?: () => void }) {
@@ -56,6 +58,16 @@ export function HeroAnimated() {
   const [isSOSOpen, setIsSOSOpen] = useState(false);
   const [showDash, setShowDash] = useState(true);
   const [dashPhase, setDashPhase] = useState<'circle' | 'short'>('circle');
+  const [formData, setFormData] = useState({ area: "", type: "", rooms: "", repairType: "" });
+  const [open, setOpen] = useState(false);
+
+  // Формируем текст для комментария
+  const comment = [
+    formData.area && `Площадь: ${formData.area} м²`,
+    formData.type && `Тип: ${getTypeName(formData.type)}`,
+    formData.rooms && `Комнат: ${getRoomsName(formData.rooms)}`,
+    formData.repairType && `Вид ремонта: ${getRepairTypeName(formData.repairType)}`
+  ].filter(Boolean).join(", ");
 
   // Анимация для логотипа
   const logoVariants = {
@@ -120,6 +132,9 @@ export function HeroAnimated() {
           <span className="mx-2 align-middle inline-block" style={{ width: '0.75em', height: '0.18em', background: 'linear-gradient(90deg, #FF7A00, #FF0000)', borderRadius: '2px', verticalAlign: 'middle', display: 'inline-block' }}></span>
           ремонтируем настоящее!
         </motion.p>
+        <motion.div className="mb-8">
+          {/* Удаляю калькулятор и форму */}
+        </motion.div>
         <motion.div
           className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           initial="hidden"
@@ -263,4 +278,36 @@ export function HeroAnimated() {
       </div>
     </motion.section>
   );
+}
+
+// Вспомогательные функции для отображения названий
+function getTypeName(type: string) {
+  switch(type) {
+    case "apartment": return "Квартира"
+    case "house": return "Дом"
+    case "office": return "Офис"
+    case "commercial": return "Коммерческое помещение"
+    case "other": return "Другое"
+    default: return ""
+  }
+}
+function getRoomsName(rooms: string) {
+  switch(rooms) {
+    case "studio": return "Студия"
+    case "1": return "1 комната"
+    case "2": return "2 комнаты"
+    case "3": return "3 комнаты"
+    case "4": return "4 комнаты"
+    case "5+": return "5 и более"
+    default: return ""
+  }
+}
+function getRepairTypeName(type: string) {
+  switch(type) {
+    case "chernovoy": return "Черновой"
+    case "chistovoy": return "Чистовой"
+    case "pod_kluch": return "Под ключ"
+    case "dizainerskiy": return "Дизайнерский"
+    default: return ""
+  }
 } 

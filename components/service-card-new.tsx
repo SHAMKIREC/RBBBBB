@@ -92,13 +92,13 @@ export function ServiceCard({ categories, onOrderClick }: ServiceCardProps) {
           ))}
         </div>
         
-        <div className="mt-10 flex justify-center">
-          <button
-            className="bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white text-[17px] px-10 py-4 rounded-[10px] shadow-[0_4px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_6px_12px_rgba(0,0,0,0.3)] transition-all"
+        <div className="text-center mt-8">
+          <Button
             onClick={onOrderClick}
+            className="bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white px-8 py-3 rounded-lg text-lg font-medium hover:opacity-90 transition-opacity"
           >
             Заказать услугу
-          </button>
+          </Button>
         </div>
       </div>
     </section>
