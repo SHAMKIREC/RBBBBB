@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { useToast } from "@/components/ui/use-toast"
+import { Dialog, DialogContent } from '@/components/ui/dialog'
 
 interface ModalFormProps {
   isOpen: boolean
@@ -38,6 +39,7 @@ export function ModalForm({ isOpen, onClose, initialComment = "", title = "За�
   const [lastSubmit, setLastSubmit] = useState<number>(0);
   const [rateLimitError, setRateLimitError] = useState<string>("");
   const { toast } = useToast();
+  const [resultModal, setResultModal] = useState<{ open: boolean, success: boolean }>({ open: false, success: true });
 
   useEffect(() => {
     setFormData({
@@ -158,24 +160,16 @@ export function ModalForm({ isOpen, onClose, initialComment = "", title = "За�
     setLastSubmit(now);
     try {
       // Здесь отправка данных формы + recaptchaToken на сервер или в консоль
-      // Имитация успешной отправки:
-      // await fetch(...)
-      console.log('Отправка формы с данными:', {
-        ...formData,
-        recaptchaToken: recaptchaToken.substring(0, 20) + '...'
-      });
-      toast({
-        title: '✅ Заявка успешно отправлена!',
-        description: 'Мы свяжемся с вами в ближайшее время.',
-        duration: 5000
-      });
-      onClose();
+      setResultModal({ open: true, success: true });
+      setTimeout(() => {
+        setResultModal({ open: false, success: true });
+        onClose();
+      }, 7000);
     } catch (error) {
-      toast({
-        title: '❌ Не удалось отправить заявку.',
-        description: 'Пожалуйста, попробуйте позже.',
-        duration: 5000
-      });
+      setResultModal({ open: true, success: false });
+      setTimeout(() => {
+        setResultModal({ open: false, success: false });
+      }, 7000);
     }
   }
 
@@ -193,117 +187,160 @@ export function ModalForm({ isOpen, onClose, initialComment = "", title = "За�
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md relative">
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-        >
-          <X className="h-5 w-5" />
-        </button>
-
-        <div className="flex items-center gap-2 mb-2">
-          <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF0000] rounded p-1 text-white font-bold text-lg">RB</span>
-          <span className="text-[#FF3A2D] font-semibold">Решаем Быстро</span>
-        </div>
-        <h2 className="text-2xl font-bold mb-2">{title}</h2>
-        <p className="text-gray-600 text-sm mb-4">Оставьте заявку, и мы свяжемся с вами для обсуждения деталей в течение <span className="text-[#FF3A2D] font-bold">5 минут</span></p>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="name">Имя</Label>
-            <Input
-              id="name"
-              ref={nameRef}
-              placeholder="Ваше имя"
-              value={formData.name}
-              onChange={(e) => {
-                const value = e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ\s'-]/g, '')
-                setFormData({ ...formData, name: value })
-              }}
-              onKeyDown={e => handleKeyDown(e, 'name')}
-              required
-              className={`border-2 border-[#FF7A00] focus:border-[#FF3A2D] focus:ring-0 ${errors.name ? 'border-red-500' : ''}`}
-            />
-            {errors.name && <div className="text-red-500 text-xs mt-1">{errors.name}</div>}
-          </div>
-
-          <div>
-            <Label htmlFor="phone">Телефон</Label>
-            <Input
-              id="phone"
-              ref={phoneRef}
-              type="tel"
-              placeholder="Ваш номер телефона"
-              value={formData.phone}
-              onChange={(e) => {
-                let value = e.target.value.replace(/[^\d\s+\-()]/g, '')
-                // Автозамена первой 8 на +7
-                if (value.length === 1 && value === '8') value = '+7'
-                if (value.startsWith('8') && value.length > 1) value = value.replace(/^8/, '+7')
-                // Если не начинается с +7, всегда делаем +7
-                if (!value.startsWith('+7')) value = '+7'
-                // Оставляем только +7 и максимум 10 цифр после +7
-                if (value.startsWith('+7')) {
-                  const digits = value.replace(/\D/g, '')
-                  const main = digits.slice(1, 11) // только 10 цифр после 7
-                  value = '+7' + main
-                }
-                setFormData({ ...formData, phone: value })
-              }}
-              onKeyDown={e => handleKeyDown(e, 'phone')}
-              required
-              className={`border-2 border-[#FF7A00] focus:border-[#FF3A2D] focus:ring-0 ${errors.phone ? 'border-red-500' : ''}`}
-            />
-            {errors.phone && <div className="text-red-500 text-xs mt-1">{errors.phone}</div>}
-          </div>
-
-          <div>
-            <Label htmlFor="email">Email (необязательно)</Label>
-            <Input
-              id="email"
-              ref={emailRef}
-              type="email"
-              placeholder="example@mail.com"
-              value={formData.email}
-              onChange={handleEmailChange}
-              onKeyDown={e => handleKeyDown(e, 'email')}
-              className={`border-2 border-[#FF7A00] focus:border-[#FF3A2D] focus:ring-0 ${errors.email ? 'border-red-500' : ''}`}
-            />
-            {errors.email && <div className="text-red-500 text-xs mt-1">{errors.email}</div>}
-          </div>
-
-          <div>
-            <Label htmlFor="comment">Комментарий</Label>
-            <Textarea
-              id="comment"
-              ref={commentRef}
-              placeholder="Опишите ваши пожелания или задайте вопрос"
-              value={formData.comment}
-              onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
-              onKeyDown={e => handleKeyDown(e, 'comment')}
-              rows={3}
-              className={`border-2 border-[#FF7A00] focus:border-[#FF3A2D] focus:ring-0 ${errors.comment ? 'border-red-500' : ''}`}
-            />
-            {errors.comment && <div className="text-red-500 text-xs mt-1">{errors.comment || ""}</div>}
-          </div>
-
-          {rateLimitError && <div className="text-red-500 text-xs mt-1">{rateLimitError}</div>}
+    <>
+      <button type="button" onClick={() => alert('Проверка alert вне формы')}
+        style={{position:'fixed',top:10,right:10,zIndex:9999,background:'#fff',border:'1px solid #f00',padding:8}}>Проверка alert</button>
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md relative">
           <button
-            type="submit"
-            disabled={!isFormValid() || !recaptchaToken || (Date.now() - lastSubmit < 30000)}
-            className="w-full bg-gradient-to-r from-[#FF7A00] to-[#FF3A2D] text-white font-bold py-3 rounded-md disabled:opacity-60"
+            onClick={onClose}
+            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
           >
-            Отправить заявку
+            <X className="h-5 w-5" />
           </button>
-          {/* Диагностика: показываем причину дизейбла */}
-          <div style={{fontSize:12, color:'#888', marginTop:8}}>
-            {!isFormValid() && 'Форма невалидна. '}
-            {!recaptchaToken && 'Нет токена reCAPTCHA. '}
-            {(Date.now() - lastSubmit < 30000) && 'Ограничение по времени (30 сек). '}
+
+          <div className="flex items-center gap-2 mb-2">
+            <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF0000] rounded p-1 text-white font-bold text-lg">RB</span>
+            <span className="text-[#FF3A2D] font-semibold">Решаем Быстро</span>
           </div>
-        </form>
+          <h2 className="text-2xl font-bold mb-2">{title}</h2>
+          <p className="text-gray-600 text-sm mb-4">Оставьте заявку, и мы свяжемся с вами для обсуждения деталей в течение <span className="text-[#FF3A2D] font-bold">5 минут</span></p>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <Label htmlFor="name">Имя</Label>
+              <Input
+                id="name"
+                ref={nameRef}
+                placeholder="Ваше имя"
+                value={formData.name}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ\s'-]/g, '')
+                  setFormData({ ...formData, name: value })
+                }}
+                onKeyDown={e => handleKeyDown(e, 'name')}
+                required
+                className={`border-2 border-[#FF7A00] focus:border-[#FF3A2D] focus:ring-0 ${errors.name ? 'border-red-500' : ''}`}
+              />
+              {errors.name && <div className="text-red-500 text-xs mt-1">{errors.name}</div>}
+            </div>
+
+            <div>
+              <Label htmlFor="phone">Телефон</Label>
+              <Input
+                id="phone"
+                ref={phoneRef}
+                type="tel"
+                placeholder="Ваш номер телефона"
+                value={formData.phone}
+                onChange={(e) => {
+                  let value = e.target.value.replace(/[^\d\s+\-()]/g, '')
+                  // Автозамена первой 8 на +7
+                  if (value.length === 1 && value === '8') value = '+7'
+                  if (value.startsWith('8') && value.length > 1) value = value.replace(/^8/, '+7')
+                  // Если не начинается с +7, всегда делаем +7
+                  if (!value.startsWith('+7')) value = '+7'
+                  // Оставляем только +7 и максимум 10 цифр после +7
+                  if (value.startsWith('+7')) {
+                    const digits = value.replace(/\D/g, '')
+                    const main = digits.slice(1, 11) // только 10 цифр после 7
+                    value = '+7' + main
+                  }
+                  setFormData({ ...formData, phone: value })
+                }}
+                onKeyDown={e => handleKeyDown(e, 'phone')}
+                required
+                className={`border-2 border-[#FF7A00] focus:border-[#FF3A2D] focus:ring-0 ${errors.phone ? 'border-red-500' : ''}`}
+              />
+              {errors.phone && <div className="text-red-500 text-xs mt-1">{errors.phone}</div>}
+            </div>
+
+            <div>
+              <Label htmlFor="email">Email (необязательно)</Label>
+              <Input
+                id="email"
+                ref={emailRef}
+                type="email"
+                placeholder="example@mail.com"
+                value={formData.email}
+                onChange={handleEmailChange}
+                onKeyDown={e => handleKeyDown(e, 'email')}
+                className={`border-2 border-[#FF7A00] focus:border-[#FF3A2D] focus:ring-0 ${errors.email ? 'border-red-500' : ''}`}
+              />
+              {errors.email && <div className="text-red-500 text-xs mt-1">{errors.email}</div>}
+            </div>
+
+            <div>
+              <Label htmlFor="comment">Комментарий</Label>
+              <Textarea
+                id="comment"
+                ref={commentRef}
+                placeholder="Опишите ваши пожелания или задайте вопрос"
+                value={formData.comment}
+                onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
+                onKeyDown={e => handleKeyDown(e, 'comment')}
+                rows={3}
+                className={`border-2 border-[#FF7A00] focus:border-[#FF3A2D] focus:ring-0 ${errors.comment ? 'border-red-500' : ''}`}
+              />
+              {errors.comment && <div className="text-red-500 text-xs mt-1">{errors.comment || ""}</div>}
+            </div>
+
+            {rateLimitError && <div className="text-red-500 text-xs mt-1">{rateLimitError}</div>}
+            <button
+              type="submit"
+              disabled={!isFormValid() || !recaptchaToken || (Date.now() - lastSubmit < 30000)}
+              className="w-full bg-gradient-to-r from-[#FF7A00] to-[#FF3A2D] text-white font-bold py-3 rounded-md disabled:opacity-60"
+            >
+              Отправить заявку
+            </button>
+            {/* Диагностика: показываем причину дизейбла */}
+            <div style={{fontSize:12, color:'#888', marginTop:8}}>
+              {!isFormValid() && 'Форма невалидна. '}
+              {!recaptchaToken && 'Нет токена reCAPTCHA. '}
+              {(Date.now() - lastSubmit < 30000) && 'Ограничение по времени (30 сек). '}
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+      <Dialog open={resultModal.open} onOpenChange={() => setResultModal({ ...resultModal, open: false })}>
+        <DialogContent className="max-w-md w-full flex flex-col items-center justify-center text-center py-8 px-6 rounded-lg shadow-xl" style={{background:'#FFF3E6'}}>
+          <div className="flex flex-col items-center mb-4">
+            <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF0000] rounded p-2 text-white font-extrabold text-2xl mb-2">RB</span>
+            <span className="text-[#FF3A2D] font-extrabold text-lg">Решаем Быстро</span>
+          </div>
+          {resultModal.success ? (
+            <>
+              <div className="mb-4">
+                <svg width="88" height="88" viewBox="0 0 72 72" fill="none">
+                  <defs>
+                    <radialGradient id="shield" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stopColor="#FFF3E6" />
+                      <stop offset="100%" stopColor="#FFD6B0" />
+                    </radialGradient>
+                    <linearGradient id="check" x1="0" y1="0" x2="1" y2="1">
+                      <stop stopColor="#00C853" />
+                      <stop offset="1" stopColor="#009688" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M36 8C36 8 14 12 14 28C14 56 36 66 36 66C36 66 58 56 58 28C58 12 36 8 36 8Z" fill="url(#shield)" stroke="#FF7A00" strokeWidth="2"/>
+                  <path d="M25 39L34 48L49 27" stroke="url(#check)" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              <div className="text-2xl font-extrabold mb-2">🎉 Заявка отправлена!🎉</div>
+              <div className="text-lg font-semibold text-gray-700">
+                Спасибо, что выбрали нас — мы уже на связи и скоро всё решим. Ожидайте звонка или сообщения в течение
+                <span className="font-extrabold bg-gradient-to-r from-[#FF7A00] to-[#FF0000] bg-clip-text text-transparent mx-1">5 минут</span>!
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="text-red-500 text-5xl mb-4">✗</div>
+              <div className="text-xl font-bold mb-2">Не удалось отправить заявку.</div>
+              <div className="text-gray-600">Пожалуйста, попробуйте позже.</div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
   )
 }
