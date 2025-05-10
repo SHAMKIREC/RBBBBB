@@ -1,8 +1,4 @@
 {
-  "/services/engineering/page": "app/services/engineering/page.js",
   "/services/academic/page": "app/services/academic/page.js",
-  "/services/remont/page": "app/services/remont/page.js",
-  "/services/roofing-facades/page": "app/services/roofing-facades/page.js",
-  "/services/construction/page": "app/services/construction/page.js",
-  "/page": "app/page.js"
+  "/services/remont/page": "app/services/remont/page.js"
 }
