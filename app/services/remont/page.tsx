@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Check, ChevronDown } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { motion, AnimatePresence } from "framer-motion"
+import { ModalForm } from '@/components/ModalForm'
 
 interface ServiceCategory {
   title: string
@@ -141,11 +142,6 @@ export default function RemontPage() {
   // Обработчик открытия модального окна
   const handleOpenDialog = () => {
     setIsOrderDialogOpen(true)
-    // Автоматически заполняем комментарий выбранными услугами
-    setFormData(prev => ({
-      ...prev,
-      comment: selectedServices.join('\n')
-    }))
   }
 
   // Обработчик закрытия модального окна
@@ -161,6 +157,11 @@ export default function RemontPage() {
       comment: ""
     })
   }
+
+  // Формируем комментарий для формы
+  const commentText = selectedServices.length
+    ? `Услуга: Ремонт\nВыбрано:\n${selectedServices.map(s => `- ${s}`).join('\n')}`
+    : 'Услуга: Ремонт'
 
   // Обработчик отправки формы
   const handleSubmit = (e: React.FormEvent) => {
@@ -235,12 +236,12 @@ export default function RemontPage() {
 
           {/* Кнопка внутри блока */}
           <div className="text-center mt-8">
-          <Button
-            onClick={handleOpenDialog}
+            <Button
+              onClick={handleOpenDialog}
               className="bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white px-8 py-3 rounded-lg text-lg font-medium hover:opacity-90 transition-opacity"
-          >
-            Заказать услугу
-          </Button>
+            >
+              Заказать услугу
+            </Button>
           </div>
         </div>
 
@@ -291,78 +292,13 @@ export default function RemontPage() {
         </section>
       </section>
 
-      {/* Order Dialog */}
-      <Dialog open={isOrderDialogOpen} onOpenChange={handleCloseDialog}>
-        <DialogContent className="sm:max-w-[480px] p-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-8 h-8 rounded bg-[#FF4D00] flex items-center justify-center">
-                <span className="text-white font-bold">RB</span>
-              </div>
-              <span className="text-[#FF4D00] font-bold">Решаем Быстро</span>
-            </div>
-            
-            <h2 className="text-xl font-medium mb-2">Заказать ремонт</h2>
-            <p className="text-sm text-gray-600 mb-6">
-              Оставьте заявку, и мы свяжемся с вами для обсуждения деталей ремонта в течение <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text">5 минут</span>
-            </p>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <Label>Имя</Label>
-                <Input 
-                  placeholder="Ваше имя"
-                  value={formData.name}
-                  onChange={(e) => handleFormChange('name', e.target.value)}
-                  className="border-[#FF4D00] focus:border-[#FF4D00]"
-                />
-              </div>
-              
-              <div>
-                <Label>Телефон</Label>
-                <Input 
-                  placeholder="Ваш номер телефона"
-                  value={formData.phone}
-                  onChange={(e) => handleFormChange('phone', e.target.value)}
-                  className="border-[#FF4D00] focus:border-[#FF4D00]"
-                />
-              </div>
-
-              <div>
-                <Label>Адрес объекта</Label>
-                <Input 
-                  placeholder="Адрес помещения для ремонта"
-                  value={formData.address}
-                  onChange={(e) => handleFormChange('address', e.target.value)}
-                  className="border-[#FF4D00] focus:border-[#FF4D00]"
-                />
-              </div>
-
-              <div>
-                <Label>Комментарий</Label>
-                <Textarea 
-                  placeholder="Опишите ваши пожелания или задайте вопрос"
-                  value={formData.comment}
-                  onChange={(e) => handleFormChange('comment', e.target.value)}
-                  className="border-[#FF4D00] focus:border-[#FF4D00] min-h-[100px]"
-                />
-              </div>
-
-              <Button 
-                type="submit"
-                className="w-full bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white hover:opacity-90"
-              >
-                Отправить заявку
-              </Button>
-            </form>
-          </motion.div>
-        </DialogContent>
-      </Dialog>
+      {/* Модальное окно формы */}
+      <ModalForm
+        isOpen={isOrderDialogOpen}
+        onClose={handleCloseDialog}
+        initialComment={commentText}
+        title="Ремонт"
+      />
     </div>
   )
 } 

@@ -4,7 +4,7 @@ import { useState } from "react"
 import { ServiceHeader } from "@/components/service-header"
 import { ServiceCard } from "@/components/service-card-new"
 import { ServiceFAQ } from "@/components/service-faq"
-import { ServiceOrderForm } from "@/components/service-order-form"
+import { ModalForm } from '@/components/ModalForm'
 
 const services = [
   {
@@ -72,6 +72,12 @@ const faqItems = [
 
 export default function AcademicServicesPage() {
   const [isOrderFormOpen, setIsOrderFormOpen] = useState(false)
+  const [selectedServices, setSelectedServices] = useState<string[]>([])
+
+  // Формируем комментарий для формы
+  const commentText = selectedServices.length
+    ? `Услуга: Академическая поддержка\nВыбрано:\n${selectedServices.map(s => `- ${s}`).join('\n')}`
+    : 'Услуга: Академическая поддержка'
 
   return (
     <div className="min-h-screen bg-white">
@@ -85,14 +91,17 @@ export default function AcademicServicesPage() {
       <ServiceCard
         categories={services}
         onOrderClick={() => setIsOrderFormOpen(true)}
+        setSelectedServices={setSelectedServices}
+        selectedServices={selectedServices}
       />
 
       <ServiceFAQ items={faqItems} />
 
-      <ServiceOrderForm
+      <ModalForm
         isOpen={isOrderFormOpen}
         onClose={() => setIsOrderFormOpen(false)}
-        service="Академическая поддержка"
+        initialComment={commentText}
+        title="Академическая поддержка"
       />
     </div>
   )

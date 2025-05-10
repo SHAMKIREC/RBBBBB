@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ChevronDown } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import { ModalForm } from '@/components/ModalForm'
 
 const services: ServiceCategory[] = [
                 {
@@ -131,10 +132,6 @@ export default function ConstructionPage() {
 
   const handleOpenDialog = () => {
     setIsOrderDialogOpen(true)
-    setFormData(prev => ({
-      ...prev,
-      message: selectedServices.join('\n')
-    }))
   }
 
   const handleCloseDialog = () => {
@@ -153,6 +150,11 @@ export default function ConstructionPage() {
     console.log('Form submitted:', formData)
     handleCloseDialog()
   }
+
+  // Формируем комментарий для формы
+  const commentText = selectedServices.length
+    ? `Услуга: Строительство\nВыбрано:\n${selectedServices.map(s => `- ${s}`).join('\n')}`
+    : 'Услуга: Строительство'
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
@@ -285,79 +287,12 @@ export default function ConstructionPage() {
       </section>
 
       {/* Order Dialog */}
-      <Dialog open={isOrderDialogOpen} onOpenChange={setIsOrderDialogOpen}>
-        <DialogContent className="sm:max-w-[480px] p-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-8 h-8 rounded bg-gradient-to-r from-[#FF7A00] to-[#FF0000] flex items-center justify-center">
-                <span className="text-white font-bold">RB</span>
-              </div>
-              <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text font-bold">
-                Решаем Быстро
-              </span>
-            </div>
-            
-            <h2 className="text-xl font-medium mb-2">Заказать услугу</h2>
-            <p className="text-sm text-gray-600 mb-6">
-              Оставьте заявку, и мы свяжемся с вами для обсуждения проекта в течение <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-transparent bg-clip-text">5 минут</span>
-            </p>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <Label htmlFor="name">Ваше имя</Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => handleFormChange('name', e.target.value)}
-                  placeholder="Иван Иванов"
-                  required
-                />
-              </div>
-              <div>
-                <Label htmlFor="phone">Телефон</Label>
-                <Input
-                  id="phone"
-                  value={formData.phone}
-                  onChange={(e) => handleFormChange('phone', e.target.value)}
-                  placeholder="+7 (999) 999-99-99"
-                  required
-                />
-              </div>
-              <div>
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  value={formData.email}
-                  onChange={(e) => handleFormChange('email', e.target.value)}
-                  placeholder="example@example.com"
-                  required
-                />
-              </div>
-              <div>
-                <Label htmlFor="message">Комментарий</Label>
-                <Textarea
-                  id="message"
-                  value={formData.message}
-                  onChange={(e) => handleFormChange('message', e.target.value)}
-                  placeholder="Опишите ваши пожелания"
-                  className="min-h-[100px]"
-                />
-              </div>
-              <Button
-                type="submit"
-                className="w-full bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white"
-              >
-                Отправить заявку
-              </Button>
-            </form>
-          </motion.div>
-        </DialogContent>
-      </Dialog>
+      <ModalForm
+        isOpen={isOrderDialogOpen}
+        onClose={handleCloseDialog}
+        initialComment={commentText}
+        title="Строительство"
+      />
     </div>
   )
 }

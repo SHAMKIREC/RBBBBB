@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -10,18 +10,29 @@ import { Label } from "@/components/ui/label"
 interface ModalFormProps {
   isOpen: boolean
   onClose: () => void
+  initialComment?: string
+  title?: string
 }
 
-export function ModalForm({ isOpen, onClose }: ModalFormProps) {
+export function ModalForm({ isOpen, onClose, initialComment = "", title = "Заказать услугу" }: ModalFormProps) {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
-    message: "",
+    email: "",
+    comment: initialComment,
   })
+
+  useEffect(() => {
+    setFormData({
+      name: "",
+      phone: "",
+      email: "",
+      comment: initialComment,
+    })
+  }, [isOpen, initialComment])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Здесь будет логика отправки формы
     console.log(formData)
     onClose()
   }
@@ -38,18 +49,23 @@ export function ModalForm({ isOpen, onClose }: ModalFormProps) {
           <X className="h-5 w-5" />
         </button>
 
-        <h2 className="text-2xl font-bold mb-6">Оставить заявку</h2>
+        <div className="flex items-center gap-2 mb-2">
+          <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF0000] rounded p-1 text-white font-bold text-lg">RB</span>
+          <span className="text-[#FF3A2D] font-semibold">Решаем Быстро</span>
+        </div>
+        <h2 className="text-2xl font-bold mb-2">{title}</h2>
+        <p className="text-gray-600 text-sm mb-4">Оставьте заявку, и мы свяжемся с вами для обсуждения деталей в течение <span className="text-[#FF3A2D] font-bold">5 минут</span></p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="name">Ваше имя</Label>
+            <Label htmlFor="name">Имя</Label>
             <Input
               id="name"
+              placeholder="Ваше имя"
               value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
+              className="border-2 border-[#FF7A00] focus:border-[#FF3A2D] focus:ring-0"
             />
           </div>
 
@@ -58,31 +74,43 @@ export function ModalForm({ isOpen, onClose }: ModalFormProps) {
             <Input
               id="phone"
               type="tel"
+              placeholder="Ваш номер телефона"
               value={formData.phone}
-              onChange={(e) =>
-                setFormData({ ...formData, phone: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
               required
+              className="border-2 border-[#FF7A00] focus:border-[#FF3A2D] focus:ring-0"
             />
           </div>
 
           <div>
-            <Label htmlFor="message">Сообщение</Label>
-            <Textarea
-              id="message"
-              value={formData.message}
-              onChange={(e) =>
-                setFormData({ ...formData, message: e.target.value })
-              }
-              required
+            <Label htmlFor="email">Email (необязательно)</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="example@mail.com"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              className="border-2 border-[#FF7A00] focus:border-[#FF3A2D] focus:ring-0"
             />
           </div>
 
-          <Button type="submit" className="w-full">
-            Отправить
+          <div>
+            <Label htmlFor="comment">Комментарий</Label>
+            <Textarea
+              id="comment"
+              placeholder="Опишите ваши пожелания или задайте вопрос"
+              value={formData.comment}
+              onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
+              rows={3}
+              className="border-2 border-[#FF7A00] focus:border-[#FF3A2D] focus:ring-0"
+            />
+          </div>
+
+          <Button type="submit" className="w-full bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white text-lg font-semibold">
+            Отправить заявку
           </Button>
         </form>
       </div>
     </div>
   )
-} 
+}
