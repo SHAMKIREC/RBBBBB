@@ -4,6 +4,7 @@ import Header from '@/app/components/header'
 import Footer from './components/footer'
 import type { Metadata } from "next"
 import { ReCaptchaProvider } from '@/components/providers/recaptcha-provider'
+import { Toaster } from '@/components/ui/toaster'
 
 const inter = Inter({ 
   subsets: ['latin', 'cyrillic'],
@@ -32,6 +33,7 @@ export default function RootLayout({
           <main className="min-h-screen">{children}</main>
           <Footer />
         </ReCaptchaProvider>
+        <Toaster />
       </body>
     </html>
   )
