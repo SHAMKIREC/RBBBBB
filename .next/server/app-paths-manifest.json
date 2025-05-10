@@ -1,7 +1,8 @@
 {
-  "/calculator/page": "app/calculator/page.js",
-  "/page": "app/page.js",
-  "/blog/page": "app/blog/page.js",
-  "/reviews/page": "app/reviews/page.js",
-  "/admin/page": "app/admin/page.js"
+  "/services/engineering/page": "app/services/engineering/page.js",
+  "/services/academic/page": "app/services/academic/page.js",
+  "/services/remont/page": "app/services/remont/page.js",
+  "/services/roofing-facades/page": "app/services/roofing-facades/page.js",
+  "/services/construction/page": "app/services/construction/page.js",
+  "/page": "app/page.js"
 }

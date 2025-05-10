@@ -12,7 +12,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { ServiceHeader } from "@/components/service-header"
 import { ServiceCard } from "@/components/service-card-new"
 import { ServiceFAQ } from "@/components/service-faq"
-import { ServiceOrderForm } from "@/components/service-order-form"
+import { ModalForm } from '@/components/ModalForm'
 
 const services = [
   {
@@ -122,10 +122,6 @@ export default function WindowsDoorsPage() {
 
   const handleOpenDialog = () => {
     setIsOrderFormOpen(true)
-    setFormData(prev => ({
-      ...prev,
-      comment: selectedServices.join('\n')
-    }))
   }
 
   const handleCloseDialog = () => {
@@ -145,6 +141,11 @@ export default function WindowsDoorsPage() {
     handleCloseDialog()
   }
 
+  // Формируем комментарий для формы
+  const commentText = selectedServices.length
+    ? `Услуга: Окна и двери\nВыбрано:\n${selectedServices.map(s => `- ${s}`).join('\n')}`
+    : 'Услуга: Окна и двери'
+
   return (
     <div className="min-h-screen bg-white">
       <ServiceHeader
@@ -156,15 +157,18 @@ export default function WindowsDoorsPage() {
 
       <ServiceCard
         categories={services}
-        onOrderClick={() => setIsOrderFormOpen(true)}
+        onOrderClick={handleOpenDialog}
+        selectedServices={selectedServices}
+        setSelectedServices={setSelectedServices}
       />
 
       <ServiceFAQ items={faqItems} />
 
-      <ServiceOrderForm
+      <ModalForm
         isOpen={isOrderFormOpen}
-        onClose={() => setIsOrderFormOpen(false)}
-        service="Окна и двери"
+        onClose={handleCloseDialog}
+        initialComment={commentText}
+        title="Окна и двери"
       />
     </div>
   )

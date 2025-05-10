@@ -19,11 +19,12 @@ interface ServiceCategory {
 interface ServiceCardProps {
   categories: ServiceCategory[]
   onOrderClick: () => void
+  selectedServices: string[]
+  setSelectedServices: React.Dispatch<React.SetStateAction<string[]>>
 }
 
-export function ServiceCard({ categories, onOrderClick }: ServiceCardProps) {
+export function ServiceCard({ categories, onOrderClick, selectedServices, setSelectedServices }: ServiceCardProps) {
   const [openCategories, setOpenCategories] = useState<string[]>([])
-  const [selectedServices, setSelectedServices] = useState<string[]>([])
 
   const toggleCategory = (title: string) => {
     setOpenCategories(prev =>

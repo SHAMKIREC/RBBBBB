@@ -5,6 +5,7 @@ import { ServiceHeader } from "@/components/service-header"
 import { ServiceCard } from "@/components/service-card-new"
 import { ServiceFAQ } from "@/components/service-faq"
 import { ServiceOrderForm } from "@/components/service-order-form"
+import { ModalForm } from "@/components/ModalForm"
 
 const services = [
   {
@@ -71,6 +72,11 @@ const faqItems = [
 
 export default function ITServicesPage() {
   const [isOrderFormOpen, setIsOrderFormOpen] = useState(false)
+  const [selectedServices, setSelectedServices] = useState<string[]>([])
+
+  const commentText = selectedServices.length
+    ? `Услуга: IT-услуги\nВыбрано:\n${selectedServices.map(s => `- ${s}`).join('\n')}`
+    : 'Услуга: IT-услуги'
 
   return (
     <div className="min-h-screen bg-white">
@@ -84,14 +90,17 @@ export default function ITServicesPage() {
       <ServiceCard
         categories={services}
         onOrderClick={() => setIsOrderFormOpen(true)}
+        selectedServices={selectedServices}
+        setSelectedServices={setSelectedServices}
       />
 
       <ServiceFAQ items={faqItems} />
 
-      <ServiceOrderForm
+      <ModalForm
         isOpen={isOrderFormOpen}
         onClose={() => setIsOrderFormOpen(false)}
-        service="IT-услуги"
+        initialComment={commentText}
+        title="IT-услуги"
       />
     </div>
   )
