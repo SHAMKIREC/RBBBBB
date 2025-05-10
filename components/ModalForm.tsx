@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
+import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3'
+import { useToast } from "@/components/ui/use-toast"
 
 interface ModalFormProps {
   isOpen: boolean
@@ -31,6 +33,11 @@ export function ModalForm({ isOpen, onClose, initialComment = "", title = "За�
   const phoneRef = useRef<HTMLInputElement>(null)
   const emailRef = useRef<HTMLInputElement>(null)
   const commentRef = useRef<HTMLTextAreaElement>(null)
+  const { executeRecaptcha } = useGoogleReCaptcha();
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const [lastSubmit, setLastSubmit] = useState<number>(0);
+  const [rateLimitError, setRateLimitError] = useState<string>("");
+  const { toast } = useToast();
 
   useEffect(() => {
     setFormData({
@@ -40,6 +47,28 @@ export function ModalForm({ isOpen, onClose, initialComment = "", title = "За�
       comment: initialComment,
     })
   }, [isOpen, initialComment])
+
+  useEffect(() => {
+    if (isOpen && executeRecaptcha) {
+      const getToken = async () => {
+        try {
+          console.log('Запрашиваю токен reCAPTCHA...');
+          const token = await executeRecaptcha("order_form");
+          if (token) {
+            console.log('Получен токен reCAPTCHA:', token);
+            setRecaptchaToken(token);
+          } else {
+            console.error('Не удалось получить токен reCAPTCHA');
+            setRecaptchaToken(null);
+          }
+        } catch (e) {
+          console.error('Ошибка получения токена reCAPTCHA:', e);
+          setRecaptchaToken(null);
+        }
+      };
+      getToken();
+    }
+  }, [isOpen, executeRecaptcha, formData]);
 
   // Валидация
   const validate = () => {
@@ -108,11 +137,46 @@ export function ModalForm({ isOpen, onClose, initialComment = "", title = "За�
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!validate()) return
-    console.log(formData)
-    onClose()
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setRateLimitError("");
+    if (!validate()) return;
+    if (!recaptchaToken) {
+      setErrors({
+        name: errors.name || "",
+        phone: errors.phone || "",
+        email: errors.email || "",
+        comment: "Подтвердите, что вы не робот (reCAPTCHA)"
+      });
+      return;
+    }
+    const now = Date.now();
+    if (now - lastSubmit < 30000) {
+      setRateLimitError("Вы уже отправили заявку. Пожалуйста, подождите 30 секунд.");
+      return;
+    }
+    setLastSubmit(now);
+    try {
+      // Здесь отправка данных формы + recaptchaToken на сервер или в консоль
+      // Имитация успешной отправки:
+      // await fetch(...)
+      console.log('Отправка формы с данными:', {
+        ...formData,
+        recaptchaToken: recaptchaToken.substring(0, 20) + '...'
+      });
+      toast({
+        title: '✅ Заявка успешно отправлена!',
+        description: 'Мы свяжемся с вами в ближайшее время.',
+        duration: 5000
+      });
+      onClose();
+    } catch (error) {
+      toast({
+        title: '❌ Не удалось отправить заявку.',
+        description: 'Пожалуйста, попробуйте позже.',
+        duration: 5000
+      });
+    }
   }
 
   // Email: мгновенная валидация
@@ -221,12 +285,23 @@ export function ModalForm({ isOpen, onClose, initialComment = "", title = "За�
               rows={3}
               className={`border-2 border-[#FF7A00] focus:border-[#FF3A2D] focus:ring-0 ${errors.comment ? 'border-red-500' : ''}`}
             />
-            {errors.comment && <div className="text-red-500 text-xs mt-1">{errors.comment}</div>}
+            {errors.comment && <div className="text-red-500 text-xs mt-1">{errors.comment || ""}</div>}
           </div>
 
-          <Button type="submit" className="w-full bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white text-lg font-semibold" disabled={!isFormValid()}>
+          {rateLimitError && <div className="text-red-500 text-xs mt-1">{rateLimitError}</div>}
+          <button
+            type="submit"
+            disabled={!isFormValid() || !recaptchaToken || (Date.now() - lastSubmit < 30000)}
+            className="w-full bg-gradient-to-r from-[#FF7A00] to-[#FF3A2D] text-white font-bold py-3 rounded-md disabled:opacity-60"
+          >
             Отправить заявку
-          </Button>
+          </button>
+          {/* Диагностика: показываем причину дизейбла */}
+          <div style={{fontSize:12, color:'#888', marginTop:8}}>
+            {!isFormValid() && 'Форма невалидна. '}
+            {!recaptchaToken && 'Нет токена reCAPTCHA. '}
+            {(Date.now() - lastSubmit < 30000) && 'Ограничение по времени (30 сек). '}
+          </div>
         </form>
       </div>
     </div>

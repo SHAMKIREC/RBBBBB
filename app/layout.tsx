@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import Header from '@/app/components/header'
 import Footer from './components/footer'
 import type { Metadata } from "next"
+import { ReCaptchaProvider } from '@/components/providers/recaptcha-provider'
 
 const inter = Inter({ 
   subsets: ['latin', 'cyrillic'],
@@ -26,9 +27,11 @@ export default function RootLayout({
   return (
     <html lang="ru" suppressHydrationWarning className={inter.variable}>
       <body className={inter.className}>
-        <Header />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
+        <ReCaptchaProvider>
+          <Header />
+          <main className="min-h-screen">{children}</main>
+          <Footer />
+        </ReCaptchaProvider>
       </body>
     </html>
   )
