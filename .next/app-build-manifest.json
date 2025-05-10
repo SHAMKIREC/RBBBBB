@@ -16,10 +16,10 @@
       "static/chunks/main-app.js",
       "static/chunks/app/services/remont/page.js"
     ],
-    "/services/academic/page": [
+    "/services/engineering/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/services/academic/page.js"
+      "static/chunks/app/services/engineering/page.js"
     ]
   }
 }
