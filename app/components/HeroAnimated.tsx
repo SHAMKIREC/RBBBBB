@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Icon } from "@/components/ui/icon";
 import { Calculator } from "@/components/Calculator";
 import { HeroRequestForm } from "@/components/hero-request-form";
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 // Компонент анимированного дефиса (эффект "швырнули палку")
 function ThrownDash({ onComplete }: { onComplete?: () => void }) {
@@ -60,14 +61,44 @@ export function HeroAnimated() {
   const [dashPhase, setDashPhase] = useState<'circle' | 'short'>('circle');
   const [formData, setFormData] = useState({ area: "", type: "", rooms: "", repairType: "" });
   const [open, setOpen] = useState(false);
+  const [service, setService] = useState("");
+  const [serviceError, setServiceError] = useState(false);
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [comment, setComment] = useState("");
+  const [errors, setErrors] = useState({ name: '', phone: '', email: '', comment: '' });
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const { executeRecaptcha } = useGoogleReCaptcha();
+  const [success, setSuccess] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [acceptPolicy, setAcceptPolicy] = useState(false);
+  const [acceptPolicyError, setAcceptPolicyError] = useState("");
+  const nameRef = useRef<HTMLInputElement>(null);
+  const phoneRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const commentRef = useRef<HTMLTextAreaElement>(null);
+  const [triedSubmit, setTriedSubmit] = useState(false);
 
-  // Формируем текст для комментария
-  const comment = [
-    formData.area && `Площадь: ${formData.area} м²`,
-    formData.type && `Тип: ${getTypeName(formData.type)}`,
-    formData.rooms && `Комнат: ${getRoomsName(formData.rooms)}`,
-    formData.repairType && `Вид ремонта: ${getRepairTypeName(formData.repairType)}`
-  ].filter(Boolean).join(", ");
+  // Автоматически подставлять услугу в комментарий
+  const serviceNames: Record<string, string> = {
+    repair: "Ремонт",
+    engineering: "Инженерные системы",
+    construction: "Строительство",
+    windows: "Окна и двери",
+    roof: "Кровля и фасады",
+    it: "IT-услуги",
+    academic: "Академическая поддержка"
+  };
+
+  function handleServiceChange(value: string) {
+    setService(value);
+    setServiceError(false);
+    const newServiceName = serviceNames[value] || "";
+    if (!comment || Object.values(serviceNames).some(name => comment.startsWith(name))) {
+      setComment(newServiceName);
+    }
+  }
 
   // Анимация для логотипа
   const logoVariants = {
@@ -97,6 +128,139 @@ export function HeroAnimated() {
     hidden: { opacity: 0, scale: 0.7 },
     visible: { opacity: 1, scale: 1, transition: { type: "spring", bounce: 0.5, duration: 0.7 } },
   };
+
+  useEffect(() => {
+    if (executeRecaptcha) {
+      executeRecaptcha("order_form").then(token => setRecaptchaToken(token));
+    }
+  }, [executeRecaptcha]);
+
+  function validate() {
+    let valid = true;
+    const newErrors = { name: '', phone: '', email: '', comment: '' };
+    // Имя
+    if (!name.trim()) {
+      newErrors.name = 'Введите имя';
+      valid = false;
+    } else if (!/^([a-zA-Zа-яА-ЯёЁ\s'-]{2,})$/.test(name.trim())) {
+      newErrors.name = 'Только буквы, минимум 2 символа';
+      valid = false;
+    }
+    // Телефон (строгая РФ)
+    const digits = phone.replace(/\D/g, '');
+    if (!phone.trim()) {
+      newErrors.phone = 'Введите телефон';
+      valid = false;
+    } else if (!phone.startsWith('+7')) {
+      newErrors.phone = 'Номер должен начинаться с +7';
+      valid = false;
+    } else if (digits.length !== 11 || !digits.startsWith('7')) {
+      newErrors.phone = 'Введите корректный номер в формате +7XXXXXXXXXX';
+      valid = false;
+    }
+    // Email
+    if (email.trim() && !/^\S+@\S+\.\S+$/.test(email.trim())) {
+      newErrors.email = 'Некорректный email';
+      valid = false;
+    }
+    // Комментарий
+    if (!comment.trim() || comment.trim().length < 5) {
+      newErrors.comment = 'Минимум 5 символов';
+      valid = false;
+    }
+    setErrors(newErrors);
+    return valid;
+  }
+
+  function isFormValid() {
+    const digits = phone.replace(/\D/g, '');
+    if (!service) return false;
+    if (!name.trim() || !/^([a-zA-Zа-яА-ЯёЁ\s'-]{2,})$/.test(name.trim())) return false;
+    if (!phone.trim() || !/^\+7[\d\s\-()]{10,}$/.test(phone.trim())) return false;
+    if (!phone.startsWith('+7')) return false;
+    if (digits.length !== 11 || !digits.startsWith('7')) return false;
+    if (email.trim() && !/^\S+@\S+\.\S+$/.test(email.trim())) return false;
+    if (!comment.trim() || comment.trim().length < 5) return false;
+    if (!acceptPolicy) return false;
+    return true;
+  }
+
+  function handlePhoneChange(e: React.ChangeEvent<HTMLInputElement>) {
+    let value = e.target.value.replace(/[^\d\s+\-()]/g, '');
+    // Автозамена первой 8 на +7
+    if (value.length === 1 && value === '8') value = '+7';
+    if (/^[0-9]/.test(value) && value.length > 0) value = value.replace(/^\d/, '+7');
+    // Если не начинается с +7, всегда делаем +7
+    if (!value.startsWith('+7')) value = '+7';
+    // Оставляем только +7 и максимум 10 цифр после +7
+    if (value.startsWith('+7')) {
+      const digits = value.replace(/\D/g, '');
+      const main = digits.slice(1, 11); // только 10 цифр после 7
+      value = '+7' + main;
+    }
+    setPhone(value);
+  }
+
+  function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value.slice(0, 64);
+    setEmail(value);
+    if (value.trim() && !/^\S+@\S+\.\S+$/.test(value.trim())) {
+      setErrors(prev => ({ ...prev, email: 'Некорректный email' }));
+    } else {
+      setErrors(prev => ({ ...prev, email: '' }));
+    }
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent, field: string) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      if (!service) setTriedSubmit(true);
+      e.preventDefault();
+      if (field === 'name') phoneRef.current?.focus();
+      if (field === 'phone') emailRef.current?.focus();
+      if (field === 'email') commentRef.current?.focus();
+      if (field === 'comment' && isFormValid()) {
+        (e.target as HTMLTextAreaElement).form?.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+      }
+    }
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setTriedSubmit(true);
+    let hasError = false;
+    if (!service) {
+      setServiceError(true);
+      hasError = true;
+    }
+    if (!acceptPolicy) {
+      setAcceptPolicyError('Подтвердите согласие с политикой');
+      hasError = true;
+    } else {
+      setAcceptPolicyError("");
+    }
+    if (!validate() || hasError) return;
+    if (!recaptchaToken) {
+      setErrors(prev => ({ ...prev, comment: 'Подтвердите, что вы не робот (reCAPTCHA)' }));
+      return;
+    }
+    setShowSuccessModal(true);
+    setTimeout(() => {
+      setShowSuccessModal(false);
+      setService("");
+      setName("");
+      setPhone("");
+      setEmail("");
+      setComment("");
+      setErrors({ name: '', phone: '', email: '', comment: '' });
+      setAcceptPolicy(false);
+      setAcceptPolicyError("");
+      setTriedSubmit(false);
+    }, 5000);
+  }
+
+  // Подсказка для услуги: если все поля заполнены, чекбокс отмечен, но услуга не выбрана — всегда показывать
+  const shouldShowServiceHint =
+    (!service && name && phone && comment && acceptPolicy && isFormValid() === false) || (serviceError || (triedSubmit && !service));
 
   return (
     <motion.section
@@ -160,94 +324,104 @@ export function HeroAnimated() {
                 <p className="text-sm text-gray-600 mb-6">
                   Мы готовы обсудить детали и предложить оптимальное решение. Заполните форму — и мы свяжемся с вами.
                 </p>
-                <form className="space-y-4">
+                <form className="space-y-4" onSubmit={handleSubmit} autoComplete="on">
+                  {success && (
+                    <div className="text-green-600 text-center font-semibold py-2">Заявка отправлена!</div>
+                  )}
+                  <div className="grid gap-2">
+                    <label htmlFor="service" className="text-sm font-medium mb-1">Выберите услуги</label>
+                    <select
+                      id="service"
+                      className={`border-2 w-full p-2 rounded focus:outline-none transition-colors
+                        ${(serviceError || (triedSubmit && !service) || shouldShowServiceHint) ? 'border-red-500 focus:border-red-500' : 'border-[#FF7A00] focus:border-[#FF3A2D]'}
+                      `}
+                      value={service}
+                      onChange={e => { handleServiceChange(e.target.value); setServiceError(false); setTriedSubmit(false); }}
+                      required
+                    >
+                      <option value="">Выберите услугу</option>
+                      <option value="repair">Ремонт</option>
+                      <option value="engineering">Инженерные системы</option>
+                      <option value="construction">Строительство</option>
+                      <option value="windows">Окна и двери</option>
+                      <option value="roof">Кровля и фасады</option>
+                      <option value="it">IT-услуги</option>
+                      <option value="academic">Академическая поддержка</option>
+                    </select>
+                    {/* Подсказка под select, если чекбокс отмечен и услуга не выбрана */}
+                    {(serviceError || (triedSubmit && !service) || shouldShowServiceHint || (acceptPolicy && !service)) && (
+                      <div className="text-red-500 text-xs mt-1">Пожалуйста, выберите услугу</div>
+                    )}
+                  </div>
                   <div>
-                    <Label className="text-sm font-medium mb-1">Имя & Фамилия</Label>
+                    <Label className="text-sm font-medium mb-1">Имя</Label>
                     <Input 
-                      placeholder="Введите ваше имя и фамилию"
-                      className="border-[#FF4D00] focus:border-[#FF4D00] rounded"
+                      placeholder="Введите ваше имя"
+                      className={`border-2 border-[#FF4D00] focus:border-[#FF4D00] rounded ${errors.name ? 'border-red-500' : ''}`}
+                      value={name}
+                      onChange={e => setName(e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ\s'-]/g, '').slice(0, 32))}
+                      required
+                      maxLength={32}
+                      ref={nameRef}
+                      onKeyDown={e => handleKeyDown(e, 'name')}
+                      autoComplete="name"
+                      name="name"
+                      id="name"
                     />
+                    {errors.name && <div className="text-red-500 text-xs mt-1">{errors.name}</div>}
                   </div>
                   <div>
                     <Label className="text-sm font-medium mb-1">Телефон</Label>
                     <Input 
-                      placeholder="Введите ваш номер телефона"
-                      className="border-[#FF4D00] focus:border-[#FF4D00] rounded"
+                      type="tel"
+                      placeholder="Ваш номер телефона"
+                      className={`border-2 border-[#FF4D00] focus:border-[#FF4D00] rounded ${errors.phone ? 'border-red-500' : ''}`}
+                      value={phone}
+                      onChange={handlePhoneChange}
+                      required
+                      ref={phoneRef}
+                      onKeyDown={e => handleKeyDown(e, 'phone')}
+                      autoComplete="tel"
+                      name="phone"
+                      id="phone"
                     />
+                    {errors.phone && <div className="text-red-500 text-xs mt-1">{errors.phone}</div>}
                   </div>
                   <div>
                     <Label className="text-sm font-medium mb-1">Почта (необязательно)</Label>
                     <Input 
                       placeholder="Укажите вашу почту"
-                      className="border-[#FF4D00] focus:border-[#FF4D00] rounded"
+                      className={`border-2 border-[#FF4D00] focus:border-[#FF4D00] rounded ${errors.email ? 'border-red-500' : ''}`}
+                      value={email}
+                      onChange={handleEmailChange}
+                      maxLength={64}
+                      ref={emailRef}
+                      onKeyDown={e => handleKeyDown(e, 'email')}
+                      autoComplete="email"
+                      name="email"
+                      id="email"
                     />
+                    {errors.email && <div className="text-red-500 text-xs mt-1">{errors.email}</div>}
                   </div>
                   <div>
                     <Label className="text-sm font-medium mb-1">Комментарий</Label>
                     <Textarea 
                       placeholder="Опишите ваш запрос или задайте вопрос"
-                      className="border-[#FF4D00] focus:border-[#FF4D00] rounded min-h-[100px]"
+                      className={`border-2 border-[#FF4D00] focus:border-[#FF4D00] rounded min-h-[100px] ${errors.comment ? 'border-red-500' : ''}`}
+                      value={comment}
+                      onChange={e => setComment(e.target.value)}
+                      ref={commentRef}
+                      onKeyDown={e => handleKeyDown(e, 'comment')}
                     />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="service">Выберите услуги</Label>
-                    <Select>
-                      <SelectTrigger className="border-[#FF7A00] focus:ring-[#FF7A00] focus:border-[#FF7A00] focus:ring-0">
-                        <SelectValue placeholder="Выберите услугу" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="repair">Ремонт</SelectItem>
-                        <SelectItem value="engineering">Инженерные системы</SelectItem>
-                        <SelectItem value="construction">Строительство</SelectItem>
-                        <SelectItem value="windows">Окна и двери</SelectItem>
-                        <SelectItem value="roof">Кровля и фасады</SelectItem>
-                        <SelectItem value="it">IT-услуги</SelectItem>
-                        <SelectItem value="academic">Академическая поддержка</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium">Куда отправить запрос?</Label>
-                    <div className="flex flex-col gap-3">
-                      <div className="flex items-center gap-3">
-                        <input 
-                          type="radio" 
-                          name="sendMethod" 
-                          value="system" 
-                          className="w-4 h-4 text-[#FF4D00] border-[#FF4D00] focus:ring-[#FF4D00]" 
-                          defaultChecked 
-                        />
-                        <div className="w-6 h-6 rounded bg-gradient-to-r from-[#FF7A00] to-[#FF0000] flex items-center justify-center">
-                          <span className="text-xs text-white font-bold">RB</span>
-                        </div>
-                        <span className="text-sm">В систему заказов</span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <input 
-                          type="radio" 
-                          name="sendMethod" 
-                          value="telegram" 
-                          className="w-4 h-4 text-[#FF4D00] border-[#FF4D00] focus:ring-[#FF4D00]" 
-                        />
-                        <Icon icon="mdi:telegram" className="w-6 h-6 text-[#229ED9]" />
-                        <span className="text-sm">Telegram</span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <input 
-                          type="radio" 
-                          name="sendMethod" 
-                          value="whatsapp" 
-                          className="w-4 h-4 text-[#FF4D00] border-[#FF4D00] focus:ring-[#FF4D00]" 
-                        />
-                        <Icon icon="fa-brands:whatsapp" className="w-6 h-6 text-[#25D366]" />
-                        <span className="text-sm">WhatsApp</span>
-                      </div>
-                    </div>
+                    {errors.comment && <div className="text-red-500 text-xs mt-1">{errors.comment}</div>}
                   </div>
                   <div className="flex items-start gap-2">
                     <input 
                       type="checkbox" 
                       className="mt-1 w-4 h-4 rounded border-[#FF7A00] text-[#FF7A00] focus:ring-[#FF7A00] focus:ring-offset-0 checked:bg-gradient-to-r checked:from-[#FF7A00] checked:to-[#FF0000]" 
+                      checked={acceptPolicy}
+                      onChange={e => { setAcceptPolicy(e.target.checked); setAcceptPolicyError(""); }}
+                      required
                     />
                     <span className="text-xs text-gray-500">
                       Нажимая на кнопку, вы подтверждаете согласие с{" "}
@@ -256,13 +430,59 @@ export function HeroAnimated() {
                       </a>
                     </span>
                   </div>
+                  {acceptPolicyError && <div className="text-red-500 text-xs mt-1">{acceptPolicyError}</div>}
                   <Button 
                     type="submit" 
                     className="w-full h-12 bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white hover:opacity-90"
+                    disabled={!isFormValid() || !recaptchaToken}
+                    tabIndex={0}
+                    onMouseDown={e => {
+                      if (!service) {
+                        setTriedSubmit(true);
+                      }
+                    }}
+                    onClick={e => {
+                      if (!service) {
+                        setTriedSubmit(true);
+                      }
+                    }}
                   >
                     Отправить запрос
                   </Button>
                 </form>
+                <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
+                  <DialogContent className="max-w-md w-full flex flex-col items-center justify-center text-center py-8 px-6 rounded-lg shadow-xl" style={{background:'#FFF3E6'}}>
+                    <div className="flex flex-col items-center mb-4">
+                      <span className="bg-gradient-to-r from-[#FF7A00] to-[#FF0000] rounded p-2 text-white font-extrabold text-2xl mb-2">RB</span>
+                      <span className="text-[#FF3A2D] font-extrabold text-lg">Решаем Быстро</span>
+                    </div>
+                    <div className="mb-4">
+                      <svg width="88" height="88" viewBox="0 0 72 72" fill="none">
+                        <defs>
+                          <radialGradient id="shield" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stopColor="#FFF3E6" />
+                            <stop offset="100%" stopColor="#FFD6B0" />
+                          </radialGradient>
+                          <linearGradient id="check" x1="0" y1="0" x2="1" y2="1">
+                            <stop stopColor="#00C853" />
+                            <stop offset="1" stopColor="#009688" />
+                          </linearGradient>
+                        </defs>
+                        <path d="M36 8C36 8 14 12 14 28C14 56 36 66 36 66C36 66 58 56 58 28C58 12 36 8 36 8Z" fill="url(#shield)" stroke="#FF7A00" strokeWidth="2"/>
+                        <path d="M25 39L34 48L49 27" stroke="url(#check)" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                    <div className="text-2xl font-extrabold mb-2 flex items-center justify-center gap-2 text-black">
+                      <span role="img" aria-label="confetti">🎉</span>
+                      <span>Заявка отправлена!</span>
+                      <span role="img" aria-label="confetti">🎉</span>
+                    </div>
+                    <div className="text-lg font-semibold text-gray-700">
+                      Спасибо, что выбрали нас — мы уже на связи и скоро всё решим. Ожидайте звонка или сообщения в течение
+                      <span className="font-extrabold bg-gradient-to-r from-[#FF7A00] to-[#FF0000] bg-clip-text text-transparent mx-1">5 минут</span>!
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </DialogContent>
             </Dialog>
           </motion.div>
