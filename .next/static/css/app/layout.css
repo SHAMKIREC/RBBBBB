@@ -3501,11 +3501,6 @@ textarea::placeholder {
   --tw-ring-color: rgb(37 99 235 / var(--tw-ring-opacity, 1));
 }
 
-.focus\:ring-\[\#FF4D00\]:focus {
-  --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(255 77 0 / var(--tw-ring-opacity, 1));
-}
-
 .focus\:ring-\[\#FF7A00\]:focus {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(255 122 0 / var(--tw-ring-opacity, 1));

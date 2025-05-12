@@ -40,6 +40,12 @@ export function ModalForm({ isOpen, onClose, initialComment = "", title = "За�
   const [rateLimitError, setRateLimitError] = useState<string>("");
   const { toast } = useToast();
   const [resultModal, setResultModal] = useState<{ open: boolean, success: boolean }>({ open: false, success: true });
+  const [acceptPolicy, setAcceptPolicy] = useState(false)
+
+  // Регулярка для имени РФ: только буквы, один пробел между словами, не в начале/конце, не подряд, 2-32 символа
+  const nameRegex = /^[a-zA-Zа-яА-ЯёЁ]{2,32}$|^[a-zA-Zа-яА-ЯёЁ]{1,16} [a-zA-Zа-яА-ЯёЁ]{1,16}$/
+  // Email строгая валидация
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
 
   useEffect(() => {
     setFormData({
@@ -77,11 +83,21 @@ export function ModalForm({ isOpen, onClose, initialComment = "", title = "За�
     let valid = true
     const newErrors = { name: '', phone: '', email: '', comment: '' }
     // Имя
-    if (!formData.name.trim()) {
-      newErrors.name = 'Введите имя'
+    const name = formData.name.trim()
+    if (!name) {
+      newErrors.name = 'Имя обязательно'
       valid = false
-    } else if (!/^([a-zA-Zа-яА-ЯёЁ\s'-]{2,})$/.test(formData.name.trim())) {
-      newErrors.name = 'Только буквы, минимум 2 символа'
+    } else if (name.length < 2 || name.length > 32) {
+      newErrors.name = 'Имя должно быть от 2 до 32 символов'
+      valid = false
+    } else if (!nameRegex.test(name)) {
+      newErrors.name = 'Только буквы, один пробел между именем и фамилией, без спецсимволов'
+      valid = false
+    }
+    // Email (необязательно)
+    const email = formData.email.trim()
+    if (email && !emailRegex.test(email)) {
+      newErrors.email = 'Некорректный email'
       valid = false
     }
     // Телефон
@@ -99,11 +115,6 @@ export function ModalForm({ isOpen, onClose, initialComment = "", title = "За�
       newErrors.phone = 'В номере должно быть ровно 11 цифр (пример: +7XXXXXXXXXX)'
       valid = false
     }
-    // Email
-    if (formData.email.trim() && !/^\S+@\S+\.\S+$/.test(formData.email.trim())) {
-      newErrors.email = 'Некорректный email'
-      valid = false
-    }
     // Комментарий
     if (!formData.comment.trim() || formData.comment.trim().length < 5) {
       newErrors.comment = 'Минимум 5 символов'
@@ -115,12 +126,14 @@ export function ModalForm({ isOpen, onClose, initialComment = "", title = "За�
 
   // Проверка валидности без setState
   const isFormValid = () => {
+    const name = formData.name.trim()
+    const email = formData.email.trim()
     const digits = formData.phone.replace(/\D/g, '')
-    if (!formData.name.trim() || !/^([a-zA-Zа-яА-ЯёЁ\s'-]{2,})$/.test(formData.name.trim())) return false
+    if (!name || name.length < 2 || name.length > 32 || !nameRegex.test(name)) return false
+    if (email && !emailRegex.test(email)) return false
     if (!formData.phone.trim() || !/^\+7[\d\s+\-()]{10,}$/.test(formData.phone.trim())) return false
     if (!formData.phone.startsWith('+7')) return false
     if (digits.length !== 11 || !digits.startsWith('7')) return false
-    if (formData.email.trim() && !/^\S+@\S+\.\S+$/.test(formData.email.trim())) return false
     if (!formData.comment.trim() || formData.comment.trim().length < 5) return false
     return true
   }
@@ -215,11 +228,26 @@ export function ModalForm({ isOpen, onClose, initialComment = "", title = "За�
                 placeholder="Ваше имя"
                 value={formData.name}
                 onChange={(e) => {
-                  const value = e.target.value.replace(/[^a-zA-Zа-яА-ЯёЁ\s'-]/g, '')
+                  let value = e.target.value
+                  // Удаляем все, кроме букв и пробела
+                  value = value.replace(/[^a-zA-Zа-яА-ЯёЁ ]/g, '')
+                  // Заменяем несколько пробелов подряд на один
+                  value = value.replace(/ {2,}/g, ' ')
+                  // Обрезаем до 32 символов
+                  value = value.slice(0, 32)
+                  // Не даём ввести больше одного пробела (т.е. не более двух слов)
+                  const parts = value.split(' ')
+                  if (parts.length > 2) {
+                    // Если пользователь вставил больше двух слов, оставляем только первые два
+                    value = parts.slice(0, 2).join(' ')
+                  }
+                  // Не допускаем пробел в начале
+                  value = value.replace(/^ +/, '')
                   setFormData({ ...formData, name: value })
                 }}
                 onKeyDown={e => handleKeyDown(e, 'name')}
                 required
+                maxLength={32}
                 className={`border-2 border-[#FF7A00] focus:border-[#FF3A2D] focus:ring-0 ${errors.name ? 'border-red-500' : ''}`}
               />
               {errors.name && <div className="text-red-500 text-xs mt-1">{errors.name}</div>}
@@ -263,9 +291,24 @@ export function ModalForm({ isOpen, onClose, initialComment = "", title = "За�
                 type="email"
                 placeholder="example@mail.com"
                 value={formData.email}
-                onChange={handleEmailChange}
+                onChange={e => {
+                  let value = e.target.value
+                  // Удаляем все символы, кроме латиницы, цифр и допустимых спецсимволов email
+                  value = value.replace(/[^a-zA-Z0-9.!#$%&'*+/=?^_`{|}~@\-]/g, '')
+                  // Обрезаем до 64 символов
+                  value = value.slice(0, 64)
+                  // Если в строке есть валидный email в начале, обрезаем всё после него
+                  const match = value.match(/^([a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*)/)
+                  if (match) {
+                    value = match[1]
+                  }
+                  setFormData({ ...formData, email: value })
+                  if (value && !emailRegex.test(value.trim())) setErrors(prev => ({ ...prev, email: 'Некорректный email' }))
+                  else setErrors(prev => ({ ...prev, email: '' }))
+                }}
                 onKeyDown={e => handleKeyDown(e, 'email')}
                 className={`border-2 border-[#FF7A00] focus:border-[#FF3A2D] focus:ring-0 ${errors.email ? 'border-red-500' : ''}`}
+                maxLength={64}
               />
               {errors.email && <div className="text-red-500 text-xs mt-1">{errors.email}</div>}
             </div>
@@ -286,9 +329,23 @@ export function ModalForm({ isOpen, onClose, initialComment = "", title = "За�
             </div>
 
             {rateLimitError && <div className="text-red-500 text-xs mt-1">{rateLimitError}</div>}
+            <div className="flex items-center mb-2">
+              <input
+                type="checkbox"
+                id="acceptPolicy"
+                checked={acceptPolicy}
+                onChange={e => setAcceptPolicy(e.target.checked)}
+                className="mr-2"
+                required
+              />
+              <label htmlFor="acceptPolicy" className="text-sm text-gray-600">
+                Нажимая на кнопку, вы подтверждаете согласие с{' '}
+                <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-orange-600 hover:underline font-medium">Политикой конфиденциальности</a>
+              </label>
+            </div>
             <button
               type="submit"
-              disabled={!isFormValid() || !recaptchaToken || (Date.now() - lastSubmit < 30000)}
+              disabled={!isFormValid() || !recaptchaToken || (Date.now() - lastSubmit < 30000) || !acceptPolicy}
               className="w-full bg-gradient-to-r from-[#FF7A00] to-[#FF3A2D] text-white font-bold py-3 rounded-md disabled:opacity-60"
             >
               Отправить заявку
@@ -298,6 +355,7 @@ export function ModalForm({ isOpen, onClose, initialComment = "", title = "За�
               {!isFormValid() && 'Форма невалидна. '}
               {!recaptchaToken && 'Нет токена reCAPTCHA. '}
               {(Date.now() - lastSubmit < 30000) && 'Ограничение по времени (30 сек). '}
+              {!acceptPolicy && 'Не подтверждено согласие с политикой конфиденциальности. '}
             </div>
           </form>
         </div>
