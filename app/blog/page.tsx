@@ -336,7 +336,6 @@ export default function BlogPage() {
                 </CardContent>
                 <CardFooter className="pt-0">
                   <Button
-                    asChild
                     className="w-full bg-[#2563EB] hover:bg-[#1d4ed8] text-white font-bold rounded-lg shadow-none border-none transition-all duration-200 text-base py-2 mt-2"
                   >
                     <Link href={`/blog/${post.id}`}>Читать далее</Link>

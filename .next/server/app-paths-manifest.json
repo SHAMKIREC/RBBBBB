@@ -1,3 +1,8 @@
 {
-  "/services/remont/page": "app/services/remont/page.js"
+  "/page": "app/page.js",
+  "/calculator/page": "app/calculator/page.js",
+  "/reviews/page": "app/reviews/page.js",
+  "/blog/page": "app/blog/page.js",
+  "/blog/[id]/page": "app/blog/[id]/page.js",
+  "/admin/page": "app/admin/page.js"
 }
