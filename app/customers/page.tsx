@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const sections = [
   {
@@ -138,36 +139,136 @@ const sections = [
 
 export default function CustomersPage() {
   const [active, setActive] = useState(sections[0].key);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  // Обработка скролла для кнопки "Наверх"
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Обработка свайпов
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+    
+    if (isLeftSwipe || isRightSwipe) {
+      const currentIndex = sections.findIndex(s => s.key === active);
+      let newIndex;
+      
+      if (isLeftSwipe) {
+        newIndex = currentIndex + 1 >= sections.length ? 0 : currentIndex + 1;
+      } else {
+        newIndex = currentIndex - 1 < 0 ? sections.length - 1 : currentIndex - 1;
+      }
+      
+      setActive(sections[newIndex].key);
+    }
+    
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
-    <div className="container py-12">
-      <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-8">
+    <div className="container px-4 py-6 md:py-12 relative">
+      {/* Мобильное меню-бургер */}
+      <button
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        className="md:hidden fixed top-3 right-3 z-50 w-10 h-10 bg-[#FF7A00] rounded-full flex items-center justify-center shadow-lg"
+        aria-label="Меню"
+      >
+        <div className={`w-5 h-5 relative transform transition-transform duration-300 ${isMenuOpen ? 'rotate-45' : ''}`}>
+          <span className={`absolute w-5 h-0.5 bg-white transform transition-all duration-300 ${isMenuOpen ? 'rotate-90 translate-y-0' : '-translate-y-1.5'}`}></span>
+          <span className={`absolute w-5 h-0.5 bg-white transition-opacity duration-300 ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
+          <span className={`absolute w-5 h-0.5 bg-white transform transition-all duration-300 ${isMenuOpen ? 'rotate-90 translate-y-0' : 'translate-y-1.5'}`}></span>
+        </div>
+      </button>
+
+      <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-4 md:gap-8">
         {/* Меню слева */}
-        <nav className="md:w-64 w-full flex md:flex-col flex-row gap-2 md:gap-4 mb-4 md:mb-0">
-          {sections.map((section) => (
-            <button
-              key={section.key}
-              onClick={() => setActive(section.key)}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-lg transition-colors w-full md:w-auto
-                ${active === section.key
-                  ? "bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white shadow"
-                  : "bg-white text-gray-800 border border-[#FF7A00] hover:bg-[#FFF3EC]"}
-              `}
+        <AnimatePresence>
+          {(isMenuOpen || window.innerWidth >= 768) && (
+            <motion.nav
+              initial={{ x: -300, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: -300, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="md:w-64 w-full flex flex-col gap-2 md:gap-4 mb-4 md:mb-0 fixed md:relative top-0 left-0 h-full md:h-auto bg-white md:bg-transparent p-4 md:p-0 z-40 overflow-y-auto"
             >
-              <span className="text-2xl md:text-3xl">{section.icon}</span>
-              <span>{section.title}</span>
-            </button>
-          ))}
-        </nav>
+              {sections.map((section) => (
+                <button
+                  key={section.key}
+                  onClick={() => {
+                    setActive(section.key);
+                    setIsMenuOpen(false);
+                  }}
+                  className={`flex items-center gap-2 md:gap-3 px-3 md:px-4 py-3 md:py-4 rounded-lg md:rounded-xl font-medium md:font-semibold text-base md:text-lg transition-colors w-full min-h-[40px] md:min-h-[44px]
+                    ${active === section.key
+                      ? "bg-gradient-to-r from-[#FF7A00] to-[#FF0000] text-white shadow"
+                      : "bg-white text-gray-800 border border-[#FF7A00] hover:bg-[#FFF3EC]"}
+                  `}
+                >
+                  <span className="text-xl md:text-3xl">{section.icon}</span>
+                  <span className="text-sm md:text-base">{section.title}</span>
+                </button>
+              ))}
+            </motion.nav>
+          )}
+        </AnimatePresence>
+
         {/* Контент справа */}
-        <div className="flex-1 bg-[#FFE4D6] rounded-xl shadow-lg p-6 min-h-[400px]">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-            <span className="text-3xl">{sections.find((s) => s.key === active)?.icon}</span>
-            {sections.find((s) => s.key === active)?.title}
+        <div 
+          className="flex-1 bg-[#FFE4D6] rounded-lg md:rounded-xl shadow-lg p-4 md:p-6 min-h-[300px] md:min-h-[400px]"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6 flex items-center gap-2 md:gap-3">
+            <span className="text-2xl md:text-3xl">{sections.find((s) => s.key === active)?.icon}</span>
+            <span className="text-base md:text-lg">{sections.find((s) => s.key === active)?.title}</span>
           </h2>
-          {sections.find((s) => s.key === active)?.content}
+          <div className="text-sm md:text-base">
+            {sections.find((s) => s.key === active)?.content}
+          </div>
         </div>
       </div>
+
+      {/* Кнопка "Наверх" */}
+      <AnimatePresence>
+        {showScrollTop && (
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            onClick={scrollToTop}
+            className="fixed bottom-6 right-6 md:bottom-8 md:right-8 w-10 h-10 md:w-12 md:h-12 bg-[#FF7A00] text-white rounded-full flex items-center justify-center shadow-lg z-50"
+            aria-label="Наверх"
+          >
+            ↑
+          </motion.button>
+        )}
+      </AnimatePresence>
     </div>
   );
 } 
